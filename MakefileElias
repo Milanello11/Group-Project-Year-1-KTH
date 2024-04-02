@@ -2,7 +2,7 @@
 SRCDIR=./src
 
 # Name of the compiler, GNU GCC in this case
-CC=gcc
+CC=gcc-13
 
 # Any include directories
 INCLUDE = /opt/homebrew/include
