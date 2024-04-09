@@ -1,6 +1,6 @@
 # Makefile for Windows
 
-# Location of where hello.c is stored in
+# Location of where main.c is stored in
 SRCDIR=./src
 
 # Name of the compiler, GNU GCC in this case
@@ -21,11 +21,13 @@ CFLAGS = -g -c
 # NOTE ORDER OF THE FLAGS MATTERS!
 LDFLAGS = -lmingw32 -lSDL2main -lSDL2 -lsdL2_image -mwindows
 
-hello:
-	@echo "Building Hello"
-	$(CC) $(CFLAGS) $(SRCDIR)/hello.c -o $@.o 
-	$(CC) hello.o -o hello $(LDFLAGS)
+snomos:
+	@echo "Building Snomos"
+	$(CC) $(CFLAGS) $(SRCDIR)/main.c -o $@.o 
+	$(CC) main.o -o snomos $(LDFLAGS)
 
 clean:
-	rm hello
-	rm hello.o
+	rm main
+	rm main.o
+
+
