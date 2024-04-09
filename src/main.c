@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-#define SPEED 800
+#define SPEED 400
 #define WINDOW_WIDTH 1200
 #define WINDOW_HEIGHT 800
 
