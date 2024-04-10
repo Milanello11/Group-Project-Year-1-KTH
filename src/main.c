@@ -12,7 +12,7 @@ int main (int argument, char* arguments[]){
 
     SDL_Init(SDL_INIT_EVERYTHING);
 
-    SDL_Window *window = SDL_CreateWindow("Snomos", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1200, 800, 0);
+    SDL_Window *window = SDL_CreateWindow("Snomos", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1200, 800, SDL_WINDOW_FULLSCREEN);
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0);
     SDL_Surface *backgroundSurface = IMG_Load("resources/Bakgrund.png");
     SDL_Surface *characterSurface = IMG_Load("resources/Ship.png");
