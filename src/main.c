@@ -3,6 +3,7 @@
 #include <SDL2/SDL_timer.h>
 #include <stdbool.h>
 #include <stdio.h>
+//#include "character.h"
 
 #define SPEED 400
 #define WINDOW_WIDTH 1200
