@@ -24,7 +24,7 @@ LDFLAGS = -lmingw32 -lSDL2main -lSDL2 -lsdL2_image -mwindows
 snomos:
 	@echo "Building Snomos"
 	$(CC) $(CFLAGS) $(SRCDIR)/main.c -o $@.o 
-	$(CC) main.o -o snomos $(LDFLAGS)
+	$(CC) snomos.o -o Snomos $(LDFLAGS)
 
 clean:
 	rm main
