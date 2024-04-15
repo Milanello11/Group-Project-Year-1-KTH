@@ -40,7 +40,7 @@ Character *createCharacter(int x, int y, SDL_Renderer *pRenderer, int window_wid
 
 void updateCharacter(Character *pCharacter){
     pCharacter->x_pos += pCharacter->x_vel;
-    pCharacter->y_pos += pCharacter->y_pos;
+    pCharacter->y_pos += pCharacter->y_vel;
 }
 
 void drawCharacter(Character *pCharacter){
