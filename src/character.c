@@ -44,7 +44,7 @@ void updateCharacter(Character *pCharacter){
 }
 
 void drawCharacter(Character *pCharacter){
-    SDL_RenderCopyEx(pCharacter->pRenderer , pCharacter->pTexture , &(pCharacter->characterRect) , NULL , NULL ,SDL_FLIP_NONE);
+ //   SDL_RenderCopyEx(pCharacter->pRenderer , pCharacter->pTexture , &(pCharacter->characterRect) , NULL , NULL ,SDL_FLIP_NONE);
 }
 
 void destroyCharacter(Character *pCharacter)
