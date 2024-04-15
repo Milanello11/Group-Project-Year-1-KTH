@@ -15,9 +15,9 @@ Character *createCharacter(int x, int y, SDL_Renderer *pRenderer, int window_w, 
     Character *pCharacter = malloc(sizeof(struct character));
     pCharacter->x_vel = 0;
     pCharacter->y_vel = 0;
-    pCharacter->window_width = window_width;
-    pCharacter->window_height = window_height;
-    SDL_Surface *pSurface = IMG_Load("resources/Ship.png");
+    pCharacter->window_width = window_w;
+    pCharacter->window_height = window_h;
+    SDL_Surface *pSurface = IMG_Load("resources/Character.png");
     if (!pSurface){
         printf("Error: %s\n", SDL_GetError());
         return NULL;
