@@ -31,5 +31,5 @@ character.o: $(SRCDIR)/character.c $(INCDIR)/character.h
 	$(CC) $(CFLAGS) $(SRCDIR)/character.c 
 
 clean:
-	rm -f snomos.o
+	rm -f *.o
 	rm -f snomos
