@@ -6,11 +6,8 @@
 //#include "character.h"
 
 #define SPEED 400
-<<<<<<< HEAD
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 960
-=======
->>>>>>> e75c2d91ffcc9096e67934348dc853884b7d3bc3
 
 int main (int argument, char* arguments[]){
 

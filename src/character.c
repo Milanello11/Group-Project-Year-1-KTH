@@ -9,12 +9,12 @@ struct character{
     SDL_Renderer *pRenderer;
     SDL_Texture *pTexture;
     SDL_Rect characterRect;
-}
+};
 
 Character *createCharacter(int x, int y, SDL_Renderer *pRenderer, int window_width, int window_height){
     Character *pCharacter = malloc(sizeof(struct character));
-    pCharacter->vx = 0;
-    pCharacter->vy = 0;
+    pCharacter->x_vel = 0;
+    pCharacter->y_vel = 0;
     pCharacter->window_width = window_width;
     pCharacter->window_height = window_height;
     SDL_Surface *pSurface = IMG_Load("resources/Ship.png");
