@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include "character.h"
 
+
+
 typedef struct{
         SDL_Window *pWindow;
         SDL_Renderer *pRenderer;
@@ -67,10 +69,11 @@ void run(Game *pGame){
            // else handleInput(pGame,&event);
         }
 
-       // updateCharacter(pGame->pCharacter);
+        
         SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
         SDL_RenderClear(pGame->pRenderer);
         SDL_SetRenderDrawColor(pGame->pRenderer,230,230,230,255);
+        updateCharacter(pGame->pCharacter);
         drawCharacter(pGame->pCharacter);
         SDL_RenderPresent(pGame->pRenderer);
         SDL_Delay(1000/60-15);

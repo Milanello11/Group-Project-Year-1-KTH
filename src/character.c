@@ -41,10 +41,12 @@ Character *createCharacter(int x, int y, SDL_Renderer *pRenderer, int window_w, 
 void updateCharacter(Character *pCharacter){
     pCharacter->x_pos += pCharacter->x_vel;
     pCharacter->y_pos += pCharacter->y_vel;
+    pCharacter->characterRect.x = pCharacter->x_pos;
+    pCharacter->characterRect.y = pCharacter->y_pos;
 }
 
 void drawCharacter(Character *pCharacter){
-    SDL_RenderCopy(pCharacter->pRenderer , pCharacter->pTexture , &(pCharacter->characterRect) , NULL);
+    SDL_RenderCopy(pCharacter->pRenderer , pCharacter->pTexture ,NULL, &(pCharacter->characterRect));
 }
 
 void destroyCharacter(Character *pCharacter)
