@@ -6,8 +6,11 @@
 //#include "character.h"
 
 #define SPEED 400
+<<<<<<< HEAD
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 960
+=======
+>>>>>>> e75c2d91ffcc9096e67934348dc853884b7d3bc3
 
 int main (int argument, char* arguments[]){
 
@@ -15,6 +18,10 @@ int main (int argument, char* arguments[]){
 
     SDL_Window *window = SDL_CreateWindow("Snomos", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1200, 800, 0);
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0);
+
+    int windowWidth, windowHeight;
+    SDL_GetWindowSize(window, &windowWidth, &windowHeight);
+    
     SDL_Surface *backgroundSurface = IMG_Load("resources/Bakgrund.png");
     SDL_Surface *characterSurface = IMG_Load("resources/Ship.png");
 
@@ -45,11 +52,11 @@ int main (int argument, char* arguments[]){
     SDL_Event event;
     SDL_Rect characterRect;
     SDL_QueryTexture(characterTexture, NULL, NULL, &characterRect.w, &characterRect.h);
-    characterRect.x = WINDOW_WIDTH/2;
-    characterRect.y = WINDOW_HEIGHT/2;
+    characterRect.x = windowWidth/2;
+    characterRect.y = windowHeight/2;
 
-    float characterX = (WINDOW_WIDTH - characterRect.w)/2;
-    float characterY = (WINDOW_HEIGHT - characterRect.h)/2;
+    float characterX = (windowWidth - characterRect.w)/2;
+    float characterY = (windowHeight - characterRect.h)/2;
     float characterXVelocity = 0;
     float characterYVelocity = 0; //pixels per second
 
@@ -124,8 +131,8 @@ int main (int argument, char* arguments[]){
         characterY += characterYVelocity/60;
         if(characterX<0) characterX=0;
         if(characterY<0) characterY=0;
-        if(characterX>WINDOW_WIDTH-characterRect.w) characterX = WINDOW_WIDTH-characterRect.w;
-        if(characterY>WINDOW_HEIGHT-characterRect.h) characterY = WINDOW_HEIGHT-characterRect.h;
+        if(characterX>windowWidth-characterRect.w) characterX = windowWidth-characterRect.w;
+        if(characterY>windowHeight-characterRect.h) characterY = windowHeight-characterRect.h;
         characterRect.x = characterX;
         characterRect.y = characterY;
 
