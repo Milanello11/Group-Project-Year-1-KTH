@@ -31,7 +31,7 @@ int initializations(Game *pGame){
         return 0;
     }
 
-    pGame->pWindow = SDL_CreateWindow("Snomos",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,WINDOW_WIDTH,WINDOW_HEIGHT,0);
+    pGame->pWindow = SDL_CreateWindow("Snomos",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,1200,800,0);
     if(!pGame->pWindow){
         printf("Error: %s\n",SDL_GetError());
         close(pGame);
@@ -46,13 +46,13 @@ int initializations(Game *pGame){
     }
 
     //pGame->pCharacter = createCharacter(WINDOW_WIDTH/2,WINDOW_HEIGHT/2,pGame->pRenderer,WINDOW_WIDTH,WINDOW_HEIGHT);
-
+/*
     if(!pGame->pCharacter){
         printf("Error: %s\n",SDL_GetError());
         close(pGame);
         return 0;
     }
-
+*/
     return 1;
 }
 
