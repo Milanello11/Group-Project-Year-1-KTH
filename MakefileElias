@@ -1,11 +1,14 @@
-# Location of where hello.c is stored in
+# Location of where Source files is stored in
 SRCDIR=./src
+
+# Lokation of where HEader files is stored in
+INCDIR=./include
 
 # Name of the compiler, GNU GCC in this case
 CC=gcc-13
 
 # Any include directories
-INCLUDE = /opt/homebrew/include
+INCLUDE = /opt/homebrew/include -I$(INCDIR)
 
 # Any flags for the compiler
 CFLAGS = -g -I$(INCLUDE) -c
@@ -17,10 +20,15 @@ LIBS = /opt/homebrew/lib
 # Extra flags to give to compilers when they are supposed to invoke the linker
 LDFLAGS = -lSDL2main -lSDL2_image -lSDL2
 
-snomos:
-	@echo "Building Hello"
-	$(CC) $(CFLAGS) $(SRCDIR)/main.c -o snomos.o 
-	$(CC) snomos.o -o snomos $(LDFLAGS) -L $(LIBS) 
+snomos: main.o character.o
+	@echo "Building Snomos"
+	$(CC) -o snomos main.o character.o $(LDFLAGS) -L $(LIBS)
+
+main.o: $(SRCDIR)/main.c $(INCDIR)/character.h
+	$(CC) $(CFLAGS) $(SRCDIR)/main.c 
+
+character.o: $(SRCDIR)/character.c $(INCDIR)/character.h
+	$(CC) $(CFLAGS) $(SRCDIR)/character.c 
 
 clean:
 	rm -f snomos.o
