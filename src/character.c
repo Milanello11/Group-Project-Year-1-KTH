@@ -11,12 +11,12 @@ struct character{
     SDL_Rect characterRect;
 };
 
-Character *createCharacter(int x, int y, SDL_Renderer *pRenderer, int window_width, int window_height){
+Character *createCharacter(int x, int y, SDL_Renderer *pRenderer, int window_w, int window_h){
     Character *pCharacter = malloc(sizeof(struct character));
     pCharacter->x_vel = 0;
     pCharacter->y_vel = 0;
-    pCharacter->window_width = window_width;
-    pCharacter->window_height = window_height;
+    pCharacter->window_width = window_w;
+    pCharacter->window_height = window_h;
     SDL_Surface *pSurface = IMG_Load("resources/Ship.png");
     if (!pSurface){
         printf("Error: %s\n", SDL_GetError());
