@@ -8,6 +8,4 @@ void updateCharacter(Character *pCharacter);
 void drawCharacter(Character *pCharacter);
 void destroyCharacter(Character *pCharacter);
 
-
-
 #endif
