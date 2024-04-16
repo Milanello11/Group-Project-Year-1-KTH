@@ -41,6 +41,10 @@ Character *createCharacter(int x, int y, SDL_Renderer *pRenderer, int window_w, 
 void updateCharacter(Character *pCharacter){
     pCharacter->x_pos += pCharacter->x_vel;
     pCharacter->y_pos += pCharacter->y_vel;
+    if(pCharacter->x_pos<0) pCharacter->x_pos+=pCharacter->window_width;
+    else if (pCharacter->x_pos>pCharacter->window_width) pCharacter->x_pos-=pCharacter->window_width;
+    if(pCharacter->y_pos<0)pCharacter->y_pos+=pCharacter->window_height;
+    else if(pCharacter->y_pos>pCharacter->window_height) pCharacter->y_pos-=pCharacter->window_height;
     pCharacter->characterRect.x = pCharacter->x_pos;
     pCharacter->characterRect.y = pCharacter->y_pos;
 }
