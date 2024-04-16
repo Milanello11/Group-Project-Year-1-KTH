@@ -16,6 +16,7 @@ typedef struct{
 int initializations(Game *pGame);
 void run(Game *pGame);
 void close(Game *pGame);
+void handleInput(Game *pGame, SDL_Event *pEvent);
 
 int main (int argument, char* arguments[]){
     Game game={0};
@@ -85,4 +86,24 @@ void close(Game *pGame){
     if(pGame->pRenderer) SDL_DestroyRenderer(pGame->pRenderer);
     if(pGame->pWindow) SDL_DestroyWindow(pGame->pWindow);
     SDL_Quit();
+}
+
+void handleInput(Game *pGame, SDL_Event *pEvent){
+    if(pEvent->type == SDL_KEYDOWN){
+        switch(pEvent->key.keysym.scancode){
+            case SDL_SCANCODE_W:
+            case SDL_SCANCODE_UP:
+                break;
+            case SDL_SCANCODE_A:
+            case SDL_SCANCODE_LEFT:
+                break;
+            case SDL_SCANCODE_D:
+            case SDL_SCANCODE_RIGHT:
+                break;
+            case SDL_SCANCODE_S:
+            case SDL_SCANCODE_DOWN:
+                break;
+
+        }
+    }
 }
