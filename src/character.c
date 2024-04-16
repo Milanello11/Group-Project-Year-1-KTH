@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "character.h"
+#define SPEED 100
 
 struct character{
     float x_pos, y_pos, x_vel, y_vel;
@@ -57,4 +58,21 @@ void destroyCharacter(Character *pCharacter)
 {
     SDL_DestroyTexture(pCharacter->pTexture);
     free(pCharacter);
+}
+
+void characterTurnUp(Character *pCharacter){
+    pCharacter->y_vel = -(SPEED);
+}
+
+void characterTurnDown(Character *pCharacter){
+    pCharacter->y_vel = SPEED;
+}
+
+void characterTurnRight(Character *pCharacter){
+    pCharacter->x_vel = SPEED;
+}
+
+void characterTurnLeft(Character *pCharacter)
+{
+    pCharacter->x_vel = -(SPEED);
 }
