@@ -11,6 +11,7 @@ typedef struct{
         SDL_Window *pWindow;
         SDL_Renderer *pRenderer;
         Character *pCharacter;
+        Character *pTmpChar;
     }Game;
 
 int initializations(Game *pGame);
@@ -49,6 +50,7 @@ int initializations(Game *pGame){
     }
 
     pGame->pCharacter = createCharacter(600,400,pGame->pRenderer,1200,800);
+    pGame->pTmpChar = createCharacter(400,400,pGame->pRenderer,1200,800);
 
     if(!pGame->pCharacter){
         printf("Error: %s\n",SDL_GetError());
@@ -74,6 +76,8 @@ void run(Game *pGame){
         SDL_SetRenderDrawColor(pGame->pRenderer,230,230,230,255);
         updateCharacter(pGame->pCharacter);
         drawCharacter(pGame->pCharacter);
+        updateCharacter(pGame->pTmpChar);
+        drawCharacter(pGame->pTmpChar);
         SDL_RenderPresent(pGame->pRenderer);
         SDL_Delay(1000/60-15);
     }
@@ -81,6 +85,7 @@ void run(Game *pGame){
 
 void close(Game *pGame){
     if(pGame->pCharacter) destroyCharacter(pGame->pCharacter);
+    if(pGame->pTmpChar) destroyCharacter(pGame->pTmpChar);
     if(pGame->pRenderer) SDL_DestroyRenderer(pGame->pRenderer);
     if(pGame->pWindow) SDL_DestroyWindow(pGame->pWindow);
     SDL_Quit();
