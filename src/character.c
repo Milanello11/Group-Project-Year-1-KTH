@@ -42,10 +42,18 @@ Character *createCharacter(int x, int y, SDL_Renderer *pRenderer, int window_w, 
 void updateCharacter(Character *pCharacter){
     pCharacter->x_pos += pCharacter->x_vel;
     pCharacter->y_pos += pCharacter->y_vel;
-    if(pCharacter->x_pos<0) pCharacter->x_pos+=pCharacter->window_width;
-    else if (pCharacter->x_pos>pCharacter->window_width) pCharacter->x_pos-=pCharacter->window_width;
-    if(pCharacter->y_pos<0)pCharacter->y_pos+=pCharacter->window_height;
-    else if(pCharacter->y_pos>pCharacter->window_height) pCharacter->y_pos-=pCharacter->window_height;
+    if(pCharacter->x_pos < 0){
+        pCharacter->x_pos = 0;
+    } 
+    else if (pCharacter->x_pos > (pCharacter->window_width - pCharacter->characterRect.w)){
+        pCharacter->x_pos = pCharacter->window_width - pCharacter->characterRect.w;
+    } 
+    if(pCharacter->y_pos < 0){
+        pCharacter->y_pos = 0;
+    }
+    else if(pCharacter->y_pos > (pCharacter->window_height - pCharacter->characterRect.h)){ 
+        pCharacter->y_pos = pCharacter->window_height - pCharacter->characterRect.h;
+    }
     pCharacter->characterRect.x = pCharacter->x_pos;
     pCharacter->characterRect.y = pCharacter->y_pos;
 }
@@ -54,8 +62,7 @@ void drawCharacter(Character *pCharacter){
     SDL_RenderCopy(pCharacter->pRenderer , pCharacter->pTexture ,NULL, &(pCharacter->characterRect));
 }
 
-void destroyCharacter(Character *pCharacter)
-{
+void destroyCharacter(Character *pCharacter){
     SDL_DestroyTexture(pCharacter->pTexture);
     free(pCharacter);
 }
