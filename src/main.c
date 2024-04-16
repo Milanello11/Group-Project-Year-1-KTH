@@ -84,10 +84,18 @@ void run(Game *pGame){
 }
 
 void close(Game *pGame){
-    if(pGame->pCharacter) destroyCharacter(pGame->pCharacter);
-    if(pGame->pTmpChar) destroyCharacter(pGame->pTmpChar);
-    if(pGame->pRenderer) SDL_DestroyRenderer(pGame->pRenderer);
-    if(pGame->pWindow) SDL_DestroyWindow(pGame->pWindow);
+    if(pGame->pCharacter){
+        destroyCharacter(pGame->pCharacter);
+    }
+    if(pGame->pTmpChar){
+        destroyCharacter(pGame->pTmpChar);
+    }
+    if(pGame->pRenderer){ 
+        SDL_DestroyRenderer(pGame->pRenderer);
+    }
+    if(pGame->pWindow){ 
+        SDL_DestroyWindow(pGame->pWindow);
+    }
     SDL_Quit();
 }
 
@@ -133,5 +141,4 @@ void handleInput(Game *pGame, SDL_Event *pEvent){
                     break;  
             }                                
     }
-            
 }
