@@ -75,18 +75,22 @@ void destroyCharacter(Character *pCharacter){
 
 void characterTurnUp(Character *pCharacter){
     pCharacter->y_vel = -(SPEED);
+    pCharacter->x_vel = 0;
 }
 
 void characterTurnDown(Character *pCharacter){
     pCharacter->y_vel = SPEED;
+    pCharacter->x_vel = 0;
 }
 
 void characterTurnRight(Character *pCharacter){
     pCharacter->x_vel = SPEED;
+    pCharacter->y_vel = 0;
 }
 
 void characterTurnLeft(Character *pCharacter){
     pCharacter->x_vel = -(SPEED);
+    pCharacter->y_vel = 0;
 }
 void characterXStop(Character *pCharacter){
     pCharacter->x_vel = 0;
