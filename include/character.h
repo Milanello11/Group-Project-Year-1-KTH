@@ -7,5 +7,10 @@ Character *createCharacter(int x, int y, SDL_Renderer *pRenderer, int window_w, 
 void updateCharacter(Character *pCharacter);
 void drawCharacter(Character *pCharacter);
 void destroyCharacter(Character *pCharacter);
+void characterTurnUp(Character *pCharacter);
+void characterTurnDown(Character *pCharacter);
+void characterTurnRight(Character *pCharacter);
+void characterTurnLeft(Character *pCharacter);
+
 
 #endif

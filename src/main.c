@@ -67,7 +67,7 @@ void run(Game *pGame){
         while(SDL_PollEvent(&event)){
             if(event.type==SDL_QUIT) 
                 active = false;
-           // else handleInput(pGame,&event);
+            else handleInput(pGame,&event);
         }
 
         
@@ -93,15 +93,19 @@ void handleInput(Game *pGame, SDL_Event *pEvent){
         switch(pEvent->key.keysym.scancode){
             case SDL_SCANCODE_W:
             case SDL_SCANCODE_UP:
+                characterTurnUp(pGame->pCharacter);
                 break;
             case SDL_SCANCODE_A:
             case SDL_SCANCODE_LEFT:
+                characterTurnLeft(pGame->pCharacter);
                 break;
             case SDL_SCANCODE_D:
             case SDL_SCANCODE_RIGHT:
+                characterTurnRight(pGame->pCharacter);
                 break;
             case SDL_SCANCODE_S:
             case SDL_SCANCODE_DOWN:
+                characterTurnDown(pGame->pCharacter);
                 break;
 
         }
