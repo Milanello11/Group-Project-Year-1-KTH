@@ -11,6 +11,8 @@ void characterTurnUp(Character *pCharacter);
 void characterTurnDown(Character *pCharacter);
 void characterTurnRight(Character *pCharacter);
 void characterTurnLeft(Character *pCharacter);
+void characterXStop(Character *pCharacter);
+void characterYStop(Character *pCharacter);
 
 
 #endif

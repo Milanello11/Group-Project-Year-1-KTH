@@ -1,7 +1,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "character.h"
-#define SPEED 100
+#define SPEED 5
 
 struct character{
     float x_pos, y_pos, x_vel, y_vel;
@@ -72,7 +72,12 @@ void characterTurnRight(Character *pCharacter){
     pCharacter->x_vel = SPEED;
 }
 
-void characterTurnLeft(Character *pCharacter)
-{
+void characterTurnLeft(Character *pCharacter){
     pCharacter->x_vel = -(SPEED);
+}
+void characterXStop(Character *pCharacter){
+    pCharacter->x_vel = 0;
+}
+void characterYStop(Character *pCharacter){
+    pCharacter->y_vel = 0;
 }
