@@ -54,8 +54,7 @@ void drawCharacter(Character *pCharacter){
     SDL_RenderCopy(pCharacter->pRenderer , pCharacter->pTexture ,NULL, &(pCharacter->characterRect));
 }
 
-void destroyCharacter(Character *pCharacter)
-{
+void destroyCharacter(Character *pCharacter){
     SDL_DestroyTexture(pCharacter->pTexture);
     free(pCharacter);
 }
@@ -72,7 +71,6 @@ void characterTurnRight(Character *pCharacter){
     pCharacter->x_vel = SPEED;
 }
 
-void characterTurnLeft(Character *pCharacter)
-{
+void characterTurnLeft(Character *pCharacter){
     pCharacter->x_vel = -(SPEED);
 }

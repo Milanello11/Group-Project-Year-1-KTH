@@ -69,8 +69,6 @@ void run(Game *pGame){
                 active = false;
             else handleInput(pGame,&event);
         }
-
-        
         SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
         SDL_RenderClear(pGame->pRenderer);
         SDL_SetRenderDrawColor(pGame->pRenderer,230,230,230,255);
