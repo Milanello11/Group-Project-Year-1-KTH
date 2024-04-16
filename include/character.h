@@ -4,7 +4,7 @@
 typedef struct character Character;
 
 Character *createCharacter(int x, int y, SDL_Renderer *pRenderer, int window_w, int window_h);
-void updateCharacter(Character *pCharacter);
+void updateCharacter(Character *pCharacter, Character *pTmpChar);
 void drawCharacter(Character *pCharacter);
 void destroyCharacter(Character *pCharacter);
 void characterTurnUp(Character *pCharacter);

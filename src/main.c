@@ -74,9 +74,9 @@ void run(Game *pGame){
         SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
         SDL_RenderClear(pGame->pRenderer);
         SDL_SetRenderDrawColor(pGame->pRenderer,230,230,230,255);
-        updateCharacter(pGame->pCharacter);
+        updateCharacter(pGame->pCharacter, pGame->pTmpChar);
         drawCharacter(pGame->pCharacter);
-        updateCharacter(pGame->pTmpChar);
+        updateCharacter(pGame->pTmpChar, pGame->pCharacter);
         drawCharacter(pGame->pTmpChar);
         SDL_RenderPresent(pGame->pRenderer);
         SDL_Delay(1000/60-15);

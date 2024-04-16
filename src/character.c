@@ -39,7 +39,13 @@ Character *createCharacter(int x, int y, SDL_Renderer *pRenderer, int window_w, 
     return pCharacter;
 }
 
-void updateCharacter(Character *pCharacter){
+void updateCharacter(Character *pCharacter, Character *pTmpChar){
+
+    if (SDL_HasIntersection(&(pCharacter->characterRect), &(pTmpChar->characterRect))){
+        pCharacter->x_vel = 0;
+        pCharacter->y_vel = 0;
+    }
+
     pCharacter->x_pos += pCharacter->x_vel;
     pCharacter->y_pos += pCharacter->y_vel;
     if(pCharacter->x_pos < 0){
