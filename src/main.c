@@ -20,7 +20,7 @@ typedef struct{
 int initializations(Game *pGame);
 void run(Game *pGame);
 void close(Game *pGame);
-void handleInput(Game *pGame, SDL_Event *pEvent);
+void handleInput(Game *pGame, SDL_Event *pEvent , bool *pSnowball);
 
 int main (int argument, char* arguments[]){
     Game game={0};
@@ -66,13 +66,14 @@ int initializations(Game *pGame){
 
 void run(Game *pGame){
     bool active = true;
+    bool snowball = false;
     SDL_Event event;
 
     while(active){
         while(SDL_PollEvent(&event)){
             if(event.type==SDL_QUIT) 
                 active = false;
-            else handleInput(pGame,&event);
+            else handleInput(pGame,&event,&snowball);
         }
         SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
         SDL_RenderClear(pGame->pRenderer);
@@ -81,8 +82,10 @@ void run(Game *pGame){
         drawCharacter(pGame->pCharacter);
         updateCharacter(pGame->pTmpChar, pGame->pCharacter);
         drawCharacter(pGame->pTmpChar);
-        updateSnowball(pGame->pSnowball);
-        drawSnowball(pGame->pSnowball);
+        if (snowball){
+            updateSnowball(pGame->pSnowball);
+            drawSnowball(pGame->pSnowball);
+        }
         SDL_RenderPresent(pGame->pRenderer);
         SDL_Delay(1000/60-15);
     }
@@ -107,7 +110,7 @@ void close(Game *pGame){
     SDL_Quit();
 }
 
-void handleInput(Game *pGame, SDL_Event *pEvent){
+void handleInput(Game *pGame, SDL_Event *pEvent, bool *pSnowball){
     switch(pEvent->type){
         case SDL_KEYDOWN:
             switch(pEvent->key.keysym.scancode){
@@ -128,7 +131,7 @@ void handleInput(Game *pGame, SDL_Event *pEvent){
                     characterTurnRight(pGame->pCharacter);
                     break;
                 case SDL_SCANCODE_SPACE:
-                    printf("SnowBall\n");
+                    *pSnowball = true;
                     break;
             }
             break;
