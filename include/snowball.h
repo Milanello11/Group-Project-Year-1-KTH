@@ -7,3 +7,6 @@ Snowball *createSnowbal(int x , int y, int x_vel , int y_vel , SDL_Renderer *pRe
 void updateSnowball(Snowball *pSnowball);
 void drawSnowball(Snowball *pSnowball);
 void destroySnowball(Snowball *pSnowball);
+
+
+#endif
