@@ -1,7 +1,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "character.h"
-#define SPEED 5
+#define SPEED 3
 
 struct character{
     float x_pos, y_pos, x_vel, y_vel;
