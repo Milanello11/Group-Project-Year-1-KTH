@@ -24,7 +24,7 @@ snomos: main.o character.o snowball.o
 	@echo "Building Snomos"
 	$(CC) -o snomos main.o character.o snowball.o $(LDFLAGS) -L $(LIBS)
 
-main.o: $(SRCDIR)/main.c $(INCDIR)/character.h
+main.o: $(SRCDIR)/main.c $(INCDIR)/character.h $(INCDIR)/snowball.h
 	$(CC) $(CFLAGS) $(SRCDIR)/main.c 
 
 character.o: $(SRCDIR)/character.c $(INCDIR)/character.h

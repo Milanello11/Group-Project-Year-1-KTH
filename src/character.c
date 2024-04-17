@@ -65,7 +65,7 @@ void updateCharacter(Character *pCharacter, Character *pTmpChar){
 }
 
 void drawCharacter(Character *pCharacter){
-    SDL_RenderCopy(pCharacter->pRenderer , pCharacter->pTexture ,NULL, &(pCharacter->characterRect));
+    SDL_RenderCopy(pCharacter->pRenderer, pCharacter->pTexture, NULL, &(pCharacter->characterRect));
 }
 
 void destroyCharacter(Character *pCharacter){

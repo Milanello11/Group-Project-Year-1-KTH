@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include "character.h"
+#include "snowball.h"
 
 
 
@@ -12,6 +13,8 @@ typedef struct{
         SDL_Renderer *pRenderer;
         Character *pCharacter;
         Character *pTmpChar;
+
+        Snowball *pSnowball;
     }Game;
 
 int initializations(Game *pGame);
@@ -51,7 +54,7 @@ int initializations(Game *pGame){
 
     pGame->pCharacter = createCharacter(600,400,pGame->pRenderer,1200,800);
     pGame->pTmpChar = createCharacter(400,400,pGame->pRenderer,1200,800);
-
+    pGame->pSnowball = createSnowball(300,300,0,0,pGame->pRenderer,1200,800);
     if(!pGame->pCharacter){
         printf("Error: %s\n",SDL_GetError());
         close(pGame);
@@ -78,6 +81,8 @@ void run(Game *pGame){
         drawCharacter(pGame->pCharacter);
         updateCharacter(pGame->pTmpChar, pGame->pCharacter);
         drawCharacter(pGame->pTmpChar);
+        updateSnowball(pGame->pSnowball);
+        drawSnowball(pGame->pSnowball);
         SDL_RenderPresent(pGame->pRenderer);
         SDL_Delay(1000/60-15);
     }
@@ -86,6 +91,9 @@ void run(Game *pGame){
 void close(Game *pGame){
     if(pGame->pCharacter){
         destroyCharacter(pGame->pCharacter);
+    }
+    if(pGame->pSnowball){
+        destroySnowball(pGame->pSnowball);
     }
     if(pGame->pTmpChar){
         destroyCharacter(pGame->pTmpChar);
@@ -118,6 +126,9 @@ void handleInput(Game *pGame, SDL_Event *pEvent){
                 case SDL_SCANCODE_D:
                 case SDL_SCANCODE_RIGHT:
                     characterTurnRight(pGame->pCharacter);
+                    break;
+                case SDL_SCANCODE_SPACE:
+                    printf("SnowBall\n");
                     break;
             }
             break;
