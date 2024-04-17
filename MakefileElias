@@ -20,9 +20,9 @@ LIBS = /opt/homebrew/lib
 # Extra flags to give to compilers when they are supposed to invoke the linker
 LDFLAGS = -lSDL2main -lSDL2_image -lSDL2
 
-snomos: main.o character.o
+snomos: main.o character.o snowball.o
 	@echo "Building Snomos"
-	$(CC) -o snomos main.o character.o $(LDFLAGS) -L $(LIBS)
+	$(CC) -o snomos main.o character.o snowball.o $(LDFLAGS) -L $(LIBS)
 
 main.o: $(SRCDIR)/main.c $(INCDIR)/character.h
 	$(CC) $(CFLAGS) $(SRCDIR)/main.c 
@@ -30,6 +30,9 @@ main.o: $(SRCDIR)/main.c $(INCDIR)/character.h
 character.o: $(SRCDIR)/character.c $(INCDIR)/character.h
 	$(CC) $(CFLAGS) $(SRCDIR)/character.c 
 
+snowball.o: $(SRCDIR)/snowball.c $(INCDIR)/snowball.h
+	$(CC) $(CFLAGS) $(SRCDIR)/snowball.c 
+	
 clean:
 	rm -f *.o
 	rm -f snomos
