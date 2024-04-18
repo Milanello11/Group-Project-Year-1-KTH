@@ -42,7 +42,7 @@ Character *createCharacter(int x, int y, SDL_Renderer *pRenderer, int window_w, 
 
 void updateCharacter(Character *pCharacter, Character *pTmpChar){
 
-    if (SDL_HasIntersection(&(pCharacter->characterRect), &(pTmpChar->characterRect))){
+    if (isColliding(pCharacter->characterRect, pTmpChar->characterRect)){
         printf("Collision\n");
     }
 
