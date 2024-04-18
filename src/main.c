@@ -80,7 +80,7 @@ void run(Game *pGame){
         while(SDL_PollEvent(&event)){
             if(event.type==SDL_QUIT) 
                 active = false;
-            //else handleInput(pGame,&event,&snowball);
+            else handleInput(pGame,&event,&snowball);
         }
         SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
         SDL_RenderClear(pGame->pRenderer);
@@ -127,19 +127,19 @@ void handleInput(Game *pGame, SDL_Event *pEvent, bool *pSnowball){
             switch(pEvent->key.keysym.scancode){
                 case SDL_SCANCODE_W:
                 case SDL_SCANCODE_UP:
-                    characterTurnUp(pGame->pCharacter);
+                    characterTurnUp(pGame->pCharacter[0]);
                     break;
                 case SDL_SCANCODE_A:
                 case SDL_SCANCODE_LEFT:
-                    characterTurnLeft(pGame->pCharacter);
+                    characterTurnLeft(pGame->pCharacter[0]);
                     break;
                 case SDL_SCANCODE_S:
                 case SDL_SCANCODE_DOWN:
-                    characterTurnDown(pGame->pCharacter);
+                    characterTurnDown(pGame->pCharacter[0]);
                     break;
                 case SDL_SCANCODE_D:
                 case SDL_SCANCODE_RIGHT:
-                    characterTurnRight(pGame->pCharacter);
+                    characterTurnRight(pGame->pCharacter[0]);
                     break;
                 case SDL_SCANCODE_SPACE:
                     *pSnowball = true;
@@ -150,19 +150,19 @@ void handleInput(Game *pGame, SDL_Event *pEvent, bool *pSnowball){
             switch(pEvent->key.keysym.scancode){
                 case SDL_SCANCODE_W:
                 case SDL_SCANCODE_UP:
-                    characterYStop(pGame->pCharacter);
+                    characterYStop(pGame->pCharacter[0]);
                     break;
                 case SDL_SCANCODE_A:
                 case SDL_SCANCODE_LEFT:
-                    characterXStop(pGame->pCharacter);
+                    characterXStop(pGame->pCharacter[0]);
                     break;
                 case SDL_SCANCODE_S:
                 case SDL_SCANCODE_DOWN:
-                    characterYStop(pGame->pCharacter);
+                    characterYStop(pGame->pCharacter[0]);
                     break;
                 case SDL_SCANCODE_D:
                 case SDL_SCANCODE_RIGHT:
-                    characterXStop(pGame->pCharacter);
+                    characterXStop(pGame->pCharacter[0]);
                     break;  
             }                                
     }
