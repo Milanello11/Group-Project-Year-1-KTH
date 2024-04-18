@@ -1,19 +1,22 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_timer.h>
+#include <SDL2/SDL_net.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include "character.h"
 #include "snowball.h"
-
-
+#include "characterData.h"
 
 typedef struct{
         SDL_Window *pWindow;
         SDL_Renderer *pRenderer;
         Character *pCharacter;
         Character *pTmpChar;
-
+        int nrOfCharacters;
+        UDPpacket *pPacket;
+        UDPsocket *pSocket;
+        IPaddress players[MAX_PLAYERS];
         Snowball *pSnowball;
     }Game;
 
@@ -51,6 +54,23 @@ int initializations(Game *pGame){
         close(pGame);
         return 0;    
     }
+    if(SDLNet_Init()){
+		printf("Error: %s\n", SDLNet_GetError());
+        close(pGame);
+		return 0;
+	}
+    if (!(pGame->pSocket = SDLNet_UDP_Open(2000)))
+	{
+		printf("SDLNet_UDP_Open: %s\n", SDLNet_GetError());
+		close(pGame);
+        return 0;
+	}
+	if (!(pGame->pPacket = SDLNet_AllocPacket(512)))
+	{
+		printf("SDLNet_AllocPacket: %s\n", SDLNet_GetError());
+		close(pGame);
+        return 0;
+	}
 
     pGame->pCharacter = createCharacter(600,400,pGame->pRenderer,1200,800);
     pGame->pTmpChar = createCharacter(400,400,pGame->pRenderer,1200,800);
@@ -108,6 +128,14 @@ void close(Game *pGame){
     if(pGame->pWindow){ 
         SDL_DestroyWindow(pGame->pWindow);
     }
+    if(pGame->pPacket){ 
+        SDLNet_FreePacket(pGame->pPacket);
+    }
+	if(pGame->pSocket){ 
+        SDLNet_UDP_Close(pGame->pSocket);
+    }
+
+    SDLNet_Quit();
     SDL_Quit();
 }
 
