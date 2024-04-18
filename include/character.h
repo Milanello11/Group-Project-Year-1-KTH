@@ -1,12 +1,14 @@
 #ifndef character_h
 #define character_h
+#define CHARACTERS 2
 
 typedef struct character Character;
 
-Character *createCharacter(int x, int y, SDL_Renderer *pRenderer, int window_w, int window_h);
-void updateCharacter(Character *pCharacter, Character *pTmpChar);
+Character *createCharacter(int number, SDL_Renderer *pRenderer, int window_w, int window_h);
+void updateCharacter(Character *pCharacter);
 void drawCharacter(Character *pCharacter);
 void destroyCharacter(Character *pCharacter);
+//Behöver fixas
 void characterTurnUp(Character *pCharacter);
 void characterTurnDown(Character *pCharacter);
 void characterTurnRight(Character *pCharacter);

@@ -6,13 +6,11 @@
 #include "character.h"
 #include "snowball.h"
 
-
-
 typedef struct{
         SDL_Window *pWindow;
         SDL_Renderer *pRenderer;
-        Character *pCharacter;
-        Character *pTmpChar;
+        Character *pCharacter[CHARACTERS];
+        int nr_of_Characters;
 
         Snowball *pSnowball;
     }Game;
@@ -52,8 +50,17 @@ int initializations(Game *pGame){
         return 0;    
     }
 
-    pGame->pCharacter = createCharacter(600,400,pGame->pRenderer,1200,800);
-    pGame->pTmpChar = createCharacter(400,400,pGame->pRenderer,1200,800);
+    for (int i = 0 ; i < CHARACTERS ; i++){
+        pGame->pCharacter[i] = createCharacter(i,pGame->pRenderer,1200,800);
+    }
+    pGame->nr_of_Characters = CHARACTERS;
+   
+    for(int i = 0 ; i < CHARACTERS ; i++){
+        if(!pGame->pCharacter[i]){
+            printf("Error: %s\n" , SDL_GetError());
+            close(pGame);
+        }
+    }
     
     if(!pGame->pCharacter){
         printf("Error: %s\n",SDL_GetError());
@@ -73,34 +80,37 @@ void run(Game *pGame){
         while(SDL_PollEvent(&event)){
             if(event.type==SDL_QUIT) 
                 active = false;
-            else handleInput(pGame,&event,&snowball);
+            //else handleInput(pGame,&event,&snowball);
         }
         SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
         SDL_RenderClear(pGame->pRenderer);
         SDL_SetRenderDrawColor(pGame->pRenderer,230,230,230,255);
-        updateCharacter(pGame->pCharacter, pGame->pTmpChar);
-        drawCharacter(pGame->pCharacter);
-        updateCharacter(pGame->pTmpChar, pGame->pCharacter);
-        drawCharacter(pGame->pTmpChar);
+        for (int i = 0; i < CHARACTERS; i++){
+            updateCharacter(pGame->pCharacter[i]);
+        }
+        for (int i = 0; i < CHARACTERS; i++){
+            drawCharacter(pGame->pCharacter[i]);
+        }
+        
+        /*
         if (snowball){
             pGame->pSnowball = createSnowball(300,300,0,0,pGame->pRenderer,1200,800);
             updateSnowball(pGame->pSnowball);
             drawSnowball(pGame->pSnowball);
-        }
+        }*/
         SDL_RenderPresent(pGame->pRenderer);
         SDL_Delay(1000/60-15);
     }
 }
 
 void close(Game *pGame){
-    if(pGame->pCharacter){
-        destroyCharacter(pGame->pCharacter);
+    for(int i=0;i<CHARACTERS;i++) {
+        if(pGame->pCharacter[i]) {
+            destroyCharacter(pGame->pCharacter[i]);
+        }
     }
     if(pGame->pSnowball){
         destroySnowball(pGame->pSnowball);
-    }
-    if(pGame->pTmpChar){
-        destroyCharacter(pGame->pTmpChar);
     }
     if(pGame->pRenderer){ 
         SDL_DestroyRenderer(pGame->pRenderer);
