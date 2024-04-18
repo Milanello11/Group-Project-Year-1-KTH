@@ -2,6 +2,7 @@
 #include <SDL2/SDL_image.h>
 #include "character.h"
 #include "snowball.h"
+#include <stdbool.h>
 #define SPEED 3
 
 struct character{
@@ -94,4 +95,7 @@ void characterXStop(Character *pCharacter){
 }
 void characterYStop(Character *pCharacter){
     pCharacter->y_vel = 0;
+}
+bool isColliding(SDL_Rect a, SDL_Rect b){
+    return (a.x > b.x + b.w || a.x + a.w < b.x || a.y > b.y + b.h || a.y + a.h < b.y);
 }
