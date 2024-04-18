@@ -54,7 +54,7 @@ int initializations(Game *pGame){
 
     pGame->pCharacter = createCharacter(600,400,pGame->pRenderer,1200,800);
     pGame->pTmpChar = createCharacter(400,400,pGame->pRenderer,1200,800);
-    pGame->pSnowball = createSnowball(300,300,0,0,pGame->pRenderer,1200,800);
+    
     if(!pGame->pCharacter){
         printf("Error: %s\n",SDL_GetError());
         close(pGame);
@@ -83,6 +83,7 @@ void run(Game *pGame){
         updateCharacter(pGame->pTmpChar, pGame->pCharacter);
         drawCharacter(pGame->pTmpChar);
         if (snowball){
+            pGame->pSnowball = createSnowball(300,300,0,0,pGame->pRenderer,1200,800);
             updateSnowball(pGame->pSnowball);
             drawSnowball(pGame->pSnowball);
         }
