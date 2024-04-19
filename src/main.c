@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include "character.h"
 #include "snowball.h"
+#define WINDOW_HEIGHT 800
+#define WINDOW_WIDTH 800
 
 typedef struct{
         SDL_Window *pWindow;
@@ -36,7 +38,7 @@ int initializations(Game *pGame){
         return 0;
     }
 
-    pGame->pWindow = SDL_CreateWindow("Snomos",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,1200,800,0);
+    pGame->pWindow = SDL_CreateWindow("Snomos",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,WINDOW_WIDTH,WINDOW_HEIGHT,0);
     if(!pGame->pWindow){
         printf("Error: %s\n",SDL_GetError());
         close(pGame);
@@ -51,7 +53,7 @@ int initializations(Game *pGame){
     }
 
     for (int i = 0 ; i < CHARACTERS ; i++){
-        pGame->pCharacter[i] = createCharacter(i,pGame->pRenderer,1200,800);
+        pGame->pCharacter[i] = createCharacter(i,pGame->pRenderer,WINDOW_WIDTH,WINDOW_HEIGHT);
     }
     pGame->nr_of_Characters = CHARACTERS;
    
