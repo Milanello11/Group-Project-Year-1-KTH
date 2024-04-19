@@ -8,12 +8,14 @@
 #include "map.h"
 
 
+#define WINDOW_HEIGHT 800
+#define WINDOW_WIDTH 800
 
 typedef struct{
         SDL_Window *pWindow;
         SDL_Renderer *pRenderer;
-        Character *pCharacter;
-        Character *pTmpChar;
+        Character *pCharacter[CHARACTERS];
+        int nr_of_Characters;
 
         Snowball *pSnowball;
     }Game;
@@ -41,7 +43,7 @@ int initializations(Game *pGame){
         return 0;
     }
 
-    pGame->pWindow = SDL_CreateWindow("Snomos",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,1200,800,0);
+    pGame->pWindow = SDL_CreateWindow("Snomos",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,WINDOW_WIDTH,WINDOW_HEIGHT,0);
     if(!pGame->pWindow){
         printf("Error: %s\n",SDL_GetError());
         close(pGame);
@@ -55,9 +57,18 @@ int initializations(Game *pGame){
         return 0;    
     }
 
-    pGame->pCharacter = createCharacter(600,400,pGame->pRenderer,1200,800);
-    pGame->pTmpChar = createCharacter(400,400,pGame->pRenderer,1200,800);
-    pGame->pSnowball = createSnowball(300,300,0,0,pGame->pRenderer,1200,800);
+    for (int i = 0 ; i < CHARACTERS ; i++){
+        pGame->pCharacter[i] = createCharacter(i,pGame->pRenderer,WINDOW_WIDTH,WINDOW_HEIGHT);
+    }
+    pGame->nr_of_Characters = CHARACTERS;
+   
+    for(int i = 0 ; i < CHARACTERS ; i++){
+        if(!pGame->pCharacter[i]){
+            printf("Error: %s\n" , SDL_GetError());
+            close(pGame);
+        }
+    }
+    
     if(!pGame->pCharacter){
         printf("Error: %s\n",SDL_GetError());
         close(pGame);
@@ -105,28 +116,33 @@ void run(Game *pGame){
         SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
         SDL_RenderClear(pGame->pRenderer);
         renderBackground(pGame->pRenderer, tile_texture, tiles_type, tile_placement);
-        updateCharacter(pGame->pCharacter, pGame->pTmpChar);
-        drawCharacter(pGame->pCharacter);
-        updateCharacter(pGame->pTmpChar, pGame->pCharacter);
-        drawCharacter(pGame->pTmpChar);
+        SDL_SetRenderDrawColor(pGame->pRenderer,230,230,230,255);
+        for (int i = 0; i < CHARACTERS; i++){
+            updateCharacter(pGame->pCharacter[i]);
+        }
+        for (int i = 0; i < CHARACTERS; i++){
+            drawCharacter(pGame->pCharacter[i]);
+        }
+        
+        /*
         if (snowball){
+            pGame->pSnowball = createSnowball(300,300,0,0,pGame->pRenderer,1200,800);
             updateSnowball(pGame->pSnowball);
             drawSnowball(pGame->pSnowball);
-        }
+        }*/
         SDL_RenderPresent(pGame->pRenderer);
         SDL_Delay(1000/60-15);
     }
 }
 
 void close(Game *pGame){
-    if(pGame->pCharacter){
-        destroyCharacter(pGame->pCharacter);
+    for(int i=0;i<CHARACTERS;i++) {
+        if(pGame->pCharacter[i]) {
+            destroyCharacter(pGame->pCharacter[i]);
+        }
     }
     if(pGame->pSnowball){
         destroySnowball(pGame->pSnowball);
-    }
-    if(pGame->pTmpChar){
-        destroyCharacter(pGame->pTmpChar);
     }
     if(pGame->pRenderer){ 
         SDL_DestroyRenderer(pGame->pRenderer);
@@ -143,19 +159,19 @@ void handleInput(Game *pGame, SDL_Event *pEvent, bool *pSnowball){
             switch(pEvent->key.keysym.scancode){
                 case SDL_SCANCODE_W:
                 case SDL_SCANCODE_UP:
-                    characterTurnUp(pGame->pCharacter);
+                    characterTurnUp(pGame->pCharacter[0]);
                     break;
                 case SDL_SCANCODE_A:
                 case SDL_SCANCODE_LEFT:
-                    characterTurnLeft(pGame->pCharacter);
+                    characterTurnLeft(pGame->pCharacter[0]);
                     break;
                 case SDL_SCANCODE_S:
                 case SDL_SCANCODE_DOWN:
-                    characterTurnDown(pGame->pCharacter);
+                    characterTurnDown(pGame->pCharacter[0]);
                     break;
                 case SDL_SCANCODE_D:
                 case SDL_SCANCODE_RIGHT:
-                    characterTurnRight(pGame->pCharacter);
+                    characterTurnRight(pGame->pCharacter[0]);
                     break;
                 case SDL_SCANCODE_SPACE:
                     *pSnowball = true;
@@ -166,19 +182,19 @@ void handleInput(Game *pGame, SDL_Event *pEvent, bool *pSnowball){
             switch(pEvent->key.keysym.scancode){
                 case SDL_SCANCODE_W:
                 case SDL_SCANCODE_UP:
-                    characterYStop(pGame->pCharacter);
+                    characterYStop(pGame->pCharacter[0]);
                     break;
                 case SDL_SCANCODE_A:
                 case SDL_SCANCODE_LEFT:
-                    characterXStop(pGame->pCharacter);
+                    characterXStop(pGame->pCharacter[0]);
                     break;
                 case SDL_SCANCODE_S:
                 case SDL_SCANCODE_DOWN:
-                    characterYStop(pGame->pCharacter);
+                    characterYStop(pGame->pCharacter[0]);
                     break;
                 case SDL_SCANCODE_D:
                 case SDL_SCANCODE_RIGHT:
-                    characterXStop(pGame->pCharacter);
+                    characterXStop(pGame->pCharacter[0]);
                     break;  
             }                                
     }
