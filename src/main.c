@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include "character.h"
 #include "snowball.h"
+#include "map.h"
 
 
 
@@ -33,6 +34,8 @@ int main (int argument, char* arguments[]){
 }
 
 int initializations(Game *pGame){
+
+
     if(SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER)!=0){
         printf("Error: %s\n",SDL_GetError());
         return 0;
@@ -61,6 +64,7 @@ int initializations(Game *pGame){
         return 0;
     }
 
+
     return 1;
 }
 
@@ -68,6 +72,29 @@ void run(Game *pGame){
     bool active = true;
     bool snowball = false;
     SDL_Event event;
+
+    SDL_Surface* tile_Map = IMG_Load("resources/tiles.png");
+    SDL_Texture* tile_texture = SDL_CreateTextureFromSurface(pGame->pRenderer, tile_Map);
+    SDL_FreeSurface(tile_Map);
+
+    SDL_Rect tile_placement[32][32];
+    for(int x = 0; x < 32; x++){
+        for(int y = 0; y < 32; y++){
+            tile_placement[x][y].x = x*16;
+            tile_placement[x][y].y = y*16;
+            tile_placement[x][y].w = 16;
+            tile_placement[x][y].h = 16;
+        }
+    }
+
+    SDL_Rect tiles_type[3];
+    for (int i = 0; i < 3; i++) {
+        tiles_type[i].x = i*16;
+        tiles_type[i].y = 0;
+        tiles_type[i].w = 16;
+        tiles_type[i].h = 16;
+    }
+
 
     while(active){
         while(SDL_PollEvent(&event)){
@@ -77,7 +104,7 @@ void run(Game *pGame){
         }
         SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
         SDL_RenderClear(pGame->pRenderer);
-        SDL_SetRenderDrawColor(pGame->pRenderer,230,230,230,255);
+        renderBackground(pGame->pRenderer, tile_texture, tiles_type, tile_placement);
         updateCharacter(pGame->pCharacter, pGame->pTmpChar);
         drawCharacter(pGame->pCharacter);
         updateCharacter(pGame->pTmpChar, pGame->pCharacter);
@@ -154,5 +181,25 @@ void handleInput(Game *pGame, SDL_Event *pEvent, bool *pSnowball){
                     characterXStop(pGame->pCharacter);
                     break;  
             }                                
+    }
+}
+
+void renderBackground(SDL_Renderer *pGameRender, SDL_Texture *tile_texture, SDL_Rect tiles_type[], SDL_Rect tile_placement[32][32]){
+
+    for(int x = 0; x < 32; x++){
+        for(int y = 0; y < 32; y++){
+            switch (getTileValue(x, y)){
+
+                case 0:
+                    SDL_RenderCopy(pGameRender, tile_texture, &tiles_type[0], &tile_placement[x][y]);
+                    break;
+                case 1:
+                    SDL_RenderCopy(pGameRender, tile_texture, &tiles_type[1], &tile_placement[x][y]);
+                    break;
+                case 2:
+                    SDL_RenderCopy(pGameRender, tile_texture, &tiles_type[2], &tile_placement[x][y]);
+                    break;
+            }
+        }
     }
 }
