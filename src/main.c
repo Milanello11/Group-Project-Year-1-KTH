@@ -88,9 +88,9 @@ void run(Game *pGame){
     SDL_Texture* tile_texture = SDL_CreateTextureFromSurface(pGame->pRenderer, tile_Map);
     SDL_FreeSurface(tile_Map);
 
-    SDL_Rect tile_placement[32][32];
-    for(int x = 0; x < 32; x++){
-        for(int y = 0; y < 32; y++){
+    SDL_Rect tile_placement[50][50];
+    for(int x = 0; x < 50; x++){
+        for(int y = 0; y < 50; y++){
             tile_placement[x][y].x = x*16;
             tile_placement[x][y].y = y*16;
             tile_placement[x][y].w = 16;
@@ -200,10 +200,10 @@ void handleInput(Game *pGame, SDL_Event *pEvent, bool *pSnowball){
     }
 }
 
-void renderBackground(SDL_Renderer *pGameRender, SDL_Texture *tile_texture, SDL_Rect tiles_type[], SDL_Rect tile_placement[32][32]){
+void renderBackground(SDL_Renderer *pGameRender, SDL_Texture *tile_texture, SDL_Rect tiles_type[], SDL_Rect tile_placement[50][50]){
 
-    for(int x = 0; x < 32; x++){
-        for(int y = 0; y < 32; y++){
+    for(int x = 0; x < 50; x++){
+        for(int y = 0; y < 50; y++){
             switch (getTileValue(x, y)){
 
                 case 0:
