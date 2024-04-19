@@ -17,6 +17,7 @@ typedef struct{
         Character *pCharacter[CHARACTERS];
         int nr_of_Characters;
 
+        
         Snowball *pSnowball;
     }Game;
 
@@ -36,7 +37,6 @@ int main (int argument, char* arguments[]){
 }
 
 int initializations(Game *pGame){
-
 
     if(SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER)!=0){
         printf("Error: %s\n",SDL_GetError());
@@ -61,7 +61,6 @@ int initializations(Game *pGame){
         pGame->pCharacter[i] = createCharacter(i,pGame->pRenderer,WINDOW_WIDTH,WINDOW_HEIGHT);
     }
     pGame->nr_of_Characters = CHARACTERS;
-   
     for(int i = 0 ; i < CHARACTERS ; i++){
         if(!pGame->pCharacter[i]){
             printf("Error: %s\n" , SDL_GetError());
@@ -69,11 +68,6 @@ int initializations(Game *pGame){
         }
     }
     
-    if(!pGame->pCharacter){
-        printf("Error: %s\n",SDL_GetError());
-        close(pGame);
-        return 0;
-    }
 
 
     return 1;
@@ -124,12 +118,8 @@ void run(Game *pGame){
             drawCharacter(pGame->pCharacter[i]);
         }
         
-        /*
-        if (snowball){
-            pGame->pSnowball = createSnowball(300,300,0,0,pGame->pRenderer,1200,800);
-            updateSnowball(pGame->pSnowball);
-            drawSnowball(pGame->pSnowball);
-        }*/
+        drawSnowball(pGame->pCharacter->pSnowball);
+
         SDL_RenderPresent(pGame->pRenderer);
         SDL_Delay(1000/60-15);
     }
