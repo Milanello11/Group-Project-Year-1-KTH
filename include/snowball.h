@@ -10,10 +10,10 @@ Snowball *createSnowball(SnowballImage *pSnowballImage, int window_width , int w
 void destroySnowballImage(SnowballImage *pSnowballImage);
 void destroySnowball(Snowball *pSnowball);
 
-/*
-void updateSnowball(Snowball *pSnowball);
-void drawSnowball(Snowball *pSnowball);
 
-*/
+void updateSnowball(Snowball *pSnowball);
+void drawSnowball(Snowball *pSnowball , SDL_Renderer *pRenderer);
+
+
 
 #endif

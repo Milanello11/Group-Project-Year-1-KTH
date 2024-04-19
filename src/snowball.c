@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <stdio.h>
 #include "snowball.h"
 
 
@@ -55,6 +56,12 @@ void destroySnowballImage(SnowballImage *pSnowballImage){
     free(pSnowballImage);
 }
 
-void drawSnowball(Snowball *pSnowball){
-    SDL_RenderCopy(pSnowball->pRenderer, pSnowball->pTexture, NULL, &(pSnowball->snowballRect));
+void drawSnowball(Snowball *pSnowball, SDL_Renderer *pRenderer){
+    //SDL_RenderCopy(pRenderer, pSnowball->pTexture, NULL, &(pSnowball->snowballRect));  //här är något knasigt 
+    printf("Johan snear\n");
+}
+void updateSnowball(Snowball *pSnowball){ //vi kommer in här men kan inte utföra något
+    printf("Elias snea\n");
+    //pSnowball->snowballRect.x = pSnowball->x_pos = 0;
+    //pSnowball->snowballRect.y = pSnowball->y_pos = 0;
 }

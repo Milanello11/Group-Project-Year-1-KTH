@@ -19,6 +19,7 @@ typedef struct{
 
         
         Snowball *pSnowball;
+        SnowballImage *pSnowballImage;
     }Game;
 
 int initializations(Game *pGame);
@@ -118,7 +119,7 @@ void run(Game *pGame){
             drawCharacter(pGame->pCharacter[i]);
         }
         
-        drawSnowball(pGame->pCharacter->pSnowball);
+        
 
         SDL_RenderPresent(pGame->pRenderer);
         SDL_Delay(1000/60-15);

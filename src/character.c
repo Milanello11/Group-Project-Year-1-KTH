@@ -3,7 +3,7 @@
 #include "character.h"
 #include "snowball.h"
 #include <stdbool.h>
-#define SPEED 3
+#define CHARACTERVELOCITY 3
 
 struct character{
     float x_pos, y_pos, x_vel, y_vel , xStart , yStart;
@@ -11,6 +11,7 @@ struct character{
 
     Snowball *pSnowball;
     SnowballImage *pSnowballImage;
+
     SDL_Renderer *pRenderer;
     SDL_Texture *pTexture;
     SDL_Rect characterRect;
@@ -22,8 +23,10 @@ Character *createCharacter(int number, SDL_Renderer *pRenderer, int window_w, in
     pCharacter->y_vel = 0;
     pCharacter->window_width = window_w;
     pCharacter->window_height = window_h;
+    
     pCharacter->pSnowballImage = createSnowballImage(pRenderer);
     pCharacter->pSnowball = createSnowball(pCharacter->pSnowballImage, window_w, window_h);
+    
     SDL_Surface *pSurface = IMG_Load("resources/Character.png");
     if (!pSurface){
         printf("Error: %s\n", SDL_GetError());
@@ -65,9 +68,13 @@ void updateCharacter(Character *pCharacter){
     }
     pCharacter->characterRect.x = pCharacter->x_pos;
     pCharacter->characterRect.y = pCharacter->y_pos;
+    updateSnowball(pCharacter->pSnowball);
 }
 
 void drawCharacter(Character *pCharacter){
+    
+    
+    drawSnowball(pCharacter->pSnowball,pCharacter->pRenderer);
     SDL_RenderCopyEx(pCharacter->pRenderer, pCharacter->pTexture, NULL, &(pCharacter->characterRect), 0, NULL, SDL_FLIP_NONE);
 }
 
@@ -77,22 +84,22 @@ void destroyCharacter(Character *pCharacter){
 }
 
 void characterTurnUp(Character *pCharacter){
-    pCharacter->y_vel = -(SPEED);
+    pCharacter->y_vel = -(CHARACTERVELOCITY);
     pCharacter->x_vel = 0;
 }
 
 void characterTurnDown(Character *pCharacter){
-    pCharacter->y_vel = SPEED;
+    pCharacter->y_vel = CHARACTERVELOCITY;
     pCharacter->x_vel = 0;
 }
 
 void characterTurnRight(Character *pCharacter){
-    pCharacter->x_vel = SPEED;
+    pCharacter->x_vel = CHARACTERVELOCITY;
     pCharacter->y_vel = 0;
 }
 
 void characterTurnLeft(Character *pCharacter){
-    pCharacter->x_vel = -(SPEED);
+    pCharacter->x_vel = -(CHARACTERVELOCITY);
     pCharacter->y_vel = 0;
 }
 void characterXStop(Character *pCharacter){
