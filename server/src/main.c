@@ -29,7 +29,7 @@ int initializations(Game *pGame);
 void run(Game *pGame);
 void close(Game *pGame);
 void handleInput(Game *pGame, SDL_Event *pEvent , bool *pSnowball);
-void add(IPadress address, IPaddress clients[], int *pNrOfClients);
+void add(IPaddress address, IPaddress clients[], int *pNrOfClients);
 void sendGameData(Game *pGame);
 void executeCommand(Game *pGame, ClientData cData);
 void setUpGame(Game *pGame);
@@ -105,6 +105,7 @@ int initializations(Game *pGame){
     pGame->state = START;
     pGame->nrOfClients = 0;
     return 1;
+    }
 }
 
 void run(Game *pGame){
@@ -173,7 +174,7 @@ void setUpGame(Game *pGame){
 void sendGameData(Game *pGame){
     pGame->sData.gState = pGame->state;
     for(int i=0;i<MAX_PLAYERS;i++){
-        getCharacterSendData(pGame->pRocket[i], &(pGame->sData.rockets[i]));
+        getCharacterSendData(pGame->pCharacter[i], &(pGame->sData.characters[i]));
     }
     for(int i=0;i<MAX_PLAYERS;i++){
         pGame->sData.playerNr = i;
