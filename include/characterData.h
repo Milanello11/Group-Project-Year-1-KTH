@@ -4,11 +4,14 @@
 
 #define MAX_PLAYERS 6
 
+enum gameState{START, ONGOING, GAME_OVER};
+typedef enum gameState GameState;
+
 enum clientCommand{UP, DOWN, LEFT, RIGHT, SHOOT};
 typedef enum clientCommand ClientCommand;
 
 struct clientData{
-    clientCommand command;
+    ClientCommand command;
     int playerNumber;
 };
 typedef struct clientData ClientData;
@@ -26,7 +29,7 @@ struct characterData{
 typedef struct characterData CharacterData;
 
 struct serverData{
-    characterData characters[MAX_PLAYERS];
+    CharacterData characters[MAX_PLAYERS];
     int playerNumber;
 };
 typedef struct serverData ServerData;

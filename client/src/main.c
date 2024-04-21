@@ -14,7 +14,6 @@ typedef struct{
         Character *pCharacter;
         Character *pTmpChar;
         int nrOfCharacters, characterNumber;
-        
         GameState state;
         UDPpacket *pPacket;
         UDPsocket pSocket;
