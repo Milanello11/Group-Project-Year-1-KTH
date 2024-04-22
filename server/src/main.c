@@ -18,7 +18,7 @@ typedef struct{
         GameState state;
         UDPpacket *pPacket;
         UDPsocket *pSocket;
-        IPaddress players[MAX_PLAYERS];
+        IPaddress clients[MAX_PLAYERS];
         int nrOfClients;
         ServerData sData;
         
@@ -147,7 +147,7 @@ void run(Game *pGame){
                 break;
             
             case GAME_OVER:
-                drawText(pGame->pOverText);
+                //drawText(pGame->pOverText);
                 sendGameData(pGame);
                 if(pGame->nrOfClients==MAX_PLAYERS) pGame->nrOfClients = 0;
 
