@@ -16,7 +16,7 @@ struct snowball{
 
 Snowball *createSnowball(SDL_Renderer *pRenderer, int window_width , int window_height){
     Snowball *pSnowball = malloc(sizeof(struct snowball));
-    pSnowball->x_vel = 0;
+    pSnowball->x_vel = 1;
     pSnowball->y_vel = 0;
     pSnowball->window_width = window_width;
     pSnowball->window_height = window_height;
