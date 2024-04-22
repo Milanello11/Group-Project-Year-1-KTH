@@ -17,9 +17,7 @@ typedef struct{
         Character *pCharacter[CHARACTERS];
         int nr_of_Characters;
 
-        
         Snowball *pSnowball;
-        SnowballImage *pSnowballImage;
     }Game;
 
 int initializations(Game *pGame);
@@ -68,9 +66,7 @@ int initializations(Game *pGame){
             close(pGame);
         }
     }
-    
-
-
+    pGame->pSnowball = createSnowball(pGame->pRenderer, WINDOW_WIDTH , WINDOW_HEIGHT);
     return 1;
 }
 
@@ -118,7 +114,8 @@ void run(Game *pGame){
         for (int i = 0; i < CHARACTERS; i++){
             drawCharacter(pGame->pCharacter[i]);
         }
-        
+        updateSnowball(pGame->pSnowball);
+        drawSnowball(pGame->pSnowball);
         
 
         SDL_RenderPresent(pGame->pRenderer);

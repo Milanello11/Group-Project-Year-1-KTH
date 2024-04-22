@@ -9,9 +9,6 @@ struct character{
     float x_pos, y_pos, x_vel, y_vel , xStart , yStart;
     int window_width , window_height;
 
-    Snowball *pSnowball;
-    SnowballImage *pSnowballImage;
-
     SDL_Renderer *pRenderer;
     SDL_Texture *pTexture;
     SDL_Rect characterRect;
@@ -23,9 +20,6 @@ Character *createCharacter(int number, SDL_Renderer *pRenderer, int window_w, in
     pCharacter->y_vel = 0;
     pCharacter->window_width = window_w;
     pCharacter->window_height = window_h;
-    
-    pCharacter->pSnowballImage = createSnowballImage(pRenderer);
-    pCharacter->pSnowball = createSnowball(pCharacter->pSnowballImage, window_w, window_h);
     
     SDL_Surface *pSurface = IMG_Load("resources/Character.png");
     if (!pSurface){
@@ -39,14 +33,11 @@ Character *createCharacter(int number, SDL_Renderer *pRenderer, int window_w, in
         printf("Error: %s\n" , SDL_GetError());
         return NULL;
     }
-    SDL_QueryTexture(pCharacter->pTexture,NULL,NULL,&(pCharacter->characterRect.w) , &(pCharacter->characterRect.h));
+    SDL_QueryTexture(pCharacter->pTexture, NULL, NULL, &(pCharacter->characterRect.w), &(pCharacter->characterRect.h));
     pCharacter->characterRect.w /= 5;
     pCharacter->characterRect.h /= 5;
     pCharacter->xStart = pCharacter->x_pos = pCharacter->characterRect.x = window_w*(number + 1) / 6 - pCharacter->characterRect.w/2;
     pCharacter->xStart = pCharacter->y_pos = pCharacter->characterRect.y = window_h/2-pCharacter->characterRect.h/2;
-
-
-
 
     return pCharacter;
 }
@@ -68,13 +59,9 @@ void updateCharacter(Character *pCharacter){
     }
     pCharacter->characterRect.x = pCharacter->x_pos;
     pCharacter->characterRect.y = pCharacter->y_pos;
-    updateSnowball(pCharacter->pSnowball);
 }
 
 void drawCharacter(Character *pCharacter){
-    
-    
-    drawSnowball(pCharacter->pSnowball,pCharacter->pRenderer);
     SDL_RenderCopyEx(pCharacter->pRenderer, pCharacter->pTexture, NULL, &(pCharacter->characterRect), 0, NULL, SDL_FLIP_NONE);
 }
 
