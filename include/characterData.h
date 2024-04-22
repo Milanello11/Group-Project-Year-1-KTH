@@ -31,6 +31,7 @@ typedef struct characterData CharacterData;
 struct serverData{
     CharacterData characters[MAX_PLAYERS];
     int playerNumber;
+    GameState gState;
 };
 typedef struct serverData ServerData;
 
