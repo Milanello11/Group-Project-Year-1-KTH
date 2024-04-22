@@ -116,11 +116,9 @@ void run(Game *pGame){
         }
         
         if (snowball){
-            
             updateSnowball(pGame->pSnowball);
             drawSnowball(pGame->pSnowball);
         }
-        
         
 
         SDL_RenderPresent(pGame->pRenderer);
