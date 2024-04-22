@@ -19,7 +19,7 @@ struct snowball{
 };
 
 SnowballImage *createSnowballImage(SDL_Renderer *pRenderer){
-    static SnowballImage *pSnowballImage = NULL;
+    SnowballImage *pSnowballImage = NULL;
     if (pSnowballImage == NULL){
         pSnowballImage = malloc(sizeof(struct snowballImage));
         SDL_Surface *pSurface = IMG_Load("resources/Snowball.png");
@@ -57,11 +57,12 @@ void destroySnowballImage(SnowballImage *pSnowballImage){
 }
 
 void drawSnowball(Snowball *pSnowball, SDL_Renderer *pRenderer){
-    //SDL_RenderCopy(pRenderer, pSnowball->pTexture, NULL, &(pSnowball->snowballRect));  //här är något knasigt 
+    printf("Johan snear\n");
+    SDL_RenderCopy(pSnowball->pRenderer, pSnowball->pTexture, NULL, NULL);  //här är något knasigt 
     printf("Johan snear\n");
 }
-void updateSnowball(Snowball *pSnowball){ //vi kommer in här men kan inte utföra något
+/*void updateSnowball(Snowball *pSnowball){ //vi kommer in här men kan inte utföra något
     printf("Elias snea\n");
     //pSnowball->snowballRect.x = pSnowball->x_pos = 0;
     //pSnowball->snowballRect.y = pSnowball->y_pos = 0;
-}
+}*/

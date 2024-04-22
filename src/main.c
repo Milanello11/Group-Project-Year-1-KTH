@@ -68,7 +68,8 @@ int initializations(Game *pGame){
             close(pGame);
         }
     }
-    
+    pGame->pSnowballImage = createSnowballImage(pGame->pRenderer);
+    pGame->pSnowball = createSnowball(pGame->pSnowballImage, WINDOW_WIDTH, WINDOW_HEIGHT);
 
 
     return 1;
@@ -118,7 +119,7 @@ void run(Game *pGame){
         for (int i = 0; i < CHARACTERS; i++){
             drawCharacter(pGame->pCharacter[i]);
         }
-        
+        drawSnowball(pGame->pSnowball, pGame->pRenderer);
         
 
         SDL_RenderPresent(pGame->pRenderer);
