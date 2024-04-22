@@ -44,6 +44,13 @@ void updateSnowball(Snowball *pSnowball){
     pSnowball->x_pos += pSnowball->x_vel;
     pSnowball->y_pos += pSnowball->y_vel;
 
+    if(pSnowball->x_pos > (pSnowball->window_width - pSnowball->snowballRect.w)){
+        pSnowball->x_vel = -1;
+    }
+    if(pSnowball->x_pos < 0){
+        pSnowball->x_vel = 1;
+    }
+
     pSnowball->snowballRect.x = pSnowball->x_pos;
     pSnowball->snowballRect.y = pSnowball->y_pos;
 }
