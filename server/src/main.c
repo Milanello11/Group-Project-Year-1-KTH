@@ -93,8 +93,8 @@ int initializations(Game *pGame){
     for(int i=0;i<MAX_PLAYERS;i++)
         pGame->pCharacter[i] = createCharacter(i,pGame->pRenderer,WINDOW_WIDTH,WINDOW_HEIGHT);
     pGame->nrOfCharacters = MAX_PLAYERS;
-    pGame->pOverText = createText(pGame->pRenderer,238,168,65,pGame->pFont,"Game over",WINDOW_WIDTH/2,WINDOW_HEIGHT/2);
-    pGame->pStartText = createText(pGame->pRenderer,238,168,65,pGame->pScoreFont,"Waiting for clients",WINDOW_WIDTH/2,WINDOW_HEIGHT/2+100);
+    //pGame->pOverText = createText(pGame->pRenderer,238,168,65,pGame->pFont,"Game over",WINDOW_WIDTH/2,WINDOW_HEIGHT/2);
+    //pGame->pStartText = createText(pGame->pRenderer,238,168,65,pGame->pScoreFont,"Waiting for clients",WINDOW_WIDTH/2,WINDOW_HEIGHT/2+100);
     for(int i=0;i<MAX_PLAYERS;i++){
         if(!pGame->pCharacter[i]){
             printf("Error: %s\n",SDL_GetError());
@@ -130,7 +130,7 @@ void run(Game *pGame){
                 }
                 for(int i=0;i<MAX_PLAYERS;i++)
                     updateCharacter(pGame->pCharacter[i])
-                SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
+                //SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
                 SDL_RenderClear(pGame->pRenderer);
                 SDL_SetRenderDrawColor(pGame->pRenderer,230,230,230,255);
                 updateCharacter(pGame->pCharacter, pGame->pTmpChar);
@@ -152,7 +152,7 @@ void run(Game *pGame){
                 if(pGame->nrOfClients==MAX_PLAYERS) pGame->nrOfClients = 0;
 
             case START:
-                rawText(pGame->pStartText);
+                //rawText(pGame->pStartText);
                 SDL_RenderPresent(pGame->pRenderer);
                 //if(SDL_PollEvent(&event) && event.type==SDL_QUIT) close_requested = 1;
                 if(SDLNet_UDP_Recv(pGame->pSocket,pGame->pPacket)==1){
@@ -177,7 +177,7 @@ void sendGameData(Game *pGame){
         getCharacterSendData(pGame->pCharacter[i], &(pGame->sData.characters[i]));
     }
     for(int i=0;i<MAX_PLAYERS;i++){
-        pGame->sData.playerNr = i;
+        pGame->sData.playerNumber = i;
         memcpy(pGame->pPacket->data, &(pGame->sData), sizeof(ServerData));
 		pGame->pPacket->len = sizeof(ServerData);
         pGame->pPacket->address = pGame->clients[i];
