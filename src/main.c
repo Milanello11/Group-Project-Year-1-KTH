@@ -31,7 +31,6 @@ int main (int argument, char* arguments[]){
         return 1;
     run(&game);
     close(&game);
-    
     return 0;
 }
 
