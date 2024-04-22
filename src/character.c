@@ -2,6 +2,7 @@
 #include <SDL2/SDL_image.h>
 #include "character.h"
 #include "snowball.h"
+#include "map.h"
 #include <stdbool.h>
 #define CHARACTERVELOCITY 3
 
@@ -56,6 +57,16 @@ void updateCharacter(Character *pCharacter){
     }
     else if(pCharacter->y_pos > (pCharacter->window_height - pCharacter->characterRect.h)){ 
         pCharacter->y_pos = pCharacter->window_height - pCharacter->characterRect.h;
+    }
+    if(getCollision(pCharacter->x_pos, pCharacter->y_pos)){
+
+        pCharacter->x_pos = pCharacter->characterRect.x;
+        pCharacter->y_pos = pCharacter->characterRect.y;
+    }
+    if(getCollision(pCharacter->x_pos + pCharacter->characterRect.w, pCharacter->y_pos + pCharacter->characterRect.h)){
+
+        pCharacter->x_pos = pCharacter->characterRect.x;
+        pCharacter->y_pos = pCharacter->characterRect.y;
     }
     pCharacter->characterRect.x = pCharacter->x_pos;
     pCharacter->characterRect.y = pCharacter->y_pos;
