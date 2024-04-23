@@ -80,10 +80,6 @@ int initializations(Game *pGame){
 		close(pGame);
         return 0;
 	}
-
-
-    pGame->pCharacter = createCharacter(600,400,pGame->pRenderer,1200,800);
-    //pGame->pTmpChar = createCharacter(400,400,pGame->pRenderer,1200,800);
     
     if(!pGame->pPacket){
         printf("Error: %s\n",SDL_GetError());
@@ -131,11 +127,6 @@ void run(Game *pGame){
                 SDL_RenderClear(pGame->pRenderer);
                 SDL_SetRenderDrawColor(pGame->pRenderer,230,230,230,255);
                 drawCharacter(pGame->pCharacter);
-                if (snowball){
-                    pGame->pSnowball = createSnowball(300,300,0,0,pGame->pRenderer,1200,800);
-                    updateSnowball(pGame->pSnowball);
-                    drawSnowball(pGame->pSnowball);
-                }
                 SDL_RenderPresent(pGame->pRenderer);
                 
                 break;
@@ -170,23 +161,13 @@ void setUpGame(Game *pGame){
 }
 
 void updateWithServerData(Game *pGame){
-    pGame->sData.gState = pGame->state;
-    for(int i=0;i<MAX_PLAYERS;i++){
-        getCharacterSendData(pGame->pCharacter[i], &(pGame->sData.rockets[i]));
-    }
-    for(int i=0;i<MAX_PLAYERS;i++){
-        pGame->sData.playerNr = i;
-        memcpy(pGame->pPacket->data, &(pGame->sData), sizeof(ServerData));
-		pGame->pPacket->len = sizeof(ServerData);
-        pGame->pPacket->address = pGame->character[i];
-		SDLNet_UDP_Send(pGame->pSocket,-1,pGame->pPacket);
-    }
-}  
-
-void add(IPaddress address, IPaddress clients[],int *pNrOfClients){
-	for(int i=0;i<*pNrOfClients;i++) if(address.host==clients[i].host &&address.port==clients[i].port) return;
-	clients[*pNrOfClients] = address;
-	(*pNrOfClients)++;
+    ServerData sData;
+    memcpy(&sData, pGame->pPacket->data, sizeof(ServerData));
+    pGame->characterNumber = sData.playerNumber;
+    pGame->state = sData.gState;
+    for(int i=0;i<CHARACTERS;i++){
+        updateCharacterWithReceivedData(pGame->pCharacter[i], &(sData.characters[i]));
+    } 
 }
 
 void close(Game *pGame){
@@ -234,6 +215,7 @@ void handleInput(Game *pGame, SDL_Event *pEvent, bool *pSnowball){
                     characterTurnRight(pGame->pCharacter);
                     break;
                 case SDL_SCANCODE_SPACE:
+                    //pGame->pSnowball = createSnowball(pGame->pRenderer, WINDOW_WIDTH , WINDOW_HEIGHT, pGame->pCharacter[0]);
                     *pSnowball = true;
                     break;
             }
@@ -242,16 +224,12 @@ void handleInput(Game *pGame, SDL_Event *pEvent, bool *pSnowball){
             switch(pEvent->key.keysym.scancode){
                 case SDL_SCANCODE_W:
                 case SDL_SCANCODE_UP:
-                    characterYStop(pGame->pCharacter);
-                    break;
-                case SDL_SCANCODE_A:
-                case SDL_SCANCODE_LEFT:
-                    characterXStop(pGame->pCharacter);
-                    break;
                 case SDL_SCANCODE_S:
                 case SDL_SCANCODE_DOWN:
                     characterYStop(pGame->pCharacter);
                     break;
+                case SDL_SCANCODE_A:
+                case SDL_SCANCODE_LEFT:
                 case SDL_SCANCODE_D:
                 case SDL_SCANCODE_RIGHT:
                     characterXStop(pGame->pCharacter);
