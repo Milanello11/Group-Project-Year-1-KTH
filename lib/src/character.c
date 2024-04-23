@@ -23,7 +23,7 @@ Character *createCharacter(int number, SDL_Renderer *pRenderer, int window_w, in
     pCharacter->window_width = window_w;
     pCharacter->window_height = window_h;
     
-    SDL_Surface *pSurface = IMG_Load("resources/Character.png");
+    SDL_Surface *pSurface = IMG_Load("../lib/resources/Character.png");
     if (!pSurface){
         printf("Error: %s\n", SDL_GetError());
         return NULL;

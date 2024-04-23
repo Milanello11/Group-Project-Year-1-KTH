@@ -1,12 +1,13 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_net.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include "character.h"
 #include "snowball.h"
 #include "characterData.h"
+#include "text.h"
 
 typedef struct{
         SDL_Window *pWindow;
@@ -20,6 +21,8 @@ typedef struct{
         int nrOfClients;
         ServerData sData;
         Snowball *pSnowball;
+        TTF_Font *pFont, *pScoreFont;
+        Text *pOverText, *pStartText;
     }Game;
 
 int initializations(Game *pGame);
@@ -33,8 +36,9 @@ void setUpGame(Game *pGame);
 
 int main (int argument, char* arguments[]){
     Game game={0};
-    if(!initializations(&game)) 
+    if(!initializations(&game)){ 
         return 1;
+    }
     run(&game);
     close(&game);
     
@@ -42,12 +46,23 @@ int main (int argument, char* arguments[]){
 }
 
 int initializations(Game *pGame){
-    if(SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER)!=0){
+    if(SDL_Init(SDL_INIT_VIDEO)!=0){
         printf("Error: %s\n",SDL_GetError());
         return 0;
     }
+    if(TTF_Init()!=0){
+    printf("Error: %s\n",TTF_GetError());
+    SDL_Quit();
+    return 0;
+    }
+    if(SDLNet_Init()){
+	printf("Error: %s\n", SDLNet_GetError());
+    TTF_Quit();
+    SDL_Quit();
+	return 0;
+	}
 
-    pGame->pWindow = SDL_CreateWindow("Snomos",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,1200,800,0);
+    pGame->pWindow = SDL_CreateWindow("Snomos Server",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT,0);
     if(!pGame->pWindow){
         printf("Error: %s\n",SDL_GetError());
         close(pGame);
@@ -60,17 +75,22 @@ int initializations(Game *pGame){
         close(pGame);
         return 0;    
     }
-    if(SDLNet_Init()){
-		printf("Error: %s\n", SDLNet_GetError());
+
+    pGame->pFont = TTF_OpenFont("../lib/resources/arial.ttf", 100);
+    pGame->pScoreFont = TTF_OpenFont("../lib/resources/arial.ttf", 30);
+    if(!pGame->pFont || !pGame->pScoreFont){
+        printf("Error: %s\n",TTF_GetError());
         close(pGame);
-		return 0;
-	}
+        return 0;
+    }
+
     if (!(pGame->pSocket = SDLNet_UDP_Open(2000)))
 	{
 		printf("SDLNet_UDP_Open: %s\n", SDLNet_GetError());
 		close(pGame);
         return 0;
 	}
+    
 	if (!(pGame->pPacket = SDLNet_AllocPacket(512)))
 	{
 		printf("SDLNet_AllocPacket: %s\n", SDLNet_GetError());
@@ -78,17 +98,18 @@ int initializations(Game *pGame){
         return 0;
 	}
     
-    if(!pGame->pCharacter){
-        printf("Error: %s\n",SDL_GetError());
-        close(pGame);
-        return 0;
-    }
-
-    for(int i=0;i < CHARACTERS;i++)
+for (int i = 0 ; i < CHARACTERS ; i++){
         pGame->pCharacter[i] = createCharacter(i,pGame->pRenderer,WINDOW_WIDTH,WINDOW_HEIGHT);
+    }
     pGame->nrOfCharacters = CHARACTERS;
+    for(int i = 0 ; i < CHARACTERS ; i++){
+        if(!pGame->pCharacter[i]){
+            printf("Error: %s\n" , SDL_GetError());
+            close(pGame);
+        }
+    }
     //pGame->pOverText = createText(pGame->pRenderer,238,168,65,pGame->pFont,"Game over",WINDOW_WIDTH/2,WINDOW_HEIGHT/2);
-    //pGame->pStartText = createText(pGame->pRenderer,238,168,65,pGame->pScoreFont,"Waiting for clients",WINDOW_WIDTH/2,WINDOW_HEIGHT/2+100);
+    pGame->pStartText = createText(pGame->pRenderer,238,168,65,pGame->pScoreFont,"Waiting for clients",WINDOW_WIDTH/2,WINDOW_HEIGHT/2+100);
     for(int i=0;i < CHARACTERS;i++){
         if(!pGame->pCharacter[i]){
             printf("Error: %s\n",SDL_GetError());
@@ -135,21 +156,26 @@ void run(Game *pGame){
                 }
 
                 SDL_RenderPresent(pGame->pRenderer);
-                
                 break;
             
             case GAME_OVER:
                 //drawText(pGame->pOverText);
                 sendGameData(pGame);
-                if(pGame->nrOfClients==MAX_PLAYERS) pGame->nrOfClients = 0;
+                if(pGame->nrOfClients==MAX_PLAYERS){
+                    pGame->nrOfClients = 0;
+                }
 
             case START:
-                //rawText(pGame->pStartText);
+                drawText(pGame->pStartText);
                 SDL_RenderPresent(pGame->pRenderer);
-                //if(SDL_PollEvent(&event) && event.type==SDL_QUIT) close_requested = 1;
+                if(SDL_PollEvent(&event) && event.type==SDL_QUIT){ 
+                    active = false;
+                }
                 if(SDLNet_UDP_Recv(pGame->pSocket,pGame->pPacket)==1){
                     add(pGame->pPacket->address,pGame->clients,&(pGame->nrOfClients));
-                    if(pGame->nrOfClients==MAX_PLAYERS) setUpGame(pGame);
+                    if(pGame->nrOfClients==CHARACTERS){ 
+                        setUpGame(pGame);
+                    }
                 }
                 break;
         }       
@@ -159,7 +185,7 @@ void run(Game *pGame){
 
 void setUpGame(Game *pGame){
     //for (int i=0;i<MAX_PLAYERS;i++) resetCharacter(pGame->pCharacter[i]);
-    pGame->nrOfCharacters=MAX_PLAYERS;
+    pGame->nrOfCharacters = CHARACTERS;
     pGame->state = ONGOING; 
 }
 
@@ -180,11 +206,12 @@ void sendGameData(Game *pGame){
 void add(IPaddress address, IPaddress clients[],int *pNrOfClients){
 	for(int i=0;i<*pNrOfClients;i++){
         if(address.host==clients[i].host &&address.port==clients[i].port){
-        return;
+            return;
         }
-        clients[*pNrOfClients] = address;
-        (*pNrOfClients)++;
     }
+    clients[*pNrOfClients] = address;
+    (*pNrOfClients)++;
+    
 }
 
 void executeCommand(Game *pGame, ClientData cData){
@@ -210,8 +237,8 @@ void executeCommand(Game *pGame, ClientData cData){
 
 void close(Game *pGame){
     for(int i=0; i < CHARACTERS;i++){
-        if(pGame->pCharacter){
-            destroyCharacter(pGame->pCharacter);
+        if(pGame->pCharacter[i]){
+            destroyCharacter(pGame->pCharacter[i]);
         }
     }
     if(pGame->pSnowball){
@@ -223,6 +250,18 @@ void close(Game *pGame){
     if(pGame->pWindow){ 
         SDL_DestroyWindow(pGame->pWindow);
     }
+    if(pGame->pOverText){
+        destroyText(pGame->pOverText);
+    }
+    if(pGame->pStartText){
+        destroyText(pGame->pStartText);  
+    } 
+    if(pGame->pFont){
+        TTF_CloseFont(pGame->pFont);
+    }
+    if(pGame->pScoreFont){
+        TTF_CloseFont(pGame->pScoreFont);
+    }
     if(pGame->pPacket){ 
         SDLNet_FreePacket(pGame->pPacket);
     }
@@ -230,6 +269,7 @@ void close(Game *pGame){
         SDLNet_UDP_Close(pGame->pSocket);
     }
 
+    TTF_Quit();
     SDLNet_Quit();
     SDL_Quit();
 }
@@ -240,19 +280,19 @@ void handleInput(Game *pGame, SDL_Event *pEvent, bool *pSnowball){
             switch(pEvent->key.keysym.scancode){
                 case SDL_SCANCODE_W:
                 case SDL_SCANCODE_UP:
-                    characterTurnUp(pGame->pCharacter);
+                    characterTurnUp(pGame->pCharacter[0]);
                     break;
                 case SDL_SCANCODE_A:
                 case SDL_SCANCODE_LEFT:
-                    characterTurnLeft(pGame->pCharacter);
+                    characterTurnLeft(pGame->pCharacter[0]);
                     break;
                 case SDL_SCANCODE_S:
                 case SDL_SCANCODE_DOWN:
-                    characterTurnDown(pGame->pCharacter);
+                    characterTurnDown(pGame->pCharacter[0]);
                     break;
                 case SDL_SCANCODE_D:
                 case SDL_SCANCODE_RIGHT:
-                    characterTurnRight(pGame->pCharacter);
+                    characterTurnRight(pGame->pCharacter[0]);
                     break;
                 case SDL_SCANCODE_SPACE:
                     //pGame->pSnowball = createSnowball(pGame->pRenderer, WINDOW_WIDTH , WINDOW_HEIGHT, pGame->pCharacter[0]);
@@ -266,13 +306,13 @@ void handleInput(Game *pGame, SDL_Event *pEvent, bool *pSnowball){
                 case SDL_SCANCODE_UP:
                 case SDL_SCANCODE_S:
                 case SDL_SCANCODE_DOWN:
-                    characterYStop(pGame->pCharacter);
+                    characterYStop(pGame->pCharacter[0]);
                     break;
                 case SDL_SCANCODE_A:
                 case SDL_SCANCODE_LEFT:
                 case SDL_SCANCODE_D:
                 case SDL_SCANCODE_RIGHT:
-                    characterXStop(pGame->pCharacter);
+                    characterXStop(pGame->pCharacter[0]);
                     break;  
             }                                
     }
