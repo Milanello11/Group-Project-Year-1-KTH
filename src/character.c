@@ -3,6 +3,7 @@
 #include "character.h"
 #include "snowball.h"
 #include "map.h"
+#include "characterData.h"
 #include <stdbool.h>
 #define CHARACTERVELOCITY 3
 
@@ -108,4 +109,18 @@ void characterYStop(Character *pCharacter){
 }
 bool isColliding(SDL_Rect a, SDL_Rect b){
     return (a.x > b.x + b.w || a.x + a.w < b.x || a.y > b.y + b.h || a.y + a.h < b.y);
+}
+void updateRocketWithRecievedData(Character *pCharacter, CharacterData *pCharacterData){
+    //pCharacter->alive = pCharacter->alive;
+    pCharacter->x_vel = pCharacterData->x_vel;
+    pCharacter->y_vel = pCharacterData->y_vel;
+    pCharacter->x_pos = pCharacterData->x_pos;
+    pCharacter->y_pos = pCharacterData->y_pos;
+}
+void getRocketSendData(Character *pCharacter, CharacterData *pCharacterData){
+    //pRocketData->alive = pRocket->alive;
+    pCharacterData->x_vel = pCharacter->x_vel;
+    pCharacterData->y_vel = pCharacter->y_vel;
+    pCharacterData->x_pos = pCharacter->x_pos;
+    pCharacterData->y_pos = pCharacter->y_pos;
 }

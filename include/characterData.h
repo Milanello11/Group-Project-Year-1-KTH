@@ -30,7 +30,7 @@ struct characterData{
 typedef struct characterData CharacterData;
 
 struct serverData{
-    CharacterData characters[MAX_PLAYERS];
+    CharacterData characters[CHARACTERS];
     int playerNumber;
     GameState gState;
 };

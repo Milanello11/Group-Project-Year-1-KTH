@@ -145,7 +145,9 @@ void run(Game *pGame){
                 if(SDLNet_UDP_Recv(pGame->pSocket,pGame->pPacket)==1){
                     updateWithServerData(pGame);
                     //add(pGame->pPacket->address,pGame->clients,&(pGame->nrOfClients));
-                    if(pGame->nrOfCharacters==CHARACTERS) setUpGame(pGame);
+                    if(pGame->nrOfCharacters==CHARACTERS){ 
+                        setUpGame(pGame);
+                    }
                 }
                 break;
             }       
