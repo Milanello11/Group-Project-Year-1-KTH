@@ -4,7 +4,7 @@ INCDIR=../lib/include
 #LIBS = C:\ProjectCourseSnomos\include
 INCLUDE = -IC:\msys2\mingw64\include\SDL2 -I$(INCDIR)
 CFLAGS = -g $(INCLUDE) -c 
-LDFLAGS = -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lm
+LDFLAGS = -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net -lm
 CC = gcc
 
 snomosServer: main.o character.o snowball.o map.o
