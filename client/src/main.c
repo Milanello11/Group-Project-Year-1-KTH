@@ -87,12 +87,12 @@ int initializations(Game *pGame){
         return 0;
     }
 
-    for(int i=0;i<MAX_PLAYERS;i++)
+    for(int i=0;i<CHARACTERS;i++)
         pGame->pCharacter[i] = createCharacter(i,pGame->pRenderer,WINDOW_WIDTH,WINDOW_HEIGHT);
-    pGame->nrOfCharacters = MAX_PLAYERS;
+    pGame->nrOfCharacters = CHARACTERS;
     //pGame->pOverText = createText(pGame->pRenderer,238,168,65,pGame->pFont,"Game over",WINDOW_WIDTH/2,WINDOW_HEIGHT/2);
     //pGame->pStartText = createText(pGame->pRenderer,238,168,65,pGame->pScoreFont,"Waiting for clients",WINDOW_WIDTH/2,WINDOW_HEIGHT/2+100);
-    for(int i=0;i<MAX_PLAYERS;i++){
+    for(int i=0;i<CHARACTERS;i++){
         if(!pGame->pCharacter[i]){
             printf("Error: %s\n",SDL_GetError());
             close(pGame);
@@ -111,7 +111,6 @@ void run(Game *pGame){
     int joining = 0;
     while(active){
         switch (pGame->state){
-
             case ONGOING:
                 while (SDLNet_UDP_recv(pGame->pSocket, pGame->pPacket)){
                     updateWithServerData(pGame);
@@ -121,7 +120,7 @@ void run(Game *pGame){
                         active = false;
                     else handleInput(pGame,&event,&snowball);
                 }
-                for(int i=0;i<MAX_PLAYERS;i++)
+                for(int i=0;i<CHARACTERS;i++)
                     updateCharacter(pGame->pCharacter[i]);
                 SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
                 SDL_RenderClear(pGame->pRenderer);
@@ -136,15 +135,17 @@ void run(Game *pGame){
             case START:
                 if(!joining){
                     
-                }else{
+                }
+                else{
                 SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
                 SDL_RenderClear(pGame->pRenderer);
                 SDL_SetRenderDrawColor(pGame->pRenderer,230,230,230,255);
                 
-                if(joining) SDLNet_UDP_Send(pGame->pSocket, -1, pGame->pPacket);
+                if(joining){
+                SDLNet_UDP_Send(pGame->pSocket, -1, pGame->pPacket);
+                }
                 if(SDLNet_UDP_Recv(pGame->pSocket,pGame->pPacket)==1){
                     updateWithServerData(pGame);
-                    //add(pGame->pPacket->address,pGame->clients,&(pGame->nrOfClients));
                     if(pGame->nrOfCharacters==CHARACTERS){ 
                         setUpGame(pGame);
                     }
@@ -157,8 +158,8 @@ void run(Game *pGame){
 }
 
 void setUpGame(Game *pGame){
-    //for (int i=0;i<MAX_PLAYERS;i++) resetCharacter(pGame->pCharacter[i]);
-    pGame->nrOfCharacters=MAX_PLAYERS;
+    //for (int i=0;i<CHARACTERS;i++) resetCharacter(pGame->pCharacter[i]);
+    pGame->nrOfCharacters=CHARACTERS;
     pGame->state = ONGOING; 
 }
 

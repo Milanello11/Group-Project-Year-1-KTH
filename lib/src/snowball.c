@@ -39,10 +39,6 @@ Snowball *createSnowball(SDL_Renderer *pRenderer, int window_width , int window_
     pSnowball->snowballRect.h /= 3;
     pSnowball->x_pos = pSnowball->snowballRect.x = (window_width / 2);
     pSnowball->y_pos = pSnowball->snowballRect.y = (window_height / 2);
-<<<<<<< HEAD
-=======
-
->>>>>>> 0c563b0820c34c2218a131dcf9b8c2a08ddb96fb
     return pSnowball;
 }
 

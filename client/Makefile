@@ -7,9 +7,9 @@ CFLAGS = -g $(INCLUDE) -c
 LDFLAGS = -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lm
 CC = gcc
 
-snomosServer: main.o character.o snowball.o map.o
+snomosClient: main.o character.o snowball.o map.o
 	@echo "Building Snomos"
-	$(CC) -o snomosServer main.o character.o snowball.o map.o $(LDFLAGS)
+	$(CC) -o snomosClient main.o character.o snowball.o map.o $(LDFLAGS)
 
 main.o: $(SRCDIR)/main.c $(INCDIR)/character.h $(INCDIR)/characterData.h $(INCDIR)/snowball.h $(INCDIR)/map.h
 	$(CC) $(CFLAGS) $(SRCDIR)/main.c 
