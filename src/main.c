@@ -66,7 +66,7 @@ int initializations(Game *pGame){
             close(pGame);
         }
     }
-    pGame->pSnowball = createSnowball(pGame->pRenderer, WINDOW_WIDTH , WINDOW_HEIGHT);
+   
     return 1;
 }
 
@@ -171,11 +171,12 @@ void handleInput(Game *pGame, SDL_Event *pEvent, bool *pSnowball){
                 break;
 
                 case SDL_SCANCODE_SPACE:
+                   // pGame->pSnowball = createSnowball(pGame->pRenderer, WINDOW_WIDTH , WINDOW_HEIGHT, pGame->pCharacter[0]);
                     *pSnowball = true;
                 break;
             }
         break;
-        
+
         case SDL_KEYUP:
             switch(pEvent->key.keysym.scancode){
                 case SDL_SCANCODE_W:

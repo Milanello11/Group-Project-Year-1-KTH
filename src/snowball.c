@@ -2,6 +2,7 @@
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include "snowball.h"
+#include "character.h"
 
 
 struct snowball{
@@ -14,7 +15,7 @@ struct snowball{
 };
 
 
-Snowball *createSnowball(SDL_Renderer *pRenderer, int window_width , int window_height){
+Snowball *createSnowball(SDL_Renderer *pRenderer, int window_width , int window_height, Character *pCharacter){
     Snowball *pSnowball = malloc(sizeof(struct snowball));
     pSnowball->x_vel = 1;
     pSnowball->y_vel = 0;
@@ -34,10 +35,11 @@ Snowball *createSnowball(SDL_Renderer *pRenderer, int window_width , int window_
         return NULL;
     }
     SDL_QueryTexture(pSnowball->pTexture, NULL, NULL, &(pSnowball->snowballRect.w), &(pSnowball->snowballRect.h));
-    pSnowball->snowballRect.w /= 4;
-    pSnowball->snowballRect.h /= 4;
+    pSnowball->snowballRect.w /= 3;
+    pSnowball->snowballRect.h /= 3;
     pSnowball->x_pos = pSnowball->snowballRect.x = (window_width / 2);
     pSnowball->y_pos = pSnowball->snowballRect.y = (window_height / 2);
+    return pSnowball;
 }
 
 void updateSnowball(Snowball *pSnowball){ 
