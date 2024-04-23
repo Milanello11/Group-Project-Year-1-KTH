@@ -1,11 +1,13 @@
 # Location of where hello.c is stored in
 SRCDIR=./src
 
+INCDIR=./include
+
 # Name of the compiler, GNU GCC in this case
 CC=gcc
 
 # Any include directories
-INCLUDE = /opt/homebrew/include
+INCLUDE = /opt/homebrew/include -I$(INCDIR)
 
 # Any flags for the compiler
 CFLAGS = -g -I$(INCLUDE) -c
@@ -16,13 +18,24 @@ LIBS = /opt/homebrew/lib
 
 # Extra flags to give to compilers when they are supposed to invoke the linker
 #LDFLAGS = -lmingw32 -lSDL2main -lSDL2 -mwindows
-LDFLAGS = -lSDL2main -lSDL2
+LDFLAGS = -lSDL2main -lSDL2_image -lSDL2
 
-hello:
-	@echo "Building Hello"
-	$(CC) $(CFLAGS) $(SRCDIR)/hello.c -o $@.o 
-	$(CC) hello.o -o hello $(LDFLAGS) -L $(LIBS)
+snomos: main.o character.o snowball.o map.o
+	@echo "Building Snomos"
+	$(CC) -o snomos main.o character.o snowball.o map.o $(LDFLAGS) -L $(LIBS)
 
+main.o: $(SRCDIR)/main.c $(INCDIR)/character.h $(INCDIR)/snowball.h $(INCDIR)/map.h
+	$(CC) $(CFLAGS) $(SRCDIR)/main.c 
+
+character.o: $(SRCDIR)/character.c $(INCDIR)/character.h
+	$(CC) $(CFLAGS) $(SRCDIR)/character.c 
+
+snowball.o: $(SRCDIR)/snowball.c $(INCDIR)/snowball.h
+	$(CC) $(CFLAGS) $(SRCDIR)/snowball.c 
+
+map.o: $(SRCDIR)/map.c $(INCDIR)/map.h
+	$(CC) $(CFLAGS) $(SRCDIR)/map.c
+	
 clean:
-	rm -f hello.o
-	rm -f hello
+	rm -f *.o
+	rm -f snomos
