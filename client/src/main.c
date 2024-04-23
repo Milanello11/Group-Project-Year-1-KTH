@@ -7,12 +7,11 @@
 #include "character.h"
 #include "snowball.h"
 #include "characterData.h"
-
 typedef struct{
         SDL_Window *pWindow;
         SDL_Renderer *pRenderer;
-        Character *pCharacter;
-        Character *pTmpChar;
+        Character *pCharacter[CHARACTERS];
+        //Character *pTmpChar;
         int nrOfCharacters, characterNumber;
         GameState state;
         UDPpacket *pPacket;
@@ -27,7 +26,7 @@ int initializations(Game *pGame);
 void run(Game *pGame);
 void close(Game *pGame);
 void handleInput(Game *pGame, SDL_Event *pEvent , bool *pSnowball);
-updateWithServerData(Game *pGame);
+void updateWithServerData(Game *pGame);
 
 int main (int argument, char* arguments[]){
     Game game={0};
@@ -84,7 +83,7 @@ int initializations(Game *pGame){
 
 
     pGame->pCharacter = createCharacter(600,400,pGame->pRenderer,1200,800);
-    pGame->pTmpChar = createCharacter(400,400,pGame->pRenderer,1200,800);
+    //pGame->pTmpChar = createCharacter(400,400,pGame->pRenderer,1200,800);
     
     if(!pGame->pPacket){
         printf("Error: %s\n",SDL_GetError());
@@ -95,8 +94,8 @@ int initializations(Game *pGame){
     for(int i=0;i<MAX_PLAYERS;i++)
         pGame->pCharacter[i] = createCharacter(i,pGame->pRenderer,WINDOW_WIDTH,WINDOW_HEIGHT);
     pGame->nrOfCharacters = MAX_PLAYERS;
-    pGame->pOverText = createText(pGame->pRenderer,238,168,65,pGame->pFont,"Game over",WINDOW_WIDTH/2,WINDOW_HEIGHT/2);
-    pGame->pStartText = createText(pGame->pRenderer,238,168,65,pGame->pScoreFont,"Waiting for clients",WINDOW_WIDTH/2,WINDOW_HEIGHT/2+100);
+    //pGame->pOverText = createText(pGame->pRenderer,238,168,65,pGame->pFont,"Game over",WINDOW_WIDTH/2,WINDOW_HEIGHT/2);
+    //pGame->pStartText = createText(pGame->pRenderer,238,168,65,pGame->pScoreFont,"Waiting for clients",WINDOW_WIDTH/2,WINDOW_HEIGHT/2+100);
     for(int i=0;i<MAX_PLAYERS;i++){
         if(!pGame->pCharacter[i]){
             printf("Error: %s\n",SDL_GetError());
@@ -127,14 +126,11 @@ void run(Game *pGame){
                     else handleInput(pGame,&event,&snowball);
                 }
                 for(int i=0;i<MAX_PLAYERS;i++)
-                    updateCharacter(pGame->pCharacter[i])
+                    updateCharacter(pGame->pCharacter[i]);
                 SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
                 SDL_RenderClear(pGame->pRenderer);
                 SDL_SetRenderDrawColor(pGame->pRenderer,230,230,230,255);
-                updateCharacter(pGame->pCharacter, pGame->pTmpChar);
                 drawCharacter(pGame->pCharacter);
-                updateCharacter(pGame->pTmpChar, pGame->pCharacter);
-                drawCharacter(pGame->pTmpChar);
                 if (snowball){
                     pGame->pSnowball = createSnowball(300,300,0,0,pGame->pRenderer,1200,800);
                     updateSnowball(pGame->pSnowball);
@@ -145,29 +141,25 @@ void run(Game *pGame){
                 break;
             
             case GAME_OVER:
-                drawText(pGame->pOverText);
-
+                
             case START:
                 if(!joining){
-                    drawText(pGame->pStartText);
+                    
                 }else{
                 SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
                 SDL_RenderClear(pGame->pRenderer);
                 SDL_SetRenderDrawColor(pGame->pRenderer,230,230,230,255);
-                drawText(pGame->pWaitingText);
-                //if(SDL_PollEvent(&event) && event.type==SDL_QUIT) close_requested = 1;
-                }
-                if(SDL_PollEvent(&__event)){
-                    if (event.type==SDL_QUIT event.type==SDL_QUIT) close_requested = 1;
-                }
+                
                 if(joining) SDLNet_UDP_Send(pGame->pSocket, -1, pGame->pPacket);
                 if(SDLNet_UDP_Recv(pGame->pSocket,pGame->pPacket)==1){
-                    add(pGame->pPacket->address,pGame->clients,&(pGame->nrOfClients));
-                    if(pGame->nrOfClients==MAX_PLAYERS) setUpGame(pGame);
+                    updateWithServerData(pGame);
+                    //add(pGame->pPacket->address,pGame->clients,&(pGame->nrOfClients));
+                    if(pGame->nrOfCharacters==CHARACTERS) setUpGame(pGame);
                 }
                 break;
-        }       
+            }       
         SDL_Delay(1000/60-15);
+        }
     }
 }
 
@@ -177,16 +169,16 @@ void setUpGame(Game *pGame){
     pGame->state = ONGOING; 
 }
 
-void sendGameData(Game *pGame){
+void updateWithServerData(Game *pGame){
     pGame->sData.gState = pGame->state;
     for(int i=0;i<MAX_PLAYERS;i++){
-        getCharacterSendData(pGame->pRocket[i], &(pGame->sData.rockets[i]));
+        getCharacterSendData(pGame->pCharacter[i], &(pGame->sData.rockets[i]));
     }
     for(int i=0;i<MAX_PLAYERS;i++){
         pGame->sData.playerNr = i;
         memcpy(pGame->pPacket->data, &(pGame->sData), sizeof(ServerData));
 		pGame->pPacket->len = sizeof(ServerData);
-        pGame->pPacket->address = pGame->clients[i];
+        pGame->pPacket->address = pGame->character[i];
 		SDLNet_UDP_Send(pGame->pSocket,-1,pGame->pPacket);
     }
 }  
@@ -203,9 +195,6 @@ void close(Game *pGame){
     }
     if(pGame->pSnowball){
         destroySnowball(pGame->pSnowball);
-    }
-    if(pGame->pTmpChar){
-        destroyCharacter(pGame->pTmpChar);
     }
     if(pGame->pRenderer){ 
         SDL_DestroyRenderer(pGame->pRenderer);
