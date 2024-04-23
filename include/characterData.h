@@ -1,8 +1,9 @@
-//Definerar alla funktioner nätverk behöver
 #ifndef character_data_h
 #define character_data_h
-
+#define WINDOW_HEIGHT 800
+#define WINDOW_WIDTH 800
 #define MAX_PLAYERS 6
+#define CHARACTERS 2
 
 enum gameState{START, ONGOING, GAME_OVER};
 typedef enum gameState GameState;
