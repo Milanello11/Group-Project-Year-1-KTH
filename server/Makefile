@@ -1,0 +1,24 @@
+SRCDIR=./src
+COMMONSRCDIR=../lib/src
+INCDIR=../lib/include
+#LIBS = C:\ProjectCourseSnomos\include
+INCLUDE = -IC:\msys2\mingw64\include\SDL2 -I$(INCDIR)
+CFLAGS = -g $(INCLUDE) -c 
+LDFLAGS = -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lm
+CC = gcc
+
+snomosServer: main.o character.o snowball.o map.o
+	@echo "Building Snomos"
+	$(CC) -o snomosServer main.o character.o snowball.o map.o $(LDFLAGS)
+
+main.o: $(SRCDIR)/main.c $(INCDIR)/character.h $(INCDIR)/characterData.h $(INCDIR)/snowball.h $(INCDIR)/map.h
+	$(CC) $(CFLAGS) $(SRCDIR)/main.c 
+
+character.o: $(SRCDIR)/character.c $(INCDIR)/character.h $(INCDIR)/characterData.h $(INCDIR)/snowball.h $(INCDIR)/map.h
+	$(CC) $(CFLAGS) $(SRCDIR)/character.c
+
+snowball.o: $(SRCDIR)/snowball.c $(INCDIR)/snowball.h $(INCDIR)/character.h
+	$(CC) $(CFLAGS) $(SRCDIR)/snowball.c 
+
+map.o: $(SRCDIR)/map.c $(INCDIR)/map.h
+	$(CC) $(CFLAGS) $(SRCDIR)/map.c
