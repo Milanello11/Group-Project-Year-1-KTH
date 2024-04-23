@@ -62,3 +62,13 @@ int getTileValue(int x, int y){
 
     return tileMap[x][y];
 }
+
+int getCollision(int x, int y){
+    x /= 16;
+    y /= 16;
+
+    if(tileMap[x][y] == 1 || tileMap[x][y] == 2)
+        return 1;
+
+    return 0;
+}

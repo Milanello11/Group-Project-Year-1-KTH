@@ -31,7 +31,6 @@ int main (int argument, char* arguments[]){
         return 1;
     run(&game);
     close(&game);
-    
     return 0;
 }
 
@@ -102,6 +101,8 @@ void run(Game *pGame){
         while(SDL_PollEvent(&event)){
             if(event.type==SDL_QUIT) 
                 active = false;
+            else if(event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
+                active = false;
             else handleInput(pGame,&event,&snowball);
         }
         SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
@@ -116,11 +117,9 @@ void run(Game *pGame){
         }
         
         if (snowball){
-            
             updateSnowball(pGame->pSnowball);
             drawSnowball(pGame->pSnowball);
         }
-        
         
 
         SDL_RenderPresent(pGame->pRenderer);
