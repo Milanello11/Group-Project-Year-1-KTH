@@ -1,6 +1,7 @@
 #ifndef character_h
 #define character_h
 #include <stdbool.h>
+#include <characterData.h>
 
 typedef struct character Character;
 
@@ -15,7 +16,8 @@ void characterTurnRight(Character *pCharacter);
 void characterTurnLeft(Character *pCharacter);
 void characterXStop(Character *pCharacter);
 void characterYStop(Character *pCharacter);
+void updateCharacterWithRecievedData(Character *pCharacter, CharacterData *pCharacterData);
+void getCharacterSendData(Character *pCharacter, CharacterData *pCharacterData);
 bool isColliding(SDL_Rect a, SDL_Rect b);
-
 
 #endif

@@ -15,7 +15,7 @@ typedef struct{
         int nrOfCharacters;
         GameState state;
         UDPpacket *pPacket;
-        UDPsocket *pSocket;
+        UDPsocket pSocket;
         IPaddress clients[MAX_PLAYERS];
         int nrOfClients;
         ServerData sData;
@@ -184,6 +184,27 @@ void add(IPaddress address, IPaddress clients[],int *pNrOfClients){
         }
         clients[*pNrOfClients] = address;
         (*pNrOfClients)++;
+    }
+}
+
+void executeCommand(Game *pGame, ClientData cData){
+        switch (cData.command)
+    {
+        case UP:
+            characterTurnUp(pGame->pCharacter[cData.playerNumber]);
+            break;
+        case DOWN:
+            characterTurnDown(pGame->pCharacter[cData.playerNumber]);
+            break;
+        case LEFT:
+            characterTurnLeft(pGame->pCharacter[cData.playerNumber]);
+            break;
+        case RIGHT:
+            characterTurnRight(pGame->pCharacter[cData.playerNumber]);
+            break;
+        case SHOOT:
+            //pGame->pSnowball = createSnowball(pGame->pRenderer, WINDOW_WIDTH, WINDOW_HEIGHT);
+            break;
     }
 }
 

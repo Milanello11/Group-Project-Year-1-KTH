@@ -22,3 +22,7 @@ snowball.o: $(COMMONSRCDIR)/snowball.c $(INCDIR)/snowball.h $(INCDIR)/character.
 
 map.o: $(COMMONSRCDIR)/map.c $(INCDIR)/map.h
 	$(CC) $(CFLAGS) $(COMMONSRCDIR)/map.c
+
+clean: 
+	del *.o
+	del *.exe
