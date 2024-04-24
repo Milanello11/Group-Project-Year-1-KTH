@@ -124,6 +124,7 @@ void run(Game *pGame){
         for(int y = 0; y < 50; y++){
             tile_placement[x][y].x = x*16;
             tile_placement[x][y].y = y*16;
+            tile_placement[x][y].w = 16;
             tile_placement[x][y].h = 16;
         }
     }
@@ -156,6 +157,7 @@ void run(Game *pGame){
                 for(int i=0;i<CHARACTERS;i++)
                     drawCharacter(pGame->pCharacter[i]);
                 SDL_RenderPresent(pGame->pRenderer);
+                SDL_Delay(1000/60-15);
                 break;
             
             case GAME_OVER:
