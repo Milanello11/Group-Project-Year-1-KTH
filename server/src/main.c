@@ -231,6 +231,11 @@ void executeCommand(Game *pGame, ClientData cData){
         case SHOOT:
             //pGame->pSnowball = createSnowball(pGame->pRenderer, WINDOW_WIDTH, WINDOW_HEIGHT);
             break;
+        case STOPX:
+            characterXStop(pGame->pCharacter[cData.playerNumber]);
+            break;
+        case STOPY:
+            characterYStop(pGame->pCharacter[cData.playerNumber]);
     }
 }
 

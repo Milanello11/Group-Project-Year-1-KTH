@@ -248,12 +248,14 @@ void handleInput(Game *pGame, SDL_Event *pEvent, bool *pSnowball){
                 case SDL_SCANCODE_S:
                 case SDL_SCANCODE_DOWN:
                     characterYStop(pGame->pCharacter[pGame->characterNumber]);
+                    cData.command = STOPX;
                     break;
                 case SDL_SCANCODE_A:
                 case SDL_SCANCODE_LEFT:
                 case SDL_SCANCODE_D:
                 case SDL_SCANCODE_RIGHT:
                     characterXStop(pGame->pCharacter[pGame->characterNumber]);
+                    cData.command = STOPY;
                     break;  
             }                                
     }
