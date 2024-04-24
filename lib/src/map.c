@@ -72,22 +72,3 @@ int getCollision(int x, int y){
 
     return 0;
 }
-void renderBackground(SDL_Renderer *pGameRender, SDL_Texture *tile_texture, SDL_Rect tiles_type[], SDL_Rect tile_placement[50][50]){
-
-    for(int x = 0; x < 50; x++){
-        for(int y = 0; y < 50; y++){
-            switch (getTileValue(x, y)){
-
-                case 0:
-                    SDL_RenderCopy(pGameRender, tile_texture, &tiles_type[0], &tile_placement[x][y]);
-                    break;
-                case 1:
-                    SDL_RenderCopy(pGameRender, tile_texture, &tiles_type[1], &tile_placement[x][y]);
-                    break;
-                case 2:
-                    SDL_RenderCopy(pGameRender, tile_texture, &tiles_type[2], &tile_placement[x][y]);
-                    break;
-            }
-        }
-    }
-}

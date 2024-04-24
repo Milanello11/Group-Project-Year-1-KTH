@@ -147,17 +147,15 @@ void run(Game *pGame){
                         active = false;
                     else handleInput(pGame,&event,&snowball);
                 }
-                for(int i=0;i<CHARACTERS;i++)
-                    updateCharacter(pGame->pCharacter[i]);
                 SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
                 SDL_RenderClear(pGame->pRenderer);
                 renderBackground(pGame->pRenderer, tile_texture, tiles_type, tile_placement);
                 SDL_SetRenderDrawColor(pGame->pRenderer,230,230,230,255);
                 for(int i=0;i<CHARACTERS;i++)
+                    updateCharacter(pGame->pCharacter[i]);
+                for(int i=0;i<CHARACTERS;i++)
                     drawCharacter(pGame->pCharacter[i]);
                 SDL_RenderPresent(pGame->pRenderer);
-                
-                
                 break;
             
             case GAME_OVER:
@@ -198,7 +196,6 @@ void run(Game *pGame){
         SDL_Delay(1000/60-15);
         }
 }
-
 
 
 void updateWithServerData(Game *pGame){
