@@ -257,4 +257,7 @@ void handleInput(Game *pGame, SDL_Event *pEvent, bool *pSnowball){
                     break;  
             }                                
     }
+    memcpy(pGame->pPacket->data, &cData, sizeof(ClientData));
+	pGame->pPacket->len = sizeof(ClientData);
+    SDLNet_UDP_Send(pGame->pSocket, -1,pGame->pPacket);
 }
