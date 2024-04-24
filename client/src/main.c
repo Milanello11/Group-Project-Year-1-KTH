@@ -112,7 +112,7 @@ void run(Game *pGame){
     while(active){
         switch (pGame->state){
             case ONGOING:
-                while (SDLNet_UDP_recv(pGame->pSocket, pGame->pPacket)){
+                while (SDLNet_UDP_Recv(pGame->pSocket, pGame->pPacket)){
                     updateWithServerData(pGame);
                 }
                 while(SDL_PollEvent(&event)){
@@ -125,7 +125,7 @@ void run(Game *pGame){
                 SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
                 SDL_RenderClear(pGame->pRenderer);
                 SDL_SetRenderDrawColor(pGame->pRenderer,230,230,230,255);
-                drawCharacter(pGame->pCharacter);
+                drawCharacter(pGame->pCharacter[0]);
                 SDL_RenderPresent(pGame->pRenderer);
                 
                 break;
@@ -146,9 +146,7 @@ void run(Game *pGame){
                 }
                 if(SDLNet_UDP_Recv(pGame->pSocket,pGame->pPacket)==1){
                     updateWithServerData(pGame);
-                    if(pGame->nrOfCharacters==CHARACTERS){ 
-                        setUpGame(pGame);
-                    }
+                    
                 }
                 break;
             }       
@@ -157,11 +155,6 @@ void run(Game *pGame){
     }
 }
 
-void setUpGame(Game *pGame){
-    //for (int i=0;i<CHARACTERS;i++) resetCharacter(pGame->pCharacter[i]);
-    pGame->nrOfCharacters=CHARACTERS;
-    pGame->state = ONGOING; 
-}
 
 void updateWithServerData(Game *pGame){
     ServerData sData;
@@ -169,13 +162,15 @@ void updateWithServerData(Game *pGame){
     pGame->characterNumber = sData.playerNumber;
     pGame->state = sData.gState;
     for(int i=0;i<CHARACTERS;i++){
-        updateCharacterWithReceivedData(pGame->pCharacter[i], &(sData.characters[i]));
+        updateCharacterWithRecievedData(pGame->pCharacter[i], &(sData.characters[i]));
     } 
 }
 
 void close(Game *pGame){
-    if(pGame->pCharacter){
-        destroyCharacter(pGame->pCharacter);
+    for(int i=0; i < CHARACTERS;i++){
+        if(pGame->pCharacter){
+            destroyCharacter(pGame->pCharacter[i]);
+        }
     }
     if(pGame->pSnowball){
         destroySnowball(pGame->pSnowball);
@@ -203,19 +198,19 @@ void handleInput(Game *pGame, SDL_Event *pEvent, bool *pSnowball){
             switch(pEvent->key.keysym.scancode){
                 case SDL_SCANCODE_W:
                 case SDL_SCANCODE_UP:
-                    characterTurnUp(pGame->pCharacter);
+                    characterTurnUp(pGame->pCharacter[0]);
                     break;
                 case SDL_SCANCODE_A:
                 case SDL_SCANCODE_LEFT:
-                    characterTurnLeft(pGame->pCharacter);
+                    characterTurnLeft(pGame->pCharacter[0]);
                     break;
                 case SDL_SCANCODE_S:
                 case SDL_SCANCODE_DOWN:
-                    characterTurnDown(pGame->pCharacter);
+                    characterTurnDown(pGame->pCharacter[0]);
                     break;
                 case SDL_SCANCODE_D:
                 case SDL_SCANCODE_RIGHT:
-                    characterTurnRight(pGame->pCharacter);
+                    characterTurnRight(pGame->pCharacter[0]);
                     break;
                 case SDL_SCANCODE_SPACE:
                     //pGame->pSnowball = createSnowball(pGame->pRenderer, WINDOW_WIDTH , WINDOW_HEIGHT, pGame->pCharacter[0]);
@@ -229,13 +224,13 @@ void handleInput(Game *pGame, SDL_Event *pEvent, bool *pSnowball){
                 case SDL_SCANCODE_UP:
                 case SDL_SCANCODE_S:
                 case SDL_SCANCODE_DOWN:
-                    characterYStop(pGame->pCharacter);
+                    characterYStop(pGame->pCharacter[0]);
                     break;
                 case SDL_SCANCODE_A:
                 case SDL_SCANCODE_LEFT:
                 case SDL_SCANCODE_D:
                 case SDL_SCANCODE_RIGHT:
-                    characterXStop(pGame->pCharacter);
+                    characterXStop(pGame->pCharacter[0]);
                     break;  
             }                                
     }
