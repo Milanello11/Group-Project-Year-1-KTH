@@ -216,7 +216,7 @@ void handleInput(Game *pGame, SDL_Event *pEvent, bool *pSnowball){
             switch(pEvent->key.keysym.scancode){
                 case SDL_SCANCODE_W:
                 case SDL_SCANCODE_UP:
-                    characterTurnUp(pGame->characterNumber);
+                    characterTurnUp(pGame->pCharacter[pGame->characterNumber]);
                     cData.command = UP;
                     break;
                 case SDL_SCANCODE_A:
