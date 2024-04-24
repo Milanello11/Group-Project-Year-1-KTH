@@ -110,6 +110,12 @@ void characterYStop(Character *pCharacter){
 bool isColliding(SDL_Rect a, SDL_Rect b){
     return (a.x > b.x + b.w || a.x + a.w < b.x || a.y > b.y + b.h || a.y + a.h < b.y);
 }
+int getPlayerXPos(Character *pCharacter){
+    return (pCharacter->characterRect.x);
+}
+int getPlayerYPos(Character *pCharacter){
+    return (pCharacter->characterRect.y);
+}
 void updateCharacterWithRecievedData(Character *pCharacter, CharacterData *pCharacterData){
     //pCharacter->alive = pCharacter->alive;
     pCharacter->x_vel = pCharacterData->x_vel;

@@ -3,11 +3,12 @@
 #include <stdio.h>
 #include "snowball.h"
 #include "character.h"
+#include <stdbool.h>
 
 
 struct snowball{
     float x_pos, y_pos, x_vel, y_vel;
-    int window_width, window_height;
+    int window_width, window_height, isOnScreen;
 
     SDL_Renderer *pRenderer;
     SDL_Texture *pTexture;
@@ -15,14 +16,14 @@ struct snowball{
 };
 
 
-Snowball *createSnowball(SDL_Renderer *pRenderer, int window_width , int window_height, Character *pCharacter){
+Snowball *createSnowball(SDL_Renderer *pRenderer, int window_width , int window_height){
     Snowball *pSnowball = malloc(sizeof(struct snowball));
-    pSnowball->x_vel = 1;
-    pSnowball->y_vel = 0;
+    pSnowball->x_vel = pSnowball->y_vel = 0;
+    pSnowball->isOnScreen = 0;
     pSnowball->window_width = window_width;
     pSnowball->window_height = window_height;
 
-    SDL_Surface *pSurface = IMG_Load("resources/Snowball.png");
+    SDL_Surface *pSurface = IMG_Load("../lib/resources/Snowball.png");
     if (!pSurface){
         printf("Error: %s\n", SDL_GetError());
         return NULL;
@@ -37,21 +38,38 @@ Snowball *createSnowball(SDL_Renderer *pRenderer, int window_width , int window_
     SDL_QueryTexture(pSnowball->pTexture, NULL, NULL, &(pSnowball->snowballRect.w), &(pSnowball->snowballRect.h));
     pSnowball->snowballRect.w /= 3;
     pSnowball->snowballRect.h /= 3;
-    pSnowball->x_pos = pSnowball->snowballRect.x = (window_width / 2);
-    pSnowball->y_pos = pSnowball->snowballRect.y = (window_height / 2);
+    pSnowball->x_pos = pSnowball->snowballRect.x = -100;
+    pSnowball->y_pos = pSnowball->snowballRect.y = -100;
     return pSnowball;
 }
 
-void updateSnowball(Snowball *pSnowball){ 
+void updateSnowball(Snowball *pSnowball, int directionIndex){ 
+
+    switch (directionIndex){
+        case 0: 
+            pSnowball->x_vel = 0;
+            pSnowball->y_vel = -SNOWBALLSPEED;
+        break;
+        case 1: 
+            pSnowball->x_vel = SNOWBALLSPEED;
+            pSnowball->y_vel = 0;
+        break;
+        case 2: 
+            pSnowball->x_vel = 0;
+            pSnowball->y_vel = SNOWBALLSPEED;
+        break;
+        case 3: 
+            pSnowball->x_vel = -SNOWBALLSPEED;
+            pSnowball->y_vel = 0;
+        break;
+    }
+    if (pSnowball->x_pos > pSnowball->window_width || pSnowball->x_pos < 0 || pSnowball->y_pos > pSnowball->window_height || pSnowball->y_pos < 0){
+        pSnowball->x_vel = 0;
+        pSnowball->y_vel = 0;
+        pSnowball->isOnScreen = 0;
+    }
     pSnowball->x_pos += pSnowball->x_vel;
     pSnowball->y_pos += pSnowball->y_vel;
-
-    if(pSnowball->x_pos > (pSnowball->window_width - pSnowball->snowballRect.w)){
-        pSnowball->x_vel =-1;
-    }
-    if(pSnowball->x_pos < 0){
-        pSnowball->x_vel = 1;
-    }
 
     pSnowball->snowballRect.x = pSnowball->x_pos;
     pSnowball->snowballRect.y = pSnowball->y_pos;
@@ -64,4 +82,13 @@ void drawSnowball(Snowball *pSnowball){
 void destroySnowball(Snowball *pSnowball){
     SDL_DestroyTexture(pSnowball->pTexture);
     free(pSnowball);
+    pSnowball = NULL;
+}           
+void startSnowball(Snowball *pSnowball, int startX, int startY){
+    pSnowball->isOnScreen = 1;
+    pSnowball->x_pos = startX;
+    pSnowball->y_pos = startY;
+}
+int getOnScreenIndex(Snowball *pSnowball){
+    return (pSnowball->isOnScreen);
 }
