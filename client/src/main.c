@@ -45,7 +45,7 @@ int initializations(Game *pGame){
     }
 
 
-    pGame->pWindow = SDL_CreateWindow("Snomos",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,1200,800,0);
+    pGame->pWindow = SDL_CreateWindow("Snomos",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT,0);
     if(!pGame->pWindow){
         printf("Error: %s\n",SDL_GetError());
         close(pGame);
@@ -86,6 +86,8 @@ int initializations(Game *pGame){
         close(pGame);
         return 0;
     }
+    pGame->pPacket->address.host = pGame->serverAddress.host;
+    pGame->pPacket->address.port = pGame->serverAddress.port;
 
     for(int i=0;i<CHARACTERS;i++)
         pGame->pCharacter[i] = createCharacter(i,pGame->pRenderer,WINDOW_WIDTH,WINDOW_HEIGHT);
@@ -99,7 +101,7 @@ int initializations(Game *pGame){
             return 0;
         }
     }
-    pGame->state = START;
+    pGame->state = ONGOING;
     return 1;
 }
 

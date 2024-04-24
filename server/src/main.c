@@ -136,20 +136,20 @@ void run(Game *pGame){
                     memcpy(&cData, pGame->pPacket->data, sizeof(ClientData));
                     executeCommand(pGame,cData);
                 }
-                while(SDL_PollEvent(&event)){
+                if(SDL_PollEvent(&event)){
                     if(event.type==SDL_QUIT) 
                         active = false;
-                    else handleInput(pGame,&event,&snowball);
+                    //else handleInput(pGame,&event,&snowball);
                 }
-                //SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
-                SDL_RenderClear(pGame->pRenderer);
-                SDL_SetRenderDrawColor(pGame->pRenderer,230,230,230,255);
                 for (int i = 0; i < CHARACTERS; i++){
                 updateCharacter(pGame->pCharacter[i]);
                 }
                 for (int i = 0; i < CHARACTERS; i++){
                 drawCharacter(pGame->pCharacter[i]);
                 }
+                //SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
+                SDL_RenderClear(pGame->pRenderer);
+                SDL_SetRenderDrawColor(pGame->pRenderer,230,230,230,255);
                 if (snowball){
                     updateSnowball(pGame->pSnowball);
                     drawSnowball(pGame->pSnowball);
