@@ -104,7 +104,7 @@ int initializations(Game *pGame){
             return 0;
         }
     }
-    pGame->state = ONGOING;
+    pGame->state = START;
     return 1;
 }
 
