@@ -144,12 +144,12 @@ void run(Game *pGame){
                 for (int i = 0; i < CHARACTERS; i++){
                 updateCharacter(pGame->pCharacter[i]);
                 }
+                SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
+                SDL_RenderClear(pGame->pRenderer);
+                //SDL_SetRenderDrawColor(pGame->pRenderer,230,230,230,255);
                 for (int i = 0; i < CHARACTERS; i++){
                 drawCharacter(pGame->pCharacter[i]);
                 }
-                //SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
-                SDL_RenderClear(pGame->pRenderer);
-                SDL_SetRenderDrawColor(pGame->pRenderer,230,230,230,255);
                 if (snowball){
                     updateSnowball(pGame->pSnowball);
                     drawSnowball(pGame->pSnowball);
@@ -173,7 +173,7 @@ void run(Game *pGame){
                 }
                 if(SDLNet_UDP_Recv(pGame->pSocket,pGame->pPacket)==1){
                     add(pGame->pPacket->address,pGame->clients,&(pGame->nrOfClients));
-                    if(pGame->nrOfClients==CHARACTERS){ 
+                    if(pGame->nrOfClients == CHARACTERS){ 
                         setUpGame(pGame);
                     }
                 }

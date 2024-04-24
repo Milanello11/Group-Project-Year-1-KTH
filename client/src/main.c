@@ -101,7 +101,7 @@ int initializations(Game *pGame){
             return 0;
         }
     }
-    pGame->state = ONGOING;
+    pGame->state = START;
     return 1;
 }
 
@@ -142,20 +142,35 @@ void run(Game *pGame){
                 SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
                 SDL_RenderClear(pGame->pRenderer);
                 SDL_SetRenderDrawColor(pGame->pRenderer,230,230,230,255);
-                
+                }
+                SDL_RenderPresent(pGame->pRenderer);
+                if(SDL_PollEvent(&event)){
+                    if(event.type == SDL_QUIT){
+                        active = false;
+                    }
+                    else if(!joining && event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_P){
+                        joining = 1;
+                        cData.command = READY;
+                        cData.playerNumber =- 1;
+                        memcpy(pGame->pPacket->data, &cData, sizeof(ClientData));
+		                pGame->pPacket->len = sizeof(ClientData);
+                    }
+                }
                 if(joining){
                 SDLNet_UDP_Send(pGame->pSocket, -1, pGame->pPacket);
                 }
                 if(SDLNet_UDP_Recv(pGame->pSocket,pGame->pPacket)==1){
                     updateWithServerData(pGame);
-                    
+                    if(pGame->state == ONGOING){
+                        joining = 0;
+                    }
                 }
                 break;
             }       
         SDL_Delay(1000/60-15);
         }
-    }
 }
+
 
 
 void updateWithServerData(Game *pGame){
