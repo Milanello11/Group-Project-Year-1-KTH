@@ -126,7 +126,8 @@ void run(Game *pGame){
                 SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
                 SDL_RenderClear(pGame->pRenderer);
                 SDL_SetRenderDrawColor(pGame->pRenderer,230,230,230,255);
-                drawCharacter(pGame->pCharacter[0]);
+                for(int i=0;i<CHARACTERS;i++)
+                    drawCharacter(pGame->pCharacter[i]);
                 SDL_RenderPresent(pGame->pRenderer);
                 
                 break;
@@ -246,13 +247,13 @@ void handleInput(Game *pGame, SDL_Event *pEvent, bool *pSnowball){
                 case SDL_SCANCODE_UP:
                 case SDL_SCANCODE_S:
                 case SDL_SCANCODE_DOWN:
-                    characterYStop(pGame->pCharacter[0]);
+                    characterYStop(pGame->pCharacter[pGame->characterNumber]);
                     break;
                 case SDL_SCANCODE_A:
                 case SDL_SCANCODE_LEFT:
                 case SDL_SCANCODE_D:
                 case SDL_SCANCODE_RIGHT:
-                    characterXStop(pGame->pCharacter[0]);
+                    characterXStop(pGame->pCharacter[pGame->characterNumber]);
                     break;  
             }                                
     }

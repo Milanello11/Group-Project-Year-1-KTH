@@ -142,7 +142,7 @@ void run(Game *pGame){
                     //else handleInput(pGame,&event,&snowball);
                 }
                 for (int i = 0; i < CHARACTERS; i++){
-                updateCharacter(pGame->pCharacter[i]);
+                    updateCharacter(pGame->pCharacter[i]);
                 }
                 SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
                 SDL_RenderClear(pGame->pRenderer);
