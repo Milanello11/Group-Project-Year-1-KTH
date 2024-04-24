@@ -209,9 +209,9 @@ void close(Game *pGame){
 }
 
 void handleInput(Game *pGame, SDL_Event *pEvent, bool *pSnowball){
+    ClientData cData;
+    cData.playerNumber = pGame->characterNumber;
     switch(pEvent->type){
-        ClientData cData;
-        cData.playerNumber = pGame->characterNumber;
         case SDL_KEYDOWN:
             switch(pEvent->key.keysym.scancode){
                 case SDL_SCANCODE_W:
