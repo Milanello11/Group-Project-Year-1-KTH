@@ -7,6 +7,8 @@
 #include "character.h"
 #include "snowball.h"
 #include "characterData.h"
+#include "map.h"
+
 typedef struct{
         SDL_Window *pWindow;
         SDL_Renderer *pRenderer;
@@ -26,6 +28,8 @@ void run(Game *pGame);
 void close(Game *pGame);
 void handleInput(Game *pGame, SDL_Event *pEvent , bool *pSnowball);
 void updateWithServerData(Game *pGame);
+void renderBackground(SDL_Renderer *pGameRender, SDL_Texture *tile_texture, SDL_Rect tiles_type[], SDL_Rect tile_placement[50][50]);
+
 
 int main (int argument, char* arguments[]){
     Game game={0};
@@ -100,7 +104,7 @@ int initializations(Game *pGame){
             return 0;
         }
     }
-    pGame->state = START;
+    pGame->state = ONGOING;
     return 1;
 }
 
@@ -110,6 +114,28 @@ void run(Game *pGame){
     SDL_Event event;
     ClientData cData;
     int joining = 0;
+
+    SDL_Surface* tile_Map = IMG_Load("../lib/resources/tiles.png");
+    SDL_Texture* tile_texture = SDL_CreateTextureFromSurface(pGame->pRenderer, tile_Map);
+    SDL_FreeSurface(tile_Map);
+
+    SDL_Rect tile_placement[50][50];
+    for(int x = 0; x < 50; x++){
+        for(int y = 0; y < 50; y++){
+            tile_placement[x][y].x = x*16;
+            tile_placement[x][y].y = y*16;
+            tile_placement[x][y].h = 16;
+        }
+    }
+
+    SDL_Rect tiles_type[3];
+    for (int i = 0; i < 3; i++) {
+        tiles_type[i].x = i*16;
+        tiles_type[i].y = 0;
+        tiles_type[i].w = 16;
+        tiles_type[i].h = 16;
+    }
+
     while(active){
         switch (pGame->state){
             case ONGOING:
@@ -125,10 +151,12 @@ void run(Game *pGame){
                     updateCharacter(pGame->pCharacter[i]);
                 SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
                 SDL_RenderClear(pGame->pRenderer);
+                renderBackground(pGame->pRenderer, tile_texture, tiles_type, tile_placement);
                 SDL_SetRenderDrawColor(pGame->pRenderer,230,230,230,255);
                 for(int i=0;i<CHARACTERS;i++)
                     drawCharacter(pGame->pCharacter[i]);
                 SDL_RenderPresent(pGame->pRenderer);
+                
                 
                 break;
             
@@ -262,4 +290,24 @@ void handleInput(Game *pGame, SDL_Event *pEvent, bool *pSnowball){
     memcpy(pGame->pPacket->data, &cData, sizeof(ClientData));
 	pGame->pPacket->len = sizeof(ClientData);
     SDLNet_UDP_Send(pGame->pSocket, -1,pGame->pPacket);
+}
+
+void renderBackground(SDL_Renderer *pGameRender, SDL_Texture *tile_texture, SDL_Rect tiles_type[], SDL_Rect tile_placement[50][50]){
+
+    for(int x = 0; x < 50; x++){
+        for(int y = 0; y < 50; y++){
+            switch (getTileValue(x, y)){
+
+                case 0:
+                    SDL_RenderCopy(pGameRender, tile_texture, &tiles_type[0], &tile_placement[x][y]);
+                    break;
+                case 1:
+                    SDL_RenderCopy(pGameRender, tile_texture, &tiles_type[1], &tile_placement[x][y]);
+                    break;
+                case 2:
+                    SDL_RenderCopy(pGameRender, tile_texture, &tiles_type[2], &tile_placement[x][y]);
+                    break;
+            }
+        }
+    }
 }
