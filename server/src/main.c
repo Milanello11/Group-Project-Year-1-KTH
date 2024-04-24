@@ -236,6 +236,7 @@ void executeCommand(Game *pGame, ClientData cData){
             break;
         case STOPY:
             characterYStop(pGame->pCharacter[cData.playerNumber]);
+            break;
     }
 }
 
