@@ -148,13 +148,12 @@ void run(Game *pGame){
                 SDL_RenderClear(pGame->pRenderer);
                 //SDL_SetRenderDrawColor(pGame->pRenderer,230,230,230,255);
                 for (int i = 0; i < CHARACTERS; i++){
-                drawCharacter(pGame->pCharacter[i]);
+                    drawCharacter(pGame->pCharacter[i]);
                 }
-                if (snowball){
+                /*if (snowball){
                     updateSnowball(pGame->pSnowball);
                     drawSnowball(pGame->pSnowball);
-                }
-
+                }*/
                 SDL_RenderPresent(pGame->pRenderer);
                 break;
             
@@ -205,7 +204,7 @@ void sendGameData(Game *pGame){
 
 void add(IPaddress address, IPaddress clients[],int *pNrOfClients){
 	for(int i=0;i<*pNrOfClients;i++){
-        if(address.host==clients[i].host &&address.port==clients[i].port){
+        if(address.host==clients[i].host && address.port==clients[i].port){
             return;
         }
     }

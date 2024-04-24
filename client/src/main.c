@@ -11,7 +11,6 @@ typedef struct{
         SDL_Window *pWindow;
         SDL_Renderer *pRenderer;
         Character *pCharacter[CHARACTERS];
-        //Character *pTmpChar;
         int nrOfCharacters, characterNumber;
         GameState state;
         UDPpacket *pPacket;
@@ -69,7 +68,7 @@ int initializations(Game *pGame){
         return 0;
 	}
     
-    if(SDLNet_ResolveHost(&(pGame->serverAddress), "127.0.0.1", 2000)){
+    if(SDLNet_ResolveHost(&(pGame->serverAddress), "130.229.146.23", 2000)){
         printf("SDLNet_ResolveHost(127.0.0.1 2000): %s\n", SDLNet_GetError());
         return 0;
     }
@@ -211,23 +210,29 @@ void close(Game *pGame){
 
 void handleInput(Game *pGame, SDL_Event *pEvent, bool *pSnowball){
     switch(pEvent->type){
+        ClientData cData;
+        cData.playerNumber = pGame->characterNumber;
         case SDL_KEYDOWN:
             switch(pEvent->key.keysym.scancode){
                 case SDL_SCANCODE_W:
                 case SDL_SCANCODE_UP:
-                    characterTurnUp(pGame->pCharacter[0]);
+                    characterTurnUp(pGame->characterNumber);
+                    cData.command = UP;
                     break;
                 case SDL_SCANCODE_A:
                 case SDL_SCANCODE_LEFT:
-                    characterTurnLeft(pGame->pCharacter[0]);
+                    characterTurnLeft(pGame->pCharacter[pGame->characterNumber]);
+                    cData.command = LEFT;
                     break;
                 case SDL_SCANCODE_S:
                 case SDL_SCANCODE_DOWN:
-                    characterTurnDown(pGame->pCharacter[0]);
+                    characterTurnDown(pGame->pCharacter[pGame->characterNumber]);
+                    cData.command = DOWN;
                     break;
                 case SDL_SCANCODE_D:
                 case SDL_SCANCODE_RIGHT:
-                    characterTurnRight(pGame->pCharacter[0]);
+                    characterTurnRight(pGame->pCharacter[pGame->characterNumber]);
+                    cData.command = RIGHT;
                     break;
                 case SDL_SCANCODE_SPACE:
                     //pGame->pSnowball = createSnowball(pGame->pRenderer, WINDOW_WIDTH , WINDOW_HEIGHT, pGame->pCharacter[0]);
