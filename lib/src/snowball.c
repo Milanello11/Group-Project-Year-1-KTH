@@ -95,8 +95,15 @@ int getOnScreenIndex(Snowball *pSnowball){
 }
 
 void getSnowballSendData(Snowball *pSnowball, SnowballData *pSnowballData){
-
+    pSnowballData->x_vel = pSnowball->x_vel;
+    pSnowballData->y_vel = pSnowball->y_vel;
+    pSnowballData->x_pos = pSnowball->x_pos;
+    pSnowballData->y_pos = pSnowball->y_pos;
 }
 void updateSnowballWithRecievedData(Snowball *pSnowball, SnowballData *pSnowballData){
+    pSnowball->x_vel = pSnowballData->x_vel;
+    pSnowball->y_vel = pSnowballData->y_vel;
+    pSnowball->x_pos = pSnowballData->x_pos;
+    pSnowball->y_pos = pSnowballData->y_pos;
 
 }

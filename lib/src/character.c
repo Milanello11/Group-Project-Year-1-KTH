@@ -10,7 +10,7 @@
 struct character{
     float x_pos, y_pos, x_vel, y_vel , xStart , yStart;
     int window_width , window_height;
-
+    Snowball *pSnowball;
     SDL_Renderer *pRenderer;
     SDL_Texture *pTexture;
     SDL_Rect characterRect;
@@ -128,10 +128,10 @@ void getCharacterSendData(Character *pCharacter, CharacterData *pCharacterData){
     pCharacterData->x_pos = pCharacter->x_pos;
     pCharacterData->y_pos = pCharacter->y_pos;
 }
-/*void getCharacterSendData(Character *pCharacter, CharacterData *pCharacterData){
+void getCharacterSendData(Character *pCharacter, CharacterData *pCharacterData){
     pCharacterData->x_vel = pCharacter->x_vel;
     pCharacterData->y_vel = pCharacter->y_vel;
     pCharacterData->x_pos = pCharacter->x_pos;
     pCharacterData->y_pos = pCharacter->y_pos;
-    getSnowballSendData(Snowball *pSnowball, SnowballData *pSnowballData);
-}*/
+    getSnowballSendData(pCharacter->pSnowball,&(pCharacterData->SnowballData));
+}

@@ -25,6 +25,7 @@ typedef struct snowballData SnowballData;
 struct characterData{
     float x_pos, y_pos, x_vel, y_vel;
     int window_width , window_height;
+    SnowballData ballData;
 };
 typedef struct characterData CharacterData;
 
