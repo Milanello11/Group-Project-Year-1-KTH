@@ -19,11 +19,11 @@ struct snowball{
 Snowball *createSnowball(SDL_Renderer *pRenderer, int window_width , int window_height){
     Snowball *pSnowball = malloc(sizeof(struct snowball));
     pSnowball->x_vel = pSnowball->y_vel = 0;
-    pSnowball->isOnScreen = 0;
+pSnowball->isOnScreen = 0;
     pSnowball->window_width = window_width;
     pSnowball->window_height = window_height;
 
-    SDL_Surface *pSurface = IMG_Load("../lib/resources/Snowball.png");
+    SDL_Surface *pSurface = IMG_Load("resources/Snowball.png");
     if (!pSurface){
         printf("Error: %s\n", SDL_GetError());
         return NULL;
@@ -43,26 +43,9 @@ Snowball *createSnowball(SDL_Renderer *pRenderer, int window_width , int window_
     return pSnowball;
 }
 
-void updateSnowball(Snowball *pSnowball, int directionIndex){ 
+void updateSnowball(Snowball *pSnowball){ 
 
-    switch (directionIndex){
-        case 0: 
-            pSnowball->x_vel = 0;
-            pSnowball->y_vel = -SNOWBALLSPEED;
-        break;
-        case 1: 
-            pSnowball->x_vel = SNOWBALLSPEED;
-            pSnowball->y_vel = 0;
-        break;
-        case 2: 
-            pSnowball->x_vel = 0;
-            pSnowball->y_vel = SNOWBALLSPEED;
-        break;
-        case 3: 
-            pSnowball->x_vel = -SNOWBALLSPEED;
-            pSnowball->y_vel = 0;
-        break;
-    }
+    
     if (pSnowball->x_pos > pSnowball->window_width || pSnowball->x_pos < 0 || pSnowball->y_pos > pSnowball->window_height || pSnowball->y_pos < 0){
         pSnowball->x_vel = 0;
         pSnowball->y_vel = 0;
@@ -82,12 +65,30 @@ void drawSnowball(Snowball *pSnowball){
 void destroySnowball(Snowball *pSnowball){
     SDL_DestroyTexture(pSnowball->pTexture);
     free(pSnowball);
-    pSnowball = NULL;
+pSnowball = NULL;
 }           
-void startSnowball(Snowball *pSnowball, int startX, int startY){
+void startSnowball(Snowball *pSnowball, int startX, int startY, int directionIndex){
     pSnowball->isOnScreen = 1;
     pSnowball->x_pos = startX;
     pSnowball->y_pos = startY;
+    switch (directionIndex){
+        case 0: 
+            pSnowball->x_vel = 0;
+            pSnowball->y_vel = -SNOWBALLSPEED;
+        break;
+        case 1: 
+            pSnowball->x_vel = SNOWBALLSPEED;
+            pSnowball->y_vel = 0;
+        break;
+        case 2: 
+            pSnowball->x_vel = 0;
+            pSnowball->y_vel = SNOWBALLSPEED;
+        break;
+        case 3: 
+            pSnowball->x_vel = -SNOWBALLSPEED;
+            pSnowball->y_vel = 0;
+        break;
+    }
 }
 int getOnScreenIndex(Snowball *pSnowball){
     return (pSnowball->isOnScreen);
