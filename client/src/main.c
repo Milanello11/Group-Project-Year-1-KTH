@@ -1,6 +1,5 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_net.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -8,6 +7,7 @@
 #include "snowball.h"
 #include "characterData.h"
 #include "map.h"
+#include "menu.h"
 
 typedef struct{
         SDL_Window *pWindow;
@@ -21,6 +21,7 @@ typedef struct{
         ServerData sData;
         Snowball *pSnowball[MAXSNOWBALLS];
         Background *pBackground;
+        Menu *pMenuBackground;
     }Game;
 
 int initializations(Game *pGame);
@@ -41,11 +42,10 @@ int main (int argument, char* arguments[]){
 }
 
 int initializations(Game *pGame){
-    if(SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER)!=0){
+    if(SDL_Init(SDL_INIT_VIDEO)!=0){
         printf("Error: %s\n",SDL_GetError());
         return 0;
     }
-
 
     pGame->pWindow = SDL_CreateWindow("Snomos",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT,0);
     if(!pGame->pWindow){
@@ -125,6 +125,14 @@ int initializations(Game *pGame){
             return 0;
         }
     }
+
+    pGame->pMenuBackground = createMenuBackground(pGame->pRenderer, WINDOW_WIDTH, WINDOW_HEIGHT);
+    if(!pGame->pMenuBackground){
+        printf("Error: %s\n",SDL_GetError());
+        close(pGame);
+        return 0;
+    }
+
     pGame->state = START;
     return 1;
 }
@@ -175,19 +183,23 @@ void run(Game *pGame){
                 
             case START:
                 if(!joining){
+                    SDL_SetRenderDrawColor(pGame->pRenderer,255,255,255,255);
+                    SDL_RenderClear(pGame->pRenderer);
+                    //renderMenuBackground(pGame->pMenuBackground);
+                    SDL_RenderPresent(pGame->pRenderer);
                     
                 }
                 else{
-                SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
+                /*SDL_SetRenderDrawColor(pGame->pRenderer,255,255,255,255);
                 SDL_RenderClear(pGame->pRenderer);
-                SDL_SetRenderDrawColor(pGame->pRenderer,230,230,230,255);
+                renderMenuBackground(pGame->pMenuBackground);
+                SDL_RenderPresent(pGame->pRenderer);*/
                 }
-                SDL_RenderPresent(pGame->pRenderer);
                 if(SDL_PollEvent(&event)){
                     if(event.type == SDL_QUIT){
                         active = false;
                     }
-                    else if(!joining && event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_P){
+                    else if(!joining && event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_RETURN){
                         joining = 1;
                         cData.command = READY;
                         cData.playerNumber =- 1;
@@ -221,7 +233,7 @@ void updateWithServerData(Game *pGame){
     }
     for(int i = 0; i < MAXSNOWBALLS;i++){
         updateSnowballWithRecievedData(pGame->pSnowball[i], &(sData.SnowballData[i]));
-    } 
+    }
 }
 
 void close(Game *pGame){
