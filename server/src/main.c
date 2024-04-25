@@ -251,8 +251,10 @@ void close(Game *pGame){
             destroyCharacter(pGame->pCharacter[i]);
         }
     }
-    if(pGame->pSnowball){
-        destroySnowball(pGame->pSnowball);
+    for(int i=0; i < MAXSNOWBALLS;i++){
+        if(pGame->pCharacter[i]){
+            destroySnowball(pGame->pSnowball[i]);
+        }
     }
     if(pGame->pRenderer){ 
         SDL_DestroyRenderer(pGame->pRenderer);
