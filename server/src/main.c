@@ -205,6 +205,10 @@ void sendGameData(Game *pGame){
     for(int i=0;i<CHARACTERS;i++){
         getCharacterSendData(pGame->pCharacter[i], &(pGame->sData.characters[i]));
     }
+    /*for(int i = 0; i < MAXSNOWBALLS; i++)
+    {
+        getSnowballSendData(pGame->pSnowball[i], p);
+    }*/
     for(int i=0;i<CHARACTERS;i++){
         pGame->sData.playerNumber = i;
         memcpy(pGame->pPacket->data, &(pGame->sData), sizeof(ServerData));
