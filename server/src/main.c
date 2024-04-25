@@ -102,13 +102,20 @@ int initializations(Game *pGame){
         pGame->pCharacter[i] = createCharacter(i,pGame->pRenderer,WINDOW_WIDTH,WINDOW_HEIGHT);
     }
 
+    pGame->nrOfCharacters = CHARACTERS;
+    for(int i = 0 ; i < CHARACTERS ; i++){
+        if(!pGame->pCharacter[i]){
+            printf("Error: %s\n" , SDL_GetError());
+            close(pGame);
+        }
+    }
+
     for (int i = 0; i < MAXSNOWBALLS; i++){
         pGame->pSnowball[i] = createSnowball(pGame->pRenderer , WINDOW_WIDTH , WINDOW_HEIGHT);
     }
 
-    pGame->nrOfCharacters = CHARACTERS;
-    for(int i = 0 ; i < CHARACTERS ; i++){
-        if(!pGame->pCharacter[i]){
+    for(int i = 0 ; i < MAXSNOWBALLS ; i++){
+        if(!pGame->pSnowball[i]){
             printf("Error: %s\n" , SDL_GetError());
             close(pGame);
         }
@@ -252,7 +259,7 @@ void close(Game *pGame){
         }
     }
     for(int i=0; i < MAXSNOWBALLS;i++){
-        if(pGame->pCharacter[i]){
+        if(pGame->pSnowball[i]){
             destroySnowball(pGame->pSnowball[i]);
         }
     }
