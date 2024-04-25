@@ -80,7 +80,7 @@ int initializations(Game *pGame){
         return 0;
 	}
     
-    if(SDLNet_ResolveHost(&(pGame->serverAddress), "130.229.146.23", 2000)){
+    if(SDLNet_ResolveHost(&(pGame->serverAddress), "130.229.177.32", 2000)){
         printf("SDLNet_ResolveHost(127.0.0.1 2000): %s\n", SDLNet_GetError());
         return 0;
     }
@@ -125,7 +125,7 @@ int initializations(Game *pGame){
             return 0;
         }
     }
-    pGame->state = ONGOING;
+    pGame->state = START;
     return 1;
 }
 

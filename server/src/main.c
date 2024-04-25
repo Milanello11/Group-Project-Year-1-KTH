@@ -20,7 +20,7 @@ typedef struct{
         IPaddress clients[CHARACTERS];
         int nrOfClients;
         ServerData sData;
-        Snowball *pSnowball;
+        Snowball *pSnowball[MAXSNOWBALLS];
         TTF_Font *pFont, *pScoreFont;
         Text *pOverText, *pStartText;
     }Game;
@@ -98,9 +98,14 @@ int initializations(Game *pGame){
         return 0;
 	}
     
-for (int i = 0 ; i < CHARACTERS ; i++){
+    for (int i = 0 ; i < CHARACTERS ; i++){
         pGame->pCharacter[i] = createCharacter(i,pGame->pRenderer,WINDOW_WIDTH,WINDOW_HEIGHT);
     }
+
+    for (int i = 0; i < MAXSNOWBALLS; i++){
+        pGame->pSnowball[i] = createSnowball(pGame->pRenderer , WINDOW_WIDTH , WINDOW_HEIGHT);
+    }
+
     pGame->nrOfCharacters = CHARACTERS;
     for(int i = 0 ; i < CHARACTERS ; i++){
         if(!pGame->pCharacter[i]){
