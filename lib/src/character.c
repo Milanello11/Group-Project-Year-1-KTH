@@ -121,6 +121,7 @@ void updateCharacterWithRecievedData(Character *pCharacter, CharacterData *pChar
     pCharacter->y_vel = pCharacterData->y_vel;
     pCharacter->x_pos = pCharacterData->x_pos;
     pCharacter->y_pos = pCharacterData->y_pos;
+    updateSnowballWithRecievedData(pCharacter->pSnowball, &(pCharacterData->SnowballData));
 }
 void getCharacterSendData(Character *pCharacter, CharacterData *pCharacterData){
     pCharacterData->x_vel = pCharacter->x_vel;

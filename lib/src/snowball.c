@@ -105,5 +105,4 @@ void updateSnowballWithRecievedData(Snowball *pSnowball, SnowballData *pSnowball
     pSnowball->y_vel = pSnowballData->y_vel;
     pSnowball->x_pos = pSnowballData->x_pos;
     pSnowball->y_pos = pSnowballData->y_pos;
-
 }
