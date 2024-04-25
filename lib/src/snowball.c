@@ -93,3 +93,10 @@ void startSnowball(Snowball *pSnowball, int startX, int startY, int directionInd
 int getOnScreenIndex(Snowball *pSnowball){
     return (pSnowball->isOnScreen);
 }
+
+void getSnowballSendData(Snowball *pSnowball, SnowballData *pSnowballData){
+
+}
+void updateSnowballWithRecievedData(Snowball *pSnowball, SnowballData *pSnowballData){
+
+}
