@@ -1,7 +1,7 @@
 #ifndef character_h
 #define character_h
 #include <stdbool.h>
-#include <characterData.h>
+#include "characterData.h"
 
 typedef struct character Character;
 

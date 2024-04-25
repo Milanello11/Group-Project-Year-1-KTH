@@ -11,7 +11,6 @@ Snowball *createSnowball(SDL_Renderer *pRenderer, int window_width , int window_
 void updateSnowball(Snowball *pSnowball);
 void drawSnowball(Snowball *pSnowball);
 void destroySnowball(Snowball *pSnowball);
-void initSnowballToNull(Snowball **Snowball);
 void startSnowball(Snowball *pSnowball, int startX, int startY, int directionIndex);
 int getOnScreenIndex(Snowball *pSnowball);
 void getSnowballSendData(Snowball *pSnowball, SnowballData *pSnowballData);

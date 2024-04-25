@@ -3,7 +3,7 @@
 #define WINDOW_HEIGHT 800
 #define WINDOW_WIDTH 800
 #define CHARACTERS 2
-#include "snowball.h"
+#define MAXSNOWBALLS 5
 
 enum gameState{START, ONGOING, GAME_OVER};
 typedef enum gameState GameState;
