@@ -2,8 +2,53 @@
 #include <SDL2/SDL_image.h>
 #include "map.h"
 
-//tile start 0,0 w = 16, h = 16 -- snö -> 16,0 w = 16, h =16 -- vatten -> 32,0 w = 16, h = 16 -- is
+struct background{
+    int window_w, window_h;
+    SDL_Renderer *pRenderer;
+    SDL_Texture *pTexture;
+    SDL_Rect sourceRect;
+};
 
+Background *createBackground(SDL_Renderer *pRenderer, int window_w, int window_h){
+    Background *pBackground = malloc(sizeof(struct background));
+    pBackground->pRenderer = pRenderer;
+    SDL_Surface *pSurface = IMG_Load("../lib/resources/tiles.png");
+    if (!pSurface){
+        printf("Error: %s", SDL_GetError());
+        return NULL;
+    }
+    pBackground->pTexture = SDL_CreateTextureFromSurface(pRenderer, pSurface);
+    if (!pBackground->pTexture){
+        printf("Error: %s", SDL_GetError());
+        return NULL;
+    }
+    SDL_FreeSurface(pSurface);
+    pBackground->sourceRect.h = 16;
+    pBackground->sourceRect.w = 16;
+    pBackground->sourceRect.y = 0;
+    pBackground->window_w = window_w;
+    pBackground->window_h = window_h;
+
+    return pBackground;
+}
+SDL_Rect tile_placement[50][50];
+SDL_Rect tiles_type[3];
+void initBackground(){
+    for(int x = 0; x < 50; x++){
+        for(int y = 0; y < 50; y++){
+            tile_placement[x][y].x = x*16;
+            tile_placement[x][y].y = y*16;
+            tile_placement[x][y].w = 16;
+            tile_placement[x][y].h = 16;
+        }
+    }
+    for (int i = 0; i < 3; i++) {
+        tiles_type[i].x = i*16;
+        tiles_type[i].y = 0;
+        tiles_type[i].w = 16;
+        tiles_type[i].h = 16;
+    }
+}
 
 int tileMap[50][50] = {
     {0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01},//1-
@@ -71,4 +116,23 @@ int getCollision(int x, int y){
         return 1;
 
     return 0;
+}
+void renderBackground(SDL_Renderer *pGameRender, Background *pBackground){ //*tile_texture, SDL_Rect tiles_type[], SDL_Rect tile_placement[50][50]){
+
+    for(int x = 0; x < 50; x++){
+        for(int y = 0; y < 50; y++){
+            switch (getTileValue(x, y)){
+
+                case 0:
+                    SDL_RenderCopy(pGameRender, pBackground->pTexture, &tiles_type[0], &tile_placement[x][y]);
+                    break;
+                case 1:
+                    SDL_RenderCopy(pGameRender, pBackground->pTexture, &tiles_type[1], &tile_placement[x][y]);
+                    break;
+                case 2:
+                    SDL_RenderCopy(pGameRender, pBackground->pTexture, &tiles_type[2], &tile_placement[x][y]);
+                    break;
+            }
+        }
+    }
 }
