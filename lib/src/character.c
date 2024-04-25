@@ -10,7 +10,6 @@
 struct character{
     float x_pos, y_pos, x_vel, y_vel , xStart , yStart;
     int window_width , window_height;
-    Snowball *pSnowball;
     SDL_Renderer *pRenderer;
     SDL_Texture *pTexture;
     SDL_Rect characterRect;

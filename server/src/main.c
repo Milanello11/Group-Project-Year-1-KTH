@@ -155,17 +155,10 @@ void run(Game *pGame){
                 }
                 for (int i = 0; i < CHARACTERS; i++){
                     updateCharacter(pGame->pCharacter[i]);
+                    drawCharacter(pGame->pCharacter[i]);
                 }
                 SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
                 SDL_RenderClear(pGame->pRenderer);
-                //SDL_SetRenderDrawColor(pGame->pRenderer,230,230,230,255);
-                for (int i = 0; i < CHARACTERS; i++){
-                    drawCharacter(pGame->pCharacter[i]);
-                }
-                /*if (snowball){
-                    updateSnowball(pGame->pSnowball);
-                    drawSnowball(pGame->pSnowball);
-                }*/
                 SDL_RenderPresent(pGame->pRenderer);
                 break;
             
@@ -205,10 +198,10 @@ void sendGameData(Game *pGame){
     for(int i=0;i<CHARACTERS;i++){
         getCharacterSendData(pGame->pCharacter[i], &(pGame->sData.characters[i]));
     }
-    /*for(int i = 0; i < MAXSNOWBALLS; i++)
+    for(int i = 0; i < MAXSNOWBALLS; i++)
     {
-        getSnowballSendData(pGame->pSnowball[i], p);
-    }*/
+        getSnowballSendData(pGame->pSnowball[i], &(pGame->sData.SnowballData[i]));
+    }
     for(int i=0;i<CHARACTERS;i++){
         pGame->sData.playerNumber = i;
         memcpy(pGame->pPacket->data, &(pGame->sData), sizeof(ServerData));

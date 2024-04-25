@@ -3,6 +3,7 @@
 #define WINDOW_HEIGHT 800
 #define WINDOW_WIDTH 800
 #define CHARACTERS 2
+#include "snowball.h"
 
 enum gameState{START, ONGOING, GAME_OVER};
 typedef enum gameState GameState;
@@ -25,11 +26,11 @@ typedef struct snowballData SnowballData;
 struct characterData{
     float x_pos, y_pos, x_vel, y_vel;
     int window_width , window_height;
-    SnowballData SnowballData;
 };
 typedef struct characterData CharacterData;
 
 struct serverData{
+    SnowballData SnowballData[MAXSNOWBALLS];
     CharacterData characters[CHARACTERS];
     int playerNumber;
     GameState gState;

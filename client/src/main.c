@@ -218,6 +218,9 @@ void updateWithServerData(Game *pGame){
     pGame->state = sData.gState;
     for(int i=0;i<CHARACTERS;i++){
         updateCharacterWithRecievedData(pGame->pCharacter[i], &(sData.characters[i]));
+    }
+    for(int i = 0; i < MAXSNOWBALLS;i++){
+        updateSnowballWithRecievedData(pGame->pSnowball[i], &(sData.SnowballData[i]));
     } 
 }
 
