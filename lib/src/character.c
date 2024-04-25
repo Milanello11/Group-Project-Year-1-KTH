@@ -117,16 +117,21 @@ int getPlayerYPos(Character *pCharacter){
     return (pCharacter->characterRect.y);
 }
 void updateCharacterWithRecievedData(Character *pCharacter, CharacterData *pCharacterData){
-    //pCharacter->alive = pCharacter->alive;
     pCharacter->x_vel = pCharacterData->x_vel;
     pCharacter->y_vel = pCharacterData->y_vel;
     pCharacter->x_pos = pCharacterData->x_pos;
     pCharacter->y_pos = pCharacterData->y_pos;
 }
 void getCharacterSendData(Character *pCharacter, CharacterData *pCharacterData){
-    //pRocketData->alive = pRocket->alive;
     pCharacterData->x_vel = pCharacter->x_vel;
     pCharacterData->y_vel = pCharacter->y_vel;
     pCharacterData->x_pos = pCharacter->x_pos;
     pCharacterData->y_pos = pCharacter->y_pos;
 }
+/*void getCharacterSendData(Character *pCharacter, CharacterData *pCharacterData){
+    pCharacterData->x_vel = pCharacter->x_vel;
+    pCharacterData->y_vel = pCharacter->y_vel;
+    pCharacterData->x_pos = pCharacter->x_pos;
+    pCharacterData->y_pos = pCharacter->y_pos;
+    getSnowballSendData(Snowball *pSnowball, SnowballData *pSnowballData);
+}*/

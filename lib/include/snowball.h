@@ -2,6 +2,7 @@
 #define snowball_h
 #define SNOWBALLSPEED 10
 #define MAXSNOWBALLS 5
+#include "characterData.h"
 
 
 typedef struct snowball Snowball;
@@ -13,12 +14,8 @@ void destroySnowball(Snowball *pSnowball);
 void initSnowballToNull(Snowball **Snowball);
 void startSnowball(Snowball *pSnowball, int startX, int startY, int directionIndex);
 int getOnScreenIndex(Snowball *pSnowball);
-
 void getSnowballSendData(Snowball *pSnowball, SnowballData *pSnowballData);
 void updateSnowballWithRecievedData(Snowball *pSnowball, SnowballData *pSnowballData);
-
-
-
 
 
 #endif

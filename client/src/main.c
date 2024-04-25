@@ -19,14 +19,13 @@ typedef struct{
         UDPsocket pSocket;
         IPaddress serverAddress;
         ServerData sData;
-        
-        Snowball *pSnowball;
+        Snowball *pSnowball[MAXSNOWBALLS];
     }Game;
 
 int initializations(Game *pGame);
 void run(Game *pGame);
 void close(Game *pGame);
-void handleInput(Game *pGame, SDL_Event *pEvent , bool *pSnowball);
+void handleInput(Game *pGame, SDL_Event *pEvent , int *pDirectionIndexl);
 void updateWithServerData(Game *pGame);
 void renderBackground(SDL_Renderer *pGameRender, SDL_Texture *tile_texture, SDL_Rect tiles_type[], SDL_Rect tile_placement[50][50]);
 
@@ -92,11 +91,14 @@ int initializations(Game *pGame){
     pGame->pPacket->address.host = pGame->serverAddress.host;
     pGame->pPacket->address.port = pGame->serverAddress.port;
 
-    for(int i=0;i<CHARACTERS;i++)
+    for(int i=0;i<CHARACTERS;i++){
         pGame->pCharacter[i] = createCharacter(i,pGame->pRenderer,WINDOW_WIDTH,WINDOW_HEIGHT);
+    }
     pGame->nrOfCharacters = CHARACTERS;
+
     //pGame->pOverText = createText(pGame->pRenderer,238,168,65,pGame->pFont,"Game over",WINDOW_WIDTH/2,WINDOW_HEIGHT/2);
     //pGame->pStartText = createText(pGame->pRenderer,238,168,65,pGame->pScoreFont,"Waiting for clients",WINDOW_WIDTH/2,WINDOW_HEIGHT/2+100);
+
     for(int i=0;i<CHARACTERS;i++){
         if(!pGame->pCharacter[i]){
             printf("Error: %s\n",SDL_GetError());
@@ -104,16 +106,28 @@ int initializations(Game *pGame){
             return 0;
         }
     }
-    pGame->state = START;
+    for (int i = 0; i < MAXSNOWBALLS; i++){
+        pGame->pSnowball[i] = createSnowball(pGame->pRenderer , WINDOW_WIDTH , WINDOW_HEIGHT);
+    }
+    for(int i=0;i<MAXSNOWBALLS;i++){
+        if(!pGame->pSnowball[i]){
+            printf("Error: %s\n",SDL_GetError());
+            close(pGame);
+            return 0;
+        }
+    }
+    pGame->state = ONGOING;
     return 1;
 }
 
 void run(Game *pGame){
+
     bool active = true;
-    bool snowball = false;
+    int directionIndex = 0;
+    int joining = 0;
+
     SDL_Event event;
     ClientData cData;
-    int joining = 0;
 
     SDL_Surface* tile_Map = IMG_Load("../lib/resources/tiles.png");
     SDL_Texture* tile_texture = SDL_CreateTextureFromSurface(pGame->pRenderer, tile_Map);
@@ -146,16 +160,23 @@ void run(Game *pGame){
                 while(SDL_PollEvent(&event)){
                     if(event.type==SDL_QUIT) 
                         active = false;
-                    else handleInput(pGame,&event,&snowball);
+                    else handleInput(pGame,&event,&directionIndex);
                 }
                 SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
                 SDL_RenderClear(pGame->pRenderer);
                 renderBackground(pGame->pRenderer, tile_texture, tiles_type, tile_placement);
                 SDL_SetRenderDrawColor(pGame->pRenderer,230,230,230,255);
-                for(int i=0;i<CHARACTERS;i++)
+                for(int i=0;i<CHARACTERS;i++){
                     updateCharacter(pGame->pCharacter[i]);
-                for(int i=0;i<CHARACTERS;i++)
                     drawCharacter(pGame->pCharacter[i]);
+                }
+                for(int i=0;i<MAXSNOWBALLS;i++){
+                    if(getOnScreenIndex(pGame->pSnowball[i])){
+                        updateSnowball(pGame->pSnowball[i]);
+                        drawSnowball(pGame->pSnowball[i]);
+                    }
+                }
+                    
                 SDL_RenderPresent(pGame->pRenderer);
                 SDL_Delay(1000/60-15);
                 break;
@@ -216,9 +237,12 @@ void close(Game *pGame){
             destroyCharacter(pGame->pCharacter[i]);
         }
     }
-    if(pGame->pSnowball){
-        destroySnowball(pGame->pSnowball);
+    for(int i = 0; i < MAXSNOWBALLS;i++){
+        if(pGame->pSnowball[i]){
+            destroySnowball(pGame->pSnowball[i]);
+        }
     }
+
     if(pGame->pRenderer){ 
         SDL_DestroyRenderer(pGame->pRenderer);
     }
@@ -236,7 +260,7 @@ void close(Game *pGame){
     SDL_Quit();
 }
 
-void handleInput(Game *pGame, SDL_Event *pEvent, bool *pSnowball){
+void handleInput(Game *pGame, SDL_Event *pEvent, int *pDirectionIndex){
     ClientData cData;
     cData.playerNumber = pGame->characterNumber;
     switch(pEvent->type){
@@ -244,27 +268,52 @@ void handleInput(Game *pGame, SDL_Event *pEvent, bool *pSnowball){
             switch(pEvent->key.keysym.scancode){
                 case SDL_SCANCODE_W:
                 case SDL_SCANCODE_UP:
+                    *pDirectionIndex = 0;
                     characterTurnUp(pGame->pCharacter[pGame->characterNumber]);
                     cData.command = UP;
                     break;
                 case SDL_SCANCODE_A:
                 case SDL_SCANCODE_LEFT:
+                    *pDirectionIndex = 3;
                     characterTurnLeft(pGame->pCharacter[pGame->characterNumber]);
                     cData.command = LEFT;
                     break;
                 case SDL_SCANCODE_S:
                 case SDL_SCANCODE_DOWN:
+                    *pDirectionIndex = 2;
                     characterTurnDown(pGame->pCharacter[pGame->characterNumber]);
                     cData.command = DOWN;
                     break;
                 case SDL_SCANCODE_D:
                 case SDL_SCANCODE_RIGHT:
+                    *pDirectionIndex = 1;
                     characterTurnRight(pGame->pCharacter[pGame->characterNumber]);
                     cData.command = RIGHT;
                     break;
                 case SDL_SCANCODE_SPACE:
-                    //pGame->pSnowball = createSnowball(pGame->pRenderer, WINDOW_WIDTH , WINDOW_HEIGHT, pGame->pCharacter[0]);
-                    *pSnowball = true;
+                    int check = -1;
+                    for(int i = 0; i < MAXSNOWBALLS;i++){
+                        if(getOnScreenIndex(pGame->pSnowball[i]))
+                        {
+                            check = 1;
+                            break;
+                        }
+                    }
+                    if(check == -1){
+                        int ssx = getPlayerXPos(pGame->pCharacter[pGame->characterNumber]);
+                        int ssy = getPlayerYPos(pGame->pCharacter[pGame->characterNumber]);
+                        int found = -1;
+
+                        for(int i = 0; i < MAXSNOWBALLS;i++){
+                            if(!getOnScreenIndex(pGame->pSnowball[i])){
+                                found = i;
+                                break;
+                            }
+                        }
+                        if(found >= 0){
+                            startSnowball(pGame->pSnowball[found], ssx, ssy, *pDirectionIndex);
+                        }
+                    }
                     break;
             }
             break;

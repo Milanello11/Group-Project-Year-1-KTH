@@ -23,7 +23,7 @@ pSnowball->isOnScreen = 0;
     pSnowball->window_width = window_width;
     pSnowball->window_height = window_height;
 
-    SDL_Surface *pSurface = IMG_Load("resources/Snowball.png");
+    SDL_Surface *pSurface = IMG_Load("../lib/resources/Snowball.png");
     if (!pSurface){
         printf("Error: %s\n", SDL_GetError());
         return NULL;
