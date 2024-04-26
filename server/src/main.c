@@ -31,7 +31,7 @@ void close(Game *pGame);
 void handleInput(Game *pGame, SDL_Event *pEvent , bool *pSnowball);
 void add(IPaddress address, IPaddress clients[], int *pNrOfClients);
 void sendGameData(Game *pGame);
-void executeCommand(Game *pGame, ClientData cData);
+void executeCommand(Game *pGame, ClientData cData, int *pDirectionIndex);
 void setUpGame(Game *pGame);
 
 int main (int argument, char* arguments[]){
@@ -136,7 +136,7 @@ int initializations(Game *pGame){
 
 void run(Game *pGame){
     bool active = true;
-    bool snowball = false;
+    int directionIndex = 0;
     SDL_Event event;
     ClientData cData;
 
@@ -146,7 +146,7 @@ void run(Game *pGame){
                 sendGameData(pGame);
                 while(SDLNet_UDP_Recv(pGame->pSocket,pGame->pPacket)==1){
                     memcpy(&cData, pGame->pPacket->data, sizeof(ClientData));
-                    executeCommand(pGame,cData);
+                    executeCommand(pGame,cData,&directionIndex);
                 }
                 if(SDL_PollEvent(&event)){
                     if(event.type==SDL_QUIT) 
@@ -222,32 +222,30 @@ void add(IPaddress address, IPaddress clients[],int *pNrOfClients){
     
 }
 
-void executeCommand(Game *pGame, ClientData cData){
-        int directionIndex = 0;
+void executeCommand(Game *pGame, ClientData cData, int *pDirectionIndex){
         switch (cData.command)
     {
         case UP:
-            directionIndex = 0;
+            *pDirectionIndex = 0;
             characterTurnUp(pGame->pCharacter[cData.playerNumber]);
             break;
         case DOWN:
-            directionIndex = 2;
+            *pDirectionIndex = 2;
             characterTurnDown(pGame->pCharacter[cData.playerNumber]);
             break;
         case LEFT:
-            directionIndex = 3;
+            *pDirectionIndex = 3;
             characterTurnLeft(pGame->pCharacter[cData.playerNumber]);
             break;
         case RIGHT:
-            directionIndex = 1;
+            *pDirectionIndex = 1;
             characterTurnRight(pGame->pCharacter[cData.playerNumber]);
             break;
         case SHOOT:
             //pGame->pSnowball = createSnowball(pGame->pRenderer, WINDOW_WIDTH, WINDOW_HEIGHT);
             int ssx = getPlayerXPos(pGame->pCharacter[cData.playerNumber]);
             int ssy = getPlayerYPos(pGame->pCharacter[cData.playerNumber]);
-            startSnowball(pGame->pSnowball[cData.playerNumber], ssx, ssy, directionIndex);
-            printf("%d \n", directionIndex);
+            startSnowball(pGame->pSnowball[cData.playerNumber], ssx, ssy, *pDirectionIndex);
             break;
         case STOPX:
             characterXStop(pGame->pCharacter[cData.playerNumber]);
