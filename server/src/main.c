@@ -247,6 +247,7 @@ void executeCommand(Game *pGame, ClientData cData){
             int ssx = getPlayerXPos(pGame->pCharacter[cData.playerNumber]);
             int ssy = getPlayerYPos(pGame->pCharacter[cData.playerNumber]);
             startSnowball(pGame->pSnowball[cData.playerNumber], ssx, ssy, directionIndex);
+            printf("%d \n", directionIndex);
             break;
         case STOPX:
             characterXStop(pGame->pCharacter[cData.playerNumber]);
