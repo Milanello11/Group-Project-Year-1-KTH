@@ -20,7 +20,7 @@ typedef struct{
         IPaddress clients[CHARACTERS];
         int nrOfClients;
         ServerData sData;
-        Snowball *pSnowball[MAXSNOWBALLS];
+        //Snowball *pSnowball[MAXSNOWBALLS];
         TTF_Font *pFont, *pScoreFont;
         Text *pOverText, *pStartText;
     }Game;
@@ -110,16 +110,16 @@ int initializations(Game *pGame){
         }
     }
 
-    for (int i = 0; i < MAXSNOWBALLS; i++){
+    /*for (int i = 0; i < MAXSNOWBALLS; i++){
         pGame->pSnowball[i] = createSnowball(pGame->pRenderer , WINDOW_WIDTH , WINDOW_HEIGHT);
-    }
+    }*/
 
-    for(int i = 0 ; i < MAXSNOWBALLS ; i++){
+    /*for(int i = 0 ; i < MAXSNOWBALLS ; i++){
         if(!pGame->pSnowball[i]){
             printf("Error: %s\n" , SDL_GetError());
             close(pGame);
         }
-    }
+    }*/
     //pGame->pOverText = createText(pGame->pRenderer,238,168,65,pGame->pFont,"Game over",WINDOW_WIDTH/2,WINDOW_HEIGHT/2);
     pGame->pStartText = createText(pGame->pRenderer,238,168,65,pGame->pScoreFont,"Waiting for clients",WINDOW_WIDTH/2,WINDOW_HEIGHT/2+100);
     for(int i=0;i < CHARACTERS;i++){
@@ -157,12 +157,12 @@ void run(Game *pGame){
                     updateCharacter(pGame->pCharacter[i]);
                     drawCharacter(pGame->pCharacter[i]);
                 }
-                for(int i = 0; i < MAXSNOWBALLS;i++){
+                /*for(int i = 0; i < MAXSNOWBALLS;i++){
                     if((pGame->pSnowball[i])){
                         updateSnowball(pGame->pSnowball[i]);
                         drawSnowball(pGame->pSnowball[i]);
                     }
-                }
+                }*/
                 SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
                 SDL_RenderClear(pGame->pRenderer);
                 SDL_RenderPresent(pGame->pRenderer);
@@ -204,10 +204,10 @@ void sendGameData(Game *pGame){
     for(int i=0;i<CHARACTERS;i++){
         getCharacterSendData(pGame->pCharacter[i], &(pGame->sData.characters[i]));
     }
-    for(int i = 0; i < MAXSNOWBALLS; i++)
+    /*for(int i = 0; i < MAXSNOWBALLS; i++)
     {
         getSnowballSendData(pGame->pSnowball[i], &(pGame->sData.SnowballData[i]));
-    }
+    }*/ 
     for(int i=0;i<CHARACTERS;i++){
         pGame->sData.playerNumber = i;
         memcpy(pGame->pPacket->data, &(pGame->sData), sizeof(ServerData));
@@ -247,12 +247,12 @@ void executeCommand(Game *pGame, ClientData cData, int *pDirectionIndex){
             *pDirectionIndex = 1;
             characterTurnRight(pGame->pCharacter[cData.playerNumber]);
             break;
-        case SHOOT:
+        /*case SHOOT:
             //pGame->pSnowball = createSnowball(pGame->pRenderer, WINDOW_WIDTH, WINDOW_HEIGHT);
             int ssx = getPlayerXPos(pGame->pCharacter[cData.playerNumber]);
             int ssy = getPlayerYPos(pGame->pCharacter[cData.playerNumber]);
             startSnowball(pGame->pSnowball[cData.playerNumber], ssx, ssy, *pDirectionIndex);
-            break;
+            break;*/
         case STOPX:
             characterXStop(pGame->pCharacter[cData.playerNumber]);
             break;
@@ -268,11 +268,11 @@ void close(Game *pGame){
             destroyCharacter(pGame->pCharacter[i]);
         }
     }
-    for(int i=0; i < MAXSNOWBALLS;i++){
+    /*for(int i=0; i < MAXSNOWBALLS;i++){
         if(pGame->pSnowball[i]){
             destroySnowball(pGame->pSnowball[i]);
         }
-    }
+    }*/
     if(pGame->pRenderer){ 
         SDL_DestroyRenderer(pGame->pRenderer);
     }
@@ -323,10 +323,10 @@ void handleInput(Game *pGame, SDL_Event *pEvent, bool *pSnowball){
                 case SDL_SCANCODE_RIGHT:
                     characterTurnRight(pGame->pCharacter[0]);
                     break;
-                case SDL_SCANCODE_SPACE:
+                /*case SDL_SCANCODE_SPACE:
                     //pGame->pSnowball = createSnowball(pGame->pRenderer, WINDOW_WIDTH , WINDOW_HEIGHT, pGame->pCharacter[0]);
                     *pSnowball = true;
-                    break;
+                    break;*/
             }
             break;
         case SDL_KEYUP:
