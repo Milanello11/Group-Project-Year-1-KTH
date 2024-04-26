@@ -289,6 +289,7 @@ void handleInput(Game *pGame, SDL_Event *pEvent, int *pDirectionIndex){
                     cData.command = RIGHT;
                     break;
                 case SDL_SCANCODE_SPACE:
+                    cData.command = SHOOT;
                     int check = -1;
                     for(int i = 0; i < MAXSNOWBALLS;i++){
                         if(getOnScreenIndex(pGame->pSnowball[i]))
