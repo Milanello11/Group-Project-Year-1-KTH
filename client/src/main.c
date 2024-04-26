@@ -23,6 +23,7 @@ typedef struct{
         Snowball *pSnowball[MAXSNOWBALLS];
         Background *pBackground;
         Menu *pMenuBackground;
+        Button *pButton[3];
     }Game;
 
 int initializations(Game *pGame);
@@ -133,6 +134,10 @@ int initializations(Game *pGame){
         close(pGame);
         return 0;
     }
+    for (int i = 0; i < 3; i++){
+        pGame->pButton[i] = createButton(pGame->pRenderer, 0, 0, 400, 100);
+        setDesRect(pGame->pButton[i], i);
+    }
 
     pGame->state = START;
     return 1;
@@ -140,7 +145,6 @@ int initializations(Game *pGame){
 
 void run(Game *pGame){
 
-    Button *pButton = initButton(pGame->pRenderer, 0, 0, 400, 100); // Initialize the button
     int spritePos = 0;
     bool active = true;
     int directionIndex = 0;
@@ -161,6 +165,9 @@ void run(Game *pGame){
                 while(SDL_PollEvent(&event)){
                     if(event.type==SDL_QUIT) 
                         active = false;
+                    else if(event.key.keysym.scancode == SDL_SCANCODE_ESCAPE){
+                        active = false;
+                    }
                     else handleInput(pGame,&event,&directionIndex);
                 }
                 SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
@@ -191,21 +198,32 @@ void run(Game *pGame){
                     SDL_SetRenderDrawColor(pGame->pRenderer,255,255,255,255);
                     SDL_RenderClear(pGame->pRenderer);
                     renderMenuBackground(pGame->pMenuBackground);
-                    drawButton(pButton, spritePos);
+
+                    for(int i = 0; i < 3;i++){
+                        if(hover(mouseX, mouseY, pGame->pButton[i])){
+                            drawButton(pGame->pButton[i], i+3);
+                        }
+                        else{
+                            drawButton(pGame->pButton[i], i);
+                        }
+                    }
+
                     SDL_RenderPresent(pGame->pRenderer);  
                 }
                 if(SDL_PollEvent(&event)){
-                    spritePos = setSrcRectX(mouseX, mouseY);
                     if(event.type == SDL_QUIT){
                         active = false;
                     }
                     if(!joining && event.type == SDL_MOUSEBUTTONDOWN){
-                        if(mouseX >= 300 && mouseX <= 500 && mouseY >= 200 && mouseY <= 305){
+                        if(mouseX >= 200 && mouseX <= 600 && mouseY >= 200 && mouseY <= 355){
                             joining = 1;
                             cData.command = READY;
                             cData.playerNumber =- 1;
                             memcpy(pGame->pPacket->data, &cData, sizeof(ClientData));
                             pGame->pPacket->len = sizeof(ClientData);
+                        }
+                        if(mouseX >= 300 && mouseX <= 500 && mouseY >= 400 && mouseY <= 505){
+                            active = false;
                         }
                     }
                     /*else if(!joining && event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_RETURN){

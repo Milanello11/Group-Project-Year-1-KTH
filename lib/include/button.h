@@ -3,9 +3,10 @@
 
 typedef struct button Button;
 
-Button *initButton(SDL_Renderer *pRenderer, int x, int y, int w, int h); 
+Button *createButton(SDL_Renderer *pRenderer, int x, int y, int w, int h); 
 void drawButton(Button *pButton , int index);
 void destroyButton(Button *pButton);
-int setSrcRectX(int x , int y);
+int hover(int x , int y, Button *pButton);
+void setDesRect(Button *pButton, int index);
 
 #endif
