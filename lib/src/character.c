@@ -73,7 +73,7 @@ void updateCharacter(Character *pCharacter){
         pCharacter->x_pos = pCharacter->characterRect.x;
         pCharacter->y_pos = pCharacter->characterRect.y;
     }
-    if(getCollision(pCharacter->x_pos + pCharacter->characterRect.w, pCharacter->y_pos)){
+    if(getCollision(pCharacter->x_pos, pCharacter->y_pos + pCharacter->characterRect.h)){
 
         pCharacter->x_pos = pCharacter->characterRect.x;
         pCharacter->y_pos = pCharacter->characterRect.y;
