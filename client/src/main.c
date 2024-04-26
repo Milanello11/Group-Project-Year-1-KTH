@@ -185,15 +185,8 @@ void run(Game *pGame){
                 if(!joining){
                     SDL_SetRenderDrawColor(pGame->pRenderer,255,255,255,255);
                     SDL_RenderClear(pGame->pRenderer);
-                    //renderMenuBackground(pGame->pMenuBackground);
-                    SDL_RenderPresent(pGame->pRenderer);
-                    
-                }
-                else{
-                /*SDL_SetRenderDrawColor(pGame->pRenderer,255,255,255,255);
-                SDL_RenderClear(pGame->pRenderer);
-                renderMenuBackground(pGame->pMenuBackground);
-                SDL_RenderPresent(pGame->pRenderer);*/
+                    renderMenuBackground(pGame->pMenuBackground);
+                    SDL_RenderPresent(pGame->pRenderer);  
                 }
                 if(SDL_PollEvent(&event)){
                     if(event.type == SDL_QUIT){

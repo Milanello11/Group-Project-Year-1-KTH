@@ -223,22 +223,30 @@ void add(IPaddress address, IPaddress clients[],int *pNrOfClients){
 }
 
 void executeCommand(Game *pGame, ClientData cData){
+        int directionIndex = 0;
         switch (cData.command)
     {
         case UP:
+            directionIndex = 0;
             characterTurnUp(pGame->pCharacter[cData.playerNumber]);
             break;
         case DOWN:
+            directionIndex = 2;
             characterTurnDown(pGame->pCharacter[cData.playerNumber]);
             break;
         case LEFT:
+            directionIndex = 3;
             characterTurnLeft(pGame->pCharacter[cData.playerNumber]);
             break;
         case RIGHT:
+            directionIndex = 1;
             characterTurnRight(pGame->pCharacter[cData.playerNumber]);
             break;
         case SHOOT:
             //pGame->pSnowball = createSnowball(pGame->pRenderer, WINDOW_WIDTH, WINDOW_HEIGHT);
+            int ssx = getPlayerXPos(pGame->pCharacter[cData.playerNumber]);
+            int ssy = getPlayerYPos(pGame->pCharacter[cData.playerNumber]);
+            startSnowball(pGame->pSnowball[cData.playerNumber], ssx, ssy, directionIndex);
             break;
         case STOPX:
             characterXStop(pGame->pCharacter[cData.playerNumber]);
