@@ -200,7 +200,7 @@ void run(Game *pGame){
                         active = false;
                     }
                     if(!joining && event.type == SDL_MOUSEBUTTONDOWN){
-                        if(mouseX >= 300 && mouseX <= 700 && mouseY >= 150 && mouseY <= 250){
+                        if(mouseX >= 300 && mouseX <= 500 && mouseY >= 200 && mouseY <= 305){
                             joining = 1;
                             cData.command = READY;
                             cData.playerNumber =- 1;
