@@ -157,6 +157,12 @@ void run(Game *pGame){
                     updateCharacter(pGame->pCharacter[i]);
                     drawCharacter(pGame->pCharacter[i]);
                 }
+                for(int i = 0; i < MAXSNOWBALLS;i++){
+                    if((pGame->pSnowball[i])){
+                        updateSnowball(pGame->pSnowball[i]);
+                        drawSnowball(pGame->pSnowball[i]);
+                    }
+                }
                 SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
                 SDL_RenderClear(pGame->pRenderer);
                 SDL_RenderPresent(pGame->pRenderer);
