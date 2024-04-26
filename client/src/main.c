@@ -8,6 +8,7 @@
 #include "characterData.h"
 #include "map.h"
 #include "menu.h"
+#include "button.h"
 
 typedef struct{
         SDL_Window *pWindow;
@@ -139,6 +140,8 @@ int initializations(Game *pGame){
 
 void run(Game *pGame){
 
+    Button *pButton = initButton(pGame->pRenderer, 0, 0, 400, 100); // Initialize the button
+    int spritePos = 0;
     bool active = true;
     int directionIndex = 0;
     int joining = 0;
@@ -182,23 +185,36 @@ void run(Game *pGame){
             case GAME_OVER:
                 
             case START:
+                int mouseX, mouseY;
+                SDL_GetMouseState(&mouseX, &mouseY);
                 if(!joining){
                     SDL_SetRenderDrawColor(pGame->pRenderer,255,255,255,255);
                     SDL_RenderClear(pGame->pRenderer);
                     renderMenuBackground(pGame->pMenuBackground);
+                    drawButton(pButton, spritePos);
                     SDL_RenderPresent(pGame->pRenderer);  
                 }
                 if(SDL_PollEvent(&event)){
+                    spritePos = setSrcRectX(mouseX, mouseY);
                     if(event.type == SDL_QUIT){
                         active = false;
                     }
-                    else if(!joining && event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_RETURN){
+                    if(!joining && event.type == SDL_MOUSEBUTTONDOWN){
+                        if(mouseX >= 300 && mouseX <= 700 && mouseY >= 150 && mouseY <= 250){
+                            joining = 1;
+                            cData.command = READY;
+                            cData.playerNumber =- 1;
+                            memcpy(pGame->pPacket->data, &cData, sizeof(ClientData));
+                            pGame->pPacket->len = sizeof(ClientData);
+                        }
+                    }
+                    /*else if(!joining && event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_RETURN){
                         joining = 1;
                         cData.command = READY;
                         cData.playerNumber =- 1;
                         memcpy(pGame->pPacket->data, &cData, sizeof(ClientData));
 		                pGame->pPacket->len = sizeof(ClientData);
-                    }
+                    }*/
                 }
                 if(joining){
                 SDLNet_UDP_Send(pGame->pSocket, -1, pGame->pPacket);

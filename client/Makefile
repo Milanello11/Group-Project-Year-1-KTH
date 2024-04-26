@@ -7,9 +7,9 @@ CFLAGS = -g $(INCLUDE) -c
 LDFLAGS = -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net -lm
 CC = gcc
 
-snomosClient: main.o character.o snowball.o map.o menu.o
+snomosClient: main.o character.o snowball.o map.o menu.o button.o
 	@echo "Building Snomos"
-	$(CC) -o snomosClient main.o character.o snowball.o map.o menu.o $(LDFLAGS)
+	$(CC) -o snomosClient main.o character.o snowball.o map.o menu.o button.o $(LDFLAGS)
 
 main.o: $(SRCDIR)/main.c $(INCDIR)/character.h $(INCDIR)/characterData.h $(INCDIR)/snowball.h $(INCDIR)/map.h
 	$(CC) $(CFLAGS) $(SRCDIR)/main.c 
@@ -17,7 +17,7 @@ main.o: $(SRCDIR)/main.c $(INCDIR)/character.h $(INCDIR)/characterData.h $(INCDI
 character.o: $(COMMONSRCDIR)/character.c $(INCDIR)/character.h $(INCDIR)/characterData.h $(INCDIR)/snowball.h $(INCDIR)/map.h
 	$(CC) $(CFLAGS) $(COMMONSRCDIR)/character.c
 
-snowball.o: $(COMMONSRCDIR)/snowball.c $(INCDIR)/snowball.h $(INCDIR)/character.h
+snowball.o: $(COMMONSRCDIR)/snowball.c $(INCDIR)/snowball.h $(INCDIR)/characterData.h
 	$(CC) $(CFLAGS) $(COMMONSRCDIR)/snowball.c 
 
 map.o: $(COMMONSRCDIR)/map.c $(INCDIR)/map.h
@@ -25,3 +25,6 @@ map.o: $(COMMONSRCDIR)/map.c $(INCDIR)/map.h
 
 menu.o: $(COMMONSRCDIR)/menu.c $(INCDIR)/menu.h
 	$(CC) $(CFLAGS) $(COMMONSRCDIR)/menu.c
+
+button.o: $(COMMONSRCDIR)/button.c $(INCDIR)/button.h
+	$(CC) $(CFLAGS) $(COMMONSRCDIR)/button.c
