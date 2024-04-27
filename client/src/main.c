@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_net.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include "character.h"
@@ -9,6 +10,7 @@
 #include "map.h"
 #include "menu.h"
 #include "button.h"
+#include "text.h"
 
 typedef struct{
         SDL_Window *pWindow;
@@ -24,6 +26,8 @@ typedef struct{
         Background *pBackground;
         Menu *pMenuBackground;
         Button *pButton[3];
+        TTF_Font *pFont, *pScoreFont;
+        Text *pOverText, *pStartText;
     }Game;
 
 int initializations(Game *pGame);
@@ -49,6 +53,19 @@ int initializations(Game *pGame){
         return 0;
     }
 
+    if(TTF_Init()!=0){
+        printf("Error: %s\n",TTF_GetError());
+        SDL_Quit();
+        return 0;
+    }
+
+    if(SDLNet_Init()){
+		printf("Error: %s\n", SDLNet_GetError());
+        TTF_Quit();
+        SDL_Quit();
+		return 0;
+	}
+
     pGame->pWindow = SDL_CreateWindow("Snomos",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT,0);
     if(!pGame->pWindow){
         printf("Error: %s\n",SDL_GetError());
@@ -70,19 +87,13 @@ int initializations(Game *pGame){
         return 0;
     }
     initBackground();
-
-    if(SDLNet_Init()){
-		printf("Error: %s\n", SDLNet_GetError());
-        close(pGame);
-		return 0;
-	}
     if (!(pGame->pSocket = SDLNet_UDP_Open(0)))
 	{
 		printf("SDLNet_UDP_Open: %s\n", SDLNet_GetError());
         return 0;
 	}
     
-    if(SDLNet_ResolveHost(&(pGame->serverAddress), "130.229.177.32", 2000)){
+    if(SDLNet_ResolveHost(&(pGame->serverAddress), "192.168.0.48", 2000)){
         printf("SDLNet_ResolveHost(127.0.0.1 2000): %s\n", SDLNet_GetError());
         return 0;
     }
@@ -99,6 +110,16 @@ int initializations(Game *pGame){
         close(pGame);
         return 0;
     }
+
+    pGame->pFont = TTF_OpenFont("../lib/resources/arial.ttf", 40);
+    if(!pGame->pFont){
+        printf("Error: %s\n",TTF_GetError());
+        close(pGame);
+        return 0;
+    }
+
+    pGame->pStartText = createText(pGame->pRenderer,0,105,255,pGame->pFont,"Waiting for server",WINDOW_WIDTH/2,WINDOW_HEIGHT/2+100);
+
     pGame->pPacket->address.host = pGame->serverAddress.host;
     pGame->pPacket->address.port = pGame->serverAddress.port;
 
@@ -233,9 +254,15 @@ void run(Game *pGame){
                         memcpy(pGame->pPacket->data, &cData, sizeof(ClientData));
 		                pGame->pPacket->len = sizeof(ClientData);
                     }*/
+                if(joining){
+                    SDL_SetRenderDrawColor(pGame->pRenderer,255,255,255,255);
+                    SDL_RenderClear(pGame->pRenderer);
+                    drawText(pGame->pStartText);
+                    SDL_RenderPresent(pGame->pRenderer);
+                }
                 }
                 if(joining){
-                SDLNet_UDP_Send(pGame->pSocket, -1, pGame->pPacket);
+                    SDLNet_UDP_Send(pGame->pSocket, -1, pGame->pPacket);
                 }
                 if(SDLNet_UDP_Recv(pGame->pSocket,pGame->pPacket)==1){
                     updateWithServerData(pGame);
@@ -287,7 +314,14 @@ void close(Game *pGame){
 	if(pGame->pSocket){ 
         SDLNet_UDP_Close(pGame->pSocket);
     }
+    if(pGame->pStartText){
+        destroyText(pGame->pStartText);  
+    }
+    if(pGame->pFont){
+        TTF_CloseFont(pGame->pFont);
+    } 
 
+    TTF_Quit();
     SDLNet_Quit();
     SDL_Quit();
 }

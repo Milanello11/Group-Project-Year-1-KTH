@@ -22,7 +22,7 @@ typedef struct{
         ServerData sData;
         //Snowball *pSnowball[MAXSNOWBALLS];
         TTF_Font *pFont, *pScoreFont;
-        Text *pOverText, *pStartText;
+        Text *pIPText, *pStartText;
     }Game;
 
 int initializations(Game *pGame);
@@ -51,15 +51,15 @@ int initializations(Game *pGame){
         return 0;
     }
     if(TTF_Init()!=0){
-    printf("Error: %s\n",TTF_GetError());
-    SDL_Quit();
-    return 0;
+        printf("Error: %s\n",TTF_GetError());
+        SDL_Quit();
+        return 0;
     }
     if(SDLNet_Init()){
-	printf("Error: %s\n", SDLNet_GetError());
-    TTF_Quit();
-    SDL_Quit();
-	return 0;
+        printf("Error: %s\n", SDLNet_GetError());
+        TTF_Quit();
+        SDL_Quit();
+	    return 0;
 	}
 
     pGame->pWindow = SDL_CreateWindow("Snomos Server",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT,0);
@@ -107,6 +107,7 @@ int initializations(Game *pGame){
         if(!pGame->pCharacter[i]){
             printf("Error: %s\n" , SDL_GetError());
             close(pGame);
+            return 0;
         }
     }
 
@@ -121,17 +122,35 @@ int initializations(Game *pGame){
         }
     }*/
     //pGame->pOverText = createText(pGame->pRenderer,238,168,65,pGame->pFont,"Game over",WINDOW_WIDTH/2,WINDOW_HEIGHT/2);
+    IPaddress ip;
+    if(SDLNet_ResolveHost(&ip, NULL, 2000) == -1){
+        printf("SDLNet_ResolveHost: %s\n", SDLNet_GetError());
+        SDLNet_Quit();
+        SDL_Quit();
+        return 0; 
+    }
+
+    char *serverIP = SDLNet_ResolveIP(&ip);
+    if (serverIP) {
+        printf("Local IP Address: %s\n", serverIP);
+    } else {
+        printf("SDLNet_ResolveIP: %s\n", SDLNet_GetError());
+    }
+
     pGame->pStartText = createText(pGame->pRenderer,238,168,65,pGame->pScoreFont,"Waiting for clients",WINDOW_WIDTH/2,WINDOW_HEIGHT/2+100);
+    pGame->pIPText = createText(pGame->pRenderer, 238,168,65, pGame->pScoreFont, serverIP,WINDOW_WIDTH/2,WINDOW_HEIGHT/2);
     for(int i=0;i < CHARACTERS;i++){
         if(!pGame->pCharacter[i]){
             printf("Error: %s\n",SDL_GetError());
             close(pGame);
             return 0;
         }
+    }
+
     pGame->state = START;
     pGame->nrOfClients = 0;
+
     return 1;
-    }
 }
 
 void run(Game *pGame){
@@ -177,6 +196,7 @@ void run(Game *pGame){
 
             case START:
                 drawText(pGame->pStartText);
+                drawText(pGame->pIPText);
                 SDL_RenderPresent(pGame->pRenderer);
                 if(SDL_PollEvent(&event) && event.type==SDL_QUIT){ 
                     active = false;
@@ -279,8 +299,8 @@ void close(Game *pGame){
     if(pGame->pWindow){ 
         SDL_DestroyWindow(pGame->pWindow);
     }
-    if(pGame->pOverText){
-        destroyText(pGame->pOverText);
+    if(pGame->pIPText){
+        destroyText(pGame->pIPText);
     }
     if(pGame->pStartText){
         destroyText(pGame->pStartText);  
