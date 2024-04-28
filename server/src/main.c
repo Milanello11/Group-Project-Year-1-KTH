@@ -20,7 +20,7 @@ typedef struct{
         IPaddress clients[CHARACTERS];
         int nrOfClients;
         ServerData sData;
-        //Snowball *pSnowball[MAXSNOWBALLS];
+        Snowball *pSnowball[MAXSNOWBALLS];
         TTF_Font *pFont, *pScoreFont;
         Text *pIPText, *pStartText;
     }Game;
@@ -267,12 +267,9 @@ void executeCommand(Game *pGame, ClientData cData, int *pDirectionIndex){
             *pDirectionIndex = 1;
             characterTurnRight(pGame->pCharacter[cData.playerNumber]);
             break;
-        /*case SHOOT:
-            //pGame->pSnowball = createSnowball(pGame->pRenderer, WINDOW_WIDTH, WINDOW_HEIGHT);
-            int ssx = getPlayerXPos(pGame->pCharacter[cData.playerNumber]);
-            int ssy = getPlayerYPos(pGame->pCharacter[cData.playerNumber]);
-            startSnowball(pGame->pSnowball[cData.playerNumber], ssx, ssy, *pDirectionIndex);
-            break;*/
+        case SHOOT:
+            updateSnowball(pGame->pSnowball[cData.playerNumber]);    
+            break;
         case STOPX:
             characterXStop(pGame->pCharacter[cData.playerNumber]);
             break;
