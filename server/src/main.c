@@ -12,7 +12,7 @@
 typedef struct{
         SDL_Window *pWindow;
         SDL_Renderer *pRenderer;
-        Character *pCharacter[CHARACTERS]; //Fixa detta senare
+        Character *pCharacter[CHARACTERS];
         int nrOfCharacters;
         GameState state;
         UDPpacket *pPacket;
