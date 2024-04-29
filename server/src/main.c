@@ -111,16 +111,16 @@ int initializations(Game *pGame){
         }
     }
 
-    /*for (int i = 0; i < MAXSNOWBALLS; i++){
+    for (int i = 0; i < MAXSNOWBALLS; i++){
         pGame->pSnowball[i] = createSnowball(pGame->pRenderer , WINDOW_WIDTH , WINDOW_HEIGHT);
-    }*/
+    }
 
-    /*for(int i = 0 ; i < MAXSNOWBALLS ; i++){
+    for(int i = 0 ; i < MAXSNOWBALLS ; i++){
         if(!pGame->pSnowball[i]){
             printf("Error: %s\n" , SDL_GetError());
             close(pGame);
         }
-    }*/
+    }
     //pGame->pOverText = createText(pGame->pRenderer,238,168,65,pGame->pFont,"Game over",WINDOW_WIDTH/2,WINDOW_HEIGHT/2);
     IPaddress ip;
     if(SDLNet_ResolveHost(&ip, NULL, 2000) == -1){
@@ -176,12 +176,6 @@ void run(Game *pGame){
                     updateCharacter(pGame->pCharacter[i]);
                     drawCharacter(pGame->pCharacter[i]);
                 }
-                /*for(int i = 0; i < MAXSNOWBALLS;i++){
-                    if((pGame->pSnowball[i])){
-                        updateSnowball(pGame->pSnowball[i]);
-                        drawSnowball(pGame->pSnowball[i]);
-                    }
-                }*/
                 SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
                 SDL_RenderClear(pGame->pRenderer);
                 SDL_RenderPresent(pGame->pRenderer);
@@ -224,10 +218,13 @@ void sendGameData(Game *pGame){
     for(int i=0;i<CHARACTERS;i++){
         getCharacterSendData(pGame->pCharacter[i], &(pGame->sData.characters[i]));
     }
-    /*for(int i = 0; i < MAXSNOWBALLS; i++)
+    for(int i = 0; i < MAXSNOWBALLS; i++)
     {
-        getSnowballSendData(pGame->pSnowball[i], &(pGame->sData.SnowballData[i]));
-    }*/ 
+        if(getOnScreenIndex(pGame->pSnowball[i])){
+            updateSnowball(pGame->pSnowball[i]);
+            getSnowballSendData(pGame->pSnowball[i], &(pGame->sData.SnowballData[i]));
+        }
+    }
     for(int i=0;i<CHARACTERS;i++){
         pGame->sData.playerNumber = i;
         memcpy(pGame->pPacket->data, &(pGame->sData), sizeof(ServerData));
@@ -268,7 +265,11 @@ void executeCommand(Game *pGame, ClientData cData, int *pDirectionIndex){
             characterTurnRight(pGame->pCharacter[cData.playerNumber]);
             break;
         case SHOOT:
-            updateSnowball(pGame->pSnowball[cData.playerNumber]);    
+            for(int i = 0; i < MAXSNOWBALLS;i++){
+                if(getOnScreenIndex(pGame->pSnowball[i])){
+                    updateSnowball(pGame->pSnowball[i]);
+                }
+            }
             break;
         case STOPX:
             characterXStop(pGame->pCharacter[cData.playerNumber]);
@@ -285,11 +286,11 @@ void close(Game *pGame){
             destroyCharacter(pGame->pCharacter[i]);
         }
     }
-    /*for(int i=0; i < MAXSNOWBALLS;i++){
+    for(int i=0; i < MAXSNOWBALLS;i++){
         if(pGame->pSnowball[i]){
             destroySnowball(pGame->pSnowball[i]);
         }
-    }*/
+    }
     if(pGame->pRenderer){ 
         SDL_DestroyRenderer(pGame->pRenderer);
     }
@@ -341,8 +342,7 @@ void handleInput(Game *pGame, SDL_Event *pEvent, bool *pSnowball){
                     characterTurnRight(pGame->pCharacter[0]);
                     break;
                 /*case SDL_SCANCODE_SPACE:
-                    //pGame->pSnowball = createSnowball(pGame->pRenderer, WINDOW_WIDTH , WINDOW_HEIGHT, pGame->pCharacter[0]);
-                    *pSnowball = true;
+                    //pGame->pSnowball = createSnowball(pGame->pRenderer, WINDOW_WIDTH , WINDOW_HEIGHT, pGame->pCharacter[0]
                     break;*/
             }
             break;

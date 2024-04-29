@@ -199,12 +199,12 @@ void run(Game *pGame){
                     updateCharacter(pGame->pCharacter[i]);
                     drawCharacter(pGame->pCharacter[i]);
                 }
-                /*for(int i=0;i<MAXSNOWBALLS;i++){
+                for(int i=0;i<MAXSNOWBALLS;i++){
                     if(getOnScreenIndex(pGame->pSnowball[i])){
                         updateSnowball(pGame->pSnowball[i]);
                         drawSnowball(pGame->pSnowball[i]);
                     }
-                }*/
+                }
                     
                 SDL_RenderPresent(pGame->pRenderer);
                 SDL_Delay(1000/60-15);
@@ -247,13 +247,6 @@ void run(Game *pGame){
                             active = false;
                         }
                     }
-                    /*else if(!joining && event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_RETURN){
-                        joining = 1;
-                        cData.command = READY;
-                        cData.playerNumber =- 1;
-                        memcpy(pGame->pPacket->data, &cData, sizeof(ClientData));
-		                pGame->pPacket->len = sizeof(ClientData);
-                    }*/
                 if(joining){
                     SDL_SetRenderDrawColor(pGame->pRenderer,255,255,255,255);
                     SDL_RenderClear(pGame->pRenderer);
@@ -285,9 +278,11 @@ void updateWithServerData(Game *pGame){
     for(int i=0;i<CHARACTERS;i++){
         updateCharacterWithRecievedData(pGame->pCharacter[i], &(sData.characters[i]));
     }
-    /*for(int i = 0; i < MAXSNOWBALLS;i++){
-        updateSnowballWithRecievedData(pGame->pSnowball[i], &(sData.SnowballData[i]));
-    }*/
+    for(int i = 0; i < MAXSNOWBALLS;i++){
+        if(getOnScreenIndex(pGame->pSnowball[i])){
+            updateSnowballWithRecievedData(pGame->pSnowball[i], &(sData.SnowballData[i]));
+        }
+    }
 }
 
 void close(Game *pGame){
@@ -299,6 +294,11 @@ void close(Game *pGame){
     for(int i = 0; i < MAXSNOWBALLS;i++){
         if(pGame->pSnowball[i]){
             destroySnowball(pGame->pSnowball[i]);
+        }
+    }
+    for(int i = 0; i < 3; i++){
+        if(pGame->pButton[i]){
+            destroyButton(pGame->pButton[i]);
         }
     }
 
@@ -357,7 +357,6 @@ void handleInput(Game *pGame, SDL_Event *pEvent, int *pDirectionIndex){
                     cData.command = RIGHT;
                     break;
                 case SDL_SCANCODE_SPACE:
-                    /*cData.command = SHOOT;
                     int check = -1;
                     for(int i = 0; i < MAXSNOWBALLS;i++){
                         if(getOnScreenIndex(pGame->pSnowball[i]))
@@ -380,7 +379,8 @@ void handleInput(Game *pGame, SDL_Event *pEvent, int *pDirectionIndex){
                         if(found >= 0){
                             startSnowball(pGame->pSnowball[found], ssx, ssy, *pDirectionIndex);
                         }
-                    }*/
+                    }
+                    cData.command = SHOOT;
                     break;
             }
             break;
