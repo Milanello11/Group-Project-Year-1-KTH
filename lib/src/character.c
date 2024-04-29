@@ -39,19 +39,19 @@ Character *createCharacter(int number, SDL_Renderer *pRenderer, int window_w, in
     pCharacter->characterRect.h /= 5;
     switch (number)
     {
-    case 1:
+    case 0:
         pCharacter->xStart = pCharacter->x_pos = pCharacter->characterRect.x = 100;
         pCharacter->yStart = pCharacter->y_pos = pCharacter->characterRect.y = 100;
         break;
-    case 2:
+    case 1:
         pCharacter->xStart = pCharacter->x_pos = pCharacter->characterRect.x = 700;
         pCharacter->yStart = pCharacter->y_pos = pCharacter->characterRect.y = 100;
         break;
-    case 3:
+    case 2:
         pCharacter->xStart = pCharacter->x_pos = pCharacter->characterRect.x = 100;
-        pCharacter->yStart = pCharacter->y_pos = pCharacter->characterRect.y = 700;
+        pCharacter->yStart = pCharacter->y_pos = pCharacter->characterRect.y = 600;
         break;
-    case 4:
+    case 3:
         pCharacter->xStart = pCharacter->x_pos = pCharacter->characterRect.x = 700;
         pCharacter->yStart = pCharacter->y_pos = pCharacter->characterRect.y = 700;
         break;
