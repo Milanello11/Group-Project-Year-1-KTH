@@ -59,7 +59,7 @@ int initializations(Game *pGame){
         return 0;
     }
 
-    if(SDLNet_Init()){
+    if(SDLNet_Init()!=0){
 		printf("Error: %s\n", SDLNet_GetError());
         TTF_Quit();
         SDL_Quit();
@@ -211,7 +211,7 @@ void run(Game *pGame){
                 break;
             
             case GAME_OVER:
-                
+                break;
             case START:
                 int mouseX, mouseY;
                 SDL_GetMouseState(&mouseX, &mouseY);

@@ -55,7 +55,7 @@ int initializations(Game *pGame){
         SDL_Quit();
         return 0;
     }
-    if(SDLNet_Init()){
+    if(SDLNet_Init()!=0){
         printf("Error: %s\n", SDLNet_GetError());
         TTF_Quit();
         SDL_Quit();
