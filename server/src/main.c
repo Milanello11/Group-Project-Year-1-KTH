@@ -20,7 +20,7 @@ typedef struct{
         IPaddress clients[CHARACTERS];
         int nrOfClients;
         ServerData sData;
-        Snowball *pSnowball[MAXSNOWBALLS];
+        Snowball *pSnowball[MAXSNOWBALLSSERVER];
         TTF_Font *pFont, *pScoreFont;
         Text *pIPText, *pStartText;
     }Game;
@@ -84,7 +84,7 @@ int initializations(Game *pGame){
         return 0;
     }
 
-    if (!(pGame->pSocket = SDLNet_UDP_Open(2000)))
+    if (!(pGame->pSocket = SDLNet_UDP_Open(2069)))
 	{
 		printf("SDLNet_UDP_Open: %s\n", SDLNet_GetError());
 		close(pGame);
@@ -111,11 +111,11 @@ int initializations(Game *pGame){
         }
     }
 
-    for (int i = 0; i < MAXSNOWBALLS; i++){
+    for (int i = 0; i < MAXSNOWBALLSSERVER; i++){
         pGame->pSnowball[i] = createSnowball(pGame->pRenderer , WINDOW_WIDTH , WINDOW_HEIGHT);
     }
 
-    for(int i = 0 ; i < MAXSNOWBALLS ; i++){
+    for(int i = 0 ; i < MAXSNOWBALLSSERVER ; i++){
         if(!pGame->pSnowball[i]){
             printf("Error: %s\n" , SDL_GetError());
             close(pGame);
@@ -139,13 +139,6 @@ int initializations(Game *pGame){
 
     pGame->pStartText = createText(pGame->pRenderer,238,168,65,pGame->pScoreFont,"Waiting for clients",WINDOW_WIDTH/2,WINDOW_HEIGHT/2+100);
     pGame->pIPText = createText(pGame->pRenderer, 238,168,65, pGame->pScoreFont, serverIP,WINDOW_WIDTH/2,WINDOW_HEIGHT/2);
-    for(int i=0;i < CHARACTERS;i++){
-        if(!pGame->pCharacter[i]){
-            printf("Error: %s\n",SDL_GetError());
-            close(pGame);
-            return 0;
-        }
-    }
 
     pGame->state = START;
     pGame->nrOfClients = 0;
@@ -170,11 +163,9 @@ void run(Game *pGame){
                 if(SDL_PollEvent(&event)){
                     if(event.type==SDL_QUIT) 
                         active = false;
-                    //else handleInput(pGame,&event,&snowball);
                 }
                 for (int i = 0; i < CHARACTERS; i++){
                     updateCharacter(pGame->pCharacter[i]);
-                    drawCharacter(pGame->pCharacter[i]);
                 }
                 SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
                 SDL_RenderClear(pGame->pRenderer);
@@ -203,7 +194,7 @@ void run(Game *pGame){
                 }
                 break;
         }       
-        SDL_Delay(1000/60-15);
+        SDL_Delay(1000/60);
     }
 }
 
@@ -218,7 +209,7 @@ void sendGameData(Game *pGame){
     for(int i=0;i<CHARACTERS;i++){
         getCharacterSendData(pGame->pCharacter[i], &(pGame->sData.characters[i]));
     }
-    for(int i = 0; i < MAXSNOWBALLS; i++)
+    for(int i = 0; i < MAXSNOWBALLSSERVER; i++)
     {
         if(getOnScreenIndex(pGame->pSnowball[i])){
             updateSnowball(pGame->pSnowball[i]);
@@ -265,7 +256,7 @@ void executeCommand(Game *pGame, ClientData cData, int *pDirectionIndex){
             characterTurnRight(pGame->pCharacter[cData.playerNumber]);
             break;
         case SHOOT:
-            for(int i = 0; i < MAXSNOWBALLS;i++){
+            for(int i = 0; i < MAXSNOWBALLSSERVER;i++){
                 if(getOnScreenIndex(pGame->pSnowball[i])){
                     updateSnowball(pGame->pSnowball[i]);
                 }
@@ -286,7 +277,7 @@ void close(Game *pGame){
             destroyCharacter(pGame->pCharacter[i]);
         }
     }
-    for(int i=0; i < MAXSNOWBALLS;i++){
+    for(int i=0; i < MAXSNOWBALLSSERVER;i++){
         if(pGame->pSnowball[i]){
             destroySnowball(pGame->pSnowball[i]);
         }
@@ -319,47 +310,4 @@ void close(Game *pGame){
     TTF_Quit();
     SDLNet_Quit();
     SDL_Quit();
-}
-
-void handleInput(Game *pGame, SDL_Event *pEvent, bool *pSnowball){
-    switch(pEvent->type){
-        case SDL_KEYDOWN:
-            switch(pEvent->key.keysym.scancode){
-                case SDL_SCANCODE_W:
-                case SDL_SCANCODE_UP:
-                    characterTurnUp(pGame->pCharacter[0]);
-                    break;
-                case SDL_SCANCODE_A:
-                case SDL_SCANCODE_LEFT:
-                    characterTurnLeft(pGame->pCharacter[0]);
-                    break;
-                case SDL_SCANCODE_S:
-                case SDL_SCANCODE_DOWN:
-                    characterTurnDown(pGame->pCharacter[0]);
-                    break;
-                case SDL_SCANCODE_D:
-                case SDL_SCANCODE_RIGHT:
-                    characterTurnRight(pGame->pCharacter[0]);
-                    break;
-                /*case SDL_SCANCODE_SPACE:
-                    //pGame->pSnowball = createSnowball(pGame->pRenderer, WINDOW_WIDTH , WINDOW_HEIGHT, pGame->pCharacter[0]
-                    break;*/
-            }
-            break;
-        case SDL_KEYUP:
-            switch(pEvent->key.keysym.scancode){
-                case SDL_SCANCODE_W:
-                case SDL_SCANCODE_UP:
-                case SDL_SCANCODE_S:
-                case SDL_SCANCODE_DOWN:
-                    characterYStop(pGame->pCharacter[0]);
-                    break;
-                case SDL_SCANCODE_A:
-                case SDL_SCANCODE_LEFT:
-                case SDL_SCANCODE_D:
-                case SDL_SCANCODE_RIGHT:
-                    characterXStop(pGame->pCharacter[0]);
-                    break;  
-            }                                
-    }
 }

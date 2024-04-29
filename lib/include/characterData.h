@@ -3,7 +3,7 @@
 #define WINDOW_HEIGHT 800
 #define WINDOW_WIDTH 800
 #define CHARACTERS 4
-#define MAXSNOWBALLS 5
+#define MAXSNOWBALLSSERVER 25
 
 enum gameState{START, ONGOING, GAME_OVER};
 typedef enum gameState GameState;
@@ -30,7 +30,7 @@ struct characterData{
 typedef struct characterData CharacterData;
 
 struct serverData{
-    SnowballData SnowballData[MAXSNOWBALLS];
+    SnowballData SnowballData[MAXSNOWBALLSSERVER];
     CharacterData characters[CHARACTERS];
     int playerNumber;
     GameState gState;

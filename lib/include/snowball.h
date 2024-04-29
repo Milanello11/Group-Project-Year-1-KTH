@@ -1,7 +1,7 @@
 #ifndef snowball_h
 #define snowball_h
 #define SNOWBALLSPEED 10
-#define MAXSNOWBALLS 5
+#define MAXSNOWBALLSCLIENT 3
 #include "characterData.h"
 
 

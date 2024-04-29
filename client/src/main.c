@@ -22,7 +22,7 @@ typedef struct{
         UDPsocket pSocket;
         IPaddress serverAddress;
         ServerData sData;
-        Snowball *pSnowball[MAXSNOWBALLS];
+        Snowball *pSnowball[MAXSNOWBALLSCLIENT];
         Background *pBackground;
         Menu *pMenuBackground;
         Button *pButton[3];
@@ -93,7 +93,7 @@ int initializations(Game *pGame){
         return 0;
 	}
     
-    if(SDLNet_ResolveHost(&(pGame->serverAddress), "130.229.131.13", 2000)){
+    if(SDLNet_ResolveHost(&(pGame->serverAddress), "130.229.131.13", 2069)){
         printf("SDLNet_ResolveHost(127.0.0.1 2000): %s\n", SDLNet_GetError());
         return 0;
     }
@@ -138,10 +138,10 @@ int initializations(Game *pGame){
             return 0;
         }
     }
-    for (int i = 0; i < MAXSNOWBALLS; i++){
+    for (int i = 0; i < MAXSNOWBALLSCLIENT; i++){
         pGame->pSnowball[i] = createSnowball(pGame->pRenderer , WINDOW_WIDTH , WINDOW_HEIGHT);
     }
-    for(int i=0;i<MAXSNOWBALLS;i++){
+    for(int i=0;i<MAXSNOWBALLSCLIENT;i++){
         if(!pGame->pSnowball[i]){
             printf("Error: %s\n",SDL_GetError());
             close(pGame);
@@ -173,14 +173,13 @@ void run(Game *pGame){
 
     SDL_Event event;
     ClientData cData;
-
     SDL_Texture* startButtonTexture = NULL;
     SDL_Renderer* renderer = NULL;
 
     while(active){
         switch (pGame->state){
             case ONGOING:
-                while (SDLNet_UDP_Recv(pGame->pSocket, pGame->pPacket)){
+                while(SDLNet_UDP_Recv(pGame->pSocket, pGame->pPacket)){
                     updateWithServerData(pGame);
                 }
                 while(SDL_PollEvent(&event)){
@@ -199,7 +198,7 @@ void run(Game *pGame){
                     updateCharacter(pGame->pCharacter[i]);
                     drawCharacter(pGame->pCharacter[i]);
                 }
-                for(int i=0;i<MAXSNOWBALLS;i++){
+                for(int i=0;i<MAXSNOWBALLSCLIENT;i++){
                     if(getOnScreenIndex(pGame->pSnowball[i])){
                         updateSnowball(pGame->pSnowball[i]);
                         drawSnowball(pGame->pSnowball[i]);
@@ -207,7 +206,7 @@ void run(Game *pGame){
                 }
                     
                 SDL_RenderPresent(pGame->pRenderer);
-                SDL_Delay(1000/60-15);
+                SDL_Delay(1000/60);
                 break;
             
             case GAME_OVER:
@@ -219,7 +218,6 @@ void run(Game *pGame){
                     SDL_SetRenderDrawColor(pGame->pRenderer,255,255,255,255);
                     SDL_RenderClear(pGame->pRenderer);
                     renderMenuBackground(pGame->pMenuBackground);
-
                     for(int i = 0; i < 3;i++){
                         if(hover(mouseX, mouseY, pGame->pButton[i])){
                             drawButton(pGame->pButton[i], i+3);
@@ -228,7 +226,6 @@ void run(Game *pGame){
                             drawButton(pGame->pButton[i], i);
                         }
                     }
-
                     SDL_RenderPresent(pGame->pRenderer);  
                 }
                 if(SDL_PollEvent(&event)){
@@ -247,12 +244,12 @@ void run(Game *pGame){
                             active = false;
                         }
                     }
-                if(joining){
-                    SDL_SetRenderDrawColor(pGame->pRenderer,255,255,255,255);
-                    SDL_RenderClear(pGame->pRenderer);
-                    drawText(pGame->pStartText);
-                    SDL_RenderPresent(pGame->pRenderer);
-                }
+                    if(joining){
+                        SDL_SetRenderDrawColor(pGame->pRenderer,255,255,255,255);
+                        SDL_RenderClear(pGame->pRenderer);
+                        drawText(pGame->pStartText);
+                        SDL_RenderPresent(pGame->pRenderer);
+                    }
                 }
                 if(joining){
                     SDLNet_UDP_Send(pGame->pSocket, -1, pGame->pPacket);
@@ -278,7 +275,7 @@ void updateWithServerData(Game *pGame){
     for(int i=0;i<CHARACTERS;i++){
         updateCharacterWithRecievedData(pGame->pCharacter[i], &(sData.characters[i]));
     }
-    for(int i = 0; i < MAXSNOWBALLS;i++){
+    for(int i = 0; i < MAXSNOWBALLSCLIENT;i++){
         if(getOnScreenIndex(pGame->pSnowball[i])){
             updateSnowballWithRecievedData(pGame->pSnowball[i], &(sData.SnowballData[i]));
         }
@@ -291,7 +288,7 @@ void close(Game *pGame){
             destroyCharacter(pGame->pCharacter[i]);
         }
     }
-    for(int i = 0; i < MAXSNOWBALLS;i++){
+    for(int i = 0; i < MAXSNOWBALLSCLIENT;i++){
         if(pGame->pSnowball[i]){
             destroySnowball(pGame->pSnowball[i]);
         }
@@ -358,7 +355,7 @@ void handleInput(Game *pGame, SDL_Event *pEvent, int *pDirectionIndex){
                     break;
                 case SDL_SCANCODE_SPACE:
                     int check = -1;
-                    for(int i = 0; i < MAXSNOWBALLS;i++){
+                    for(int i = 0; i < MAXSNOWBALLSCLIENT;i++){
                         if(getOnScreenIndex(pGame->pSnowball[i]))
                         {
                             check = 1;
@@ -370,7 +367,7 @@ void handleInput(Game *pGame, SDL_Event *pEvent, int *pDirectionIndex){
                         int ssy = getPlayerYPos(pGame->pCharacter[pGame->characterNumber]);
                         int found = -1;
 
-                        for(int i = 0; i < MAXSNOWBALLS;i++){
+                        for(int i = 0; i < MAXSNOWBALLSCLIENT;i++){
                             if(!getOnScreenIndex(pGame->pSnowball[i])){
                                 found = i;
                                 break;
