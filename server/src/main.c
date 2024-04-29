@@ -12,7 +12,7 @@
 typedef struct{
         SDL_Window *pWindow;
         SDL_Renderer *pRenderer;
-        Character *pCharacter[CHARACTERS]; //Fixa detta senare
+        Character *pCharacter[CHARACTERS];
         int nrOfCharacters;
         GameState state;
         UDPpacket *pPacket;
@@ -162,7 +162,6 @@ void run(Game *pGame){
                 }
                 for (int i = 0; i < CHARACTERS; i++){
                     updateCharacter(pGame->pCharacter[i]);
-                    drawCharacter(pGame->pCharacter[i]);
                 }
                 SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
                 SDL_RenderClear(pGame->pRenderer);

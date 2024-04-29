@@ -59,7 +59,7 @@ int initializations(Game *pGame){
         return 0;
     }
 
-    if(SDLNet_Init()){
+    if(SDLNet_Init()!=0){
 		printf("Error: %s\n", SDLNet_GetError());
         TTF_Quit();
         SDL_Quit();
@@ -93,7 +93,7 @@ int initializations(Game *pGame){
         return 0;
 	}
     
-    if(SDLNet_ResolveHost(&(pGame->serverAddress), "130.229.131.13", 2000)){
+    if(SDLNet_ResolveHost(&(pGame->serverAddress), "130.229.131.13", 2069)){
         printf("SDLNet_ResolveHost(127.0.0.1 2000): %s\n", SDLNet_GetError());
         return 0;
     }
@@ -173,14 +173,13 @@ void run(Game *pGame){
 
     SDL_Event event;
     ClientData cData;
-
     SDL_Texture* startButtonTexture = NULL;
     SDL_Renderer* renderer = NULL;
 
     while(active){
         switch (pGame->state){
             case ONGOING:
-                while (SDLNet_UDP_Recv(pGame->pSocket, pGame->pPacket)){
+                while(SDLNet_UDP_Recv(pGame->pSocket, pGame->pPacket)){
                     updateWithServerData(pGame);
                 }
                 while(SDL_PollEvent(&event)){
@@ -207,11 +206,11 @@ void run(Game *pGame){
                 }
                     
                 SDL_RenderPresent(pGame->pRenderer);
-                SDL_Delay(1000/60-15);
+                SDL_Delay(1000/60);
                 break;
             
             case GAME_OVER:
-                
+                break;
             case START:
                 int mouseX, mouseY;
                 SDL_GetMouseState(&mouseX, &mouseY);
@@ -219,7 +218,6 @@ void run(Game *pGame){
                     SDL_SetRenderDrawColor(pGame->pRenderer,255,255,255,255);
                     SDL_RenderClear(pGame->pRenderer);
                     renderMenuBackground(pGame->pMenuBackground);
-
                     for(int i = 0; i < 3;i++){
                         if(hover(mouseX, mouseY, pGame->pButton[i])){
                             drawButton(pGame->pButton[i], i+3);
@@ -228,7 +226,6 @@ void run(Game *pGame){
                             drawButton(pGame->pButton[i], i);
                         }
                     }
-
                     SDL_RenderPresent(pGame->pRenderer);  
                 }
                 if(SDL_PollEvent(&event)){
@@ -247,12 +244,12 @@ void run(Game *pGame){
                             active = false;
                         }
                     }
-                if(joining){
-                    SDL_SetRenderDrawColor(pGame->pRenderer,255,255,255,255);
-                    SDL_RenderClear(pGame->pRenderer);
-                    drawText(pGame->pStartText);
-                    SDL_RenderPresent(pGame->pRenderer);
-                }
+                    if(joining){
+                        SDL_SetRenderDrawColor(pGame->pRenderer,255,255,255,255);
+                        SDL_RenderClear(pGame->pRenderer);
+                        drawText(pGame->pStartText);
+                        SDL_RenderPresent(pGame->pRenderer);
+                    }
                 }
                 if(joining){
                     SDLNet_UDP_Send(pGame->pSocket, -1, pGame->pPacket);
