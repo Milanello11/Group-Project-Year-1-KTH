@@ -37,8 +37,27 @@ Character *createCharacter(int number, SDL_Renderer *pRenderer, int window_w, in
     SDL_QueryTexture(pCharacter->pTexture, NULL, NULL, &(pCharacter->characterRect.w), &(pCharacter->characterRect.h));
     pCharacter->characterRect.w /= 5;
     pCharacter->characterRect.h /= 5;
-    pCharacter->xStart = pCharacter->x_pos = pCharacter->characterRect.x = window_w*(number + 1) / 6 - pCharacter->characterRect.w/2;
-    pCharacter->xStart = pCharacter->y_pos = pCharacter->characterRect.y = window_h/2-pCharacter->characterRect.h/2;
+    switch (number)
+    {
+    case 1:
+        pCharacter->xStart = pCharacter->x_pos = pCharacter->characterRect.x = 100;
+        pCharacter->yStart = pCharacter->y_pos = pCharacter->characterRect.y = 100;
+        break;
+    case 2:
+        pCharacter->xStart = pCharacter->x_pos = pCharacter->characterRect.x = 700;
+        pCharacter->yStart = pCharacter->y_pos = pCharacter->characterRect.y = 100;
+        break;
+    case 3:
+        pCharacter->xStart = pCharacter->x_pos = pCharacter->characterRect.x = 100;
+        pCharacter->yStart = pCharacter->y_pos = pCharacter->characterRect.y = 700;
+        break;
+    case 4:
+        pCharacter->xStart = pCharacter->x_pos = pCharacter->characterRect.x = 700;
+        pCharacter->yStart = pCharacter->y_pos = pCharacter->characterRect.y = 700;
+        break;
+    default:
+        break;
+    }
 
     return pCharacter;
 }
