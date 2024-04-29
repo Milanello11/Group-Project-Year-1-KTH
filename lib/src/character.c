@@ -53,7 +53,7 @@ Character *createCharacter(int number, SDL_Renderer *pRenderer, int window_w, in
         break;
     case 3:
         pCharacter->xStart = pCharacter->x_pos = pCharacter->characterRect.x = 700;
-        pCharacter->yStart = pCharacter->y_pos = pCharacter->characterRect.y = 700;
+        pCharacter->yStart = pCharacter->y_pos = pCharacter->characterRect.y = 600;
         break;
     default:
         break;
