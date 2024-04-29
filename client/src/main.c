@@ -93,7 +93,7 @@ int initializations(Game *pGame){
         return 0;
 	}
     
-    if(SDLNet_ResolveHost(&(pGame->serverAddress), "192.168.0.48", 2000)){
+    if(SDLNet_ResolveHost(&(pGame->serverAddress), "130.229.131.13", 2000)){
         printf("SDLNet_ResolveHost(127.0.0.1 2000): %s\n", SDLNet_GetError());
         return 0;
     }
