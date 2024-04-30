@@ -2,7 +2,6 @@
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include "snowball.h"
-#include "character.h"
 #include <stdbool.h>
 
 

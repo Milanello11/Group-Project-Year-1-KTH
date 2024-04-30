@@ -254,7 +254,7 @@ void executeCommand(Game *pGame, ClientData cData, int *pDirectionIndex){
         case SHOOT:
             for(int i = 0; i < MAXSNOWBALLS;i++){
                 if(getOnScreenIndex(pGame->pSnowball[i])){
-                    updateSnowball(pGame->pSnowball[i]);
+                    //startSnowball(pGame->pSnowball,);
                 }
             }
             break;

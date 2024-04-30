@@ -14,10 +14,10 @@ snomosServer: main.o character.o snowball.o map.o text.o
 main.o: $(SRCDIR)/main.c $(INCDIR)/character.h $(INCDIR)/characterData.h $(INCDIR)/snowball.h $(INCDIR)/map.h $(INCDIR)/text.h
 	$(CC) $(CFLAGS) $(SRCDIR)/main.c 
 
-character.o: $(COMMONSRCDIR)/character.c $(INCDIR)/character.h $(INCDIR)/characterData.h $(INCDIR)/snowball.h $(INCDIR)/map.h
+character.o: $(COMMONSRCDIR)/character.c $(INCDIR)/character.h $(INCDIR)/characterData.h
 	$(CC) $(CFLAGS) $(COMMONSRCDIR)/character.c
 
-snowball.o: $(COMMONSRCDIR)/snowball.c $(INCDIR)/snowball.h $(INCDIR)/character.h
+snowball.o: $(COMMONSRCDIR)/snowball.c $(INCDIR)/snowball.h
 	$(CC) $(CFLAGS) $(COMMONSRCDIR)/snowball.c 
 
 map.o: $(COMMONSRCDIR)/map.c $(INCDIR)/map.h

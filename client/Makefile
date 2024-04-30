@@ -14,10 +14,10 @@ snomosClient: main.o character.o snowball.o map.o menu.o button.o text.o
 main.o: $(SRCDIR)/main.c $(INCDIR)/character.h $(INCDIR)/characterData.h $(INCDIR)/snowball.h $(INCDIR)/map.h
 	$(CC) $(CFLAGS) $(SRCDIR)/main.c 
 
-character.o: $(COMMONSRCDIR)/character.c $(INCDIR)/character.h $(INCDIR)/characterData.h $(INCDIR)/snowball.h $(INCDIR)/map.h
+character.o: $(COMMONSRCDIR)/character.c $(INCDIR)/character.h $(INCDIR)/characterData.h
 	$(CC) $(CFLAGS) $(COMMONSRCDIR)/character.c
 
-snowball.o: $(COMMONSRCDIR)/snowball.c $(INCDIR)/snowball.h $(INCDIR)/characterData.h
+snowball.o: $(COMMONSRCDIR)/snowball.c $(INCDIR)/snowball.h
 	$(CC) $(CFLAGS) $(COMMONSRCDIR)/snowball.c 
 
 map.o: $(COMMONSRCDIR)/map.c $(INCDIR)/map.h
@@ -31,3 +31,7 @@ button.o: $(COMMONSRCDIR)/button.c $(INCDIR)/button.h
 
 text.o: $(COMMONSRCDIR)/text.c $(INCDIR)/text.h
 	$(CC) $(CFLAGS) $(COMMONSRCDIR)/text.c
+
+clean: 
+	rm *.o
+	rm *.exe

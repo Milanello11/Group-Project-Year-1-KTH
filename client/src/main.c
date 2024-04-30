@@ -204,7 +204,7 @@ void run(Game *pGame){
                         drawSnowball(pGame->pSnowball[i]);
                     }
                 }
-                    
+                printf("%d \n", pGame->characterNumber);
                 SDL_RenderPresent(pGame->pRenderer);
                 SDL_Delay(1000/60);
                 break;
