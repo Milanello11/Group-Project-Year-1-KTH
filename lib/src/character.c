@@ -146,6 +146,16 @@ int getPlayerXPos(Character *pCharacter){
 int getPlayerYPos(Character *pCharacter){
     return (pCharacter->characterRect.y);
 }
+bool getActiveSnowball(Character *pCharacter){
+    return (pCharacter->activeSnowball);
+}
+void updateActiveSnowball(Character *pCharacter){
+    if(pCharacter->activeSnowball){
+        pCharacter->activeSnowball = false;
+        return;
+    }
+    pCharacter->activeSnowball = true;
+}
 void updateCharacterWithRecievedData(Character *pCharacter, CharacterData *pCharacterData){
     pCharacter->x_vel = pCharacterData->x_vel;
     pCharacter->y_vel = pCharacterData->y_vel;

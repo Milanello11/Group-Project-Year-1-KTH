@@ -280,7 +280,7 @@ void updateWithServerData(Game *pGame){
         updateCharacterWithRecievedData(pGame->pCharacter[i], &(sData.characters[i]));
     }
     for(int i = 0; i < MAXSNOWBALLS;i++){
-        if(getOnScreenIndex(pGame->pSnowball[i])){
+        if(!getActiveSnowball(pGame->pCharacter[pGame->characterNumber])){
             updateSnowballWithRecievedData(pGame->pSnowball[i], &(sData.SnowballData[i]));
         }
     }
@@ -360,9 +360,9 @@ void handleInput(Game *pGame, SDL_Event *pEvent, int *pDirectionIndex){
                 case SDL_SCANCODE_SPACE:
                     int check = -1;
                     for(int i = 0; i < MAXSNOWBALLS;i++){
-                        if(getOnScreenIndex(pGame->pSnowball[i]))
-                        {
+                        if(!getActiveSnowball(pGame->pCharacter[pGame->characterNumber])){
                             check = 1;
+                            updateActiveSnowball(pGame->pCharacter[pGame->characterNumber]);
                             break;
                         }
                     }

@@ -21,5 +21,7 @@ void getCharacterSendData(Character *pCharacter, CharacterData *pCharacterData);
 bool isColliding(SDL_Rect a, SDL_Rect b);
 int getPlayerXPos(Character *pCharacter);
 int getPlayerYPos(Character *pCharacter);
+bool getActiveSnowball(Character *pCharacter);
+void updateActiveSnowball(Character *pCharacter);
 
 #endif

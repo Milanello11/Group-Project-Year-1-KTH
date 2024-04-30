@@ -256,9 +256,27 @@ void executeCommand(Game *pGame, ClientData cData, int *pDirectionIndex){
             characterTurnRight(pGame->pCharacter[cData.playerNumber]);
             break;
         case SHOOT:
+            int check = -1;
             for(int i = 0; i < MAXSNOWBALLS;i++){
-                if(getOnScreenIndex(pGame->pSnowball[i])){
-                    //startSnowball(pGame->pSnowball,);
+                if(!getActiveSnowball(pGame->pCharacter[cData.playerNumber])){
+                    check = 1;
+                    updateActiveSnowball(pGame->pCharacter[cData.playerNumber]);
+                    break;
+                }
+            }
+            if(check == -1){
+                int ssx = getPlayerXPos(pGame->pCharacter[cData.playerNumber]);
+                int ssy = getPlayerYPos(pGame->pCharacter[cData.playerNumber]);
+                int found = -1;
+
+                for(int i = 0; i < MAXSNOWBALLS;i++){
+                    if(!getOnScreenIndex(pGame->pSnowball[i])){
+                        found = i;
+                        break;
+                    }
+                }
+                if(found >= 0){
+                    startSnowball(pGame->pSnowball[found], ssx, ssy, *pDirectionIndex);
                 }
             }
             break;
