@@ -93,7 +93,7 @@ int initializations(Game *pGame){
         return 0;
 	}
     
-    if(SDLNet_ResolveHost(&(pGame->serverAddress), "130.229.131.13", 2069)){
+    if(SDLNet_ResolveHost(&(pGame->serverAddress), "130.229.190.151", 2069)){
         printf("SDLNet_ResolveHost(127.0.0.1 2000): %s\n", SDLNet_GetError());
         return 0;
     }
@@ -119,6 +119,7 @@ int initializations(Game *pGame){
     }
 
     pGame->pStartText = createText(pGame->pRenderer,0,105,255,pGame->pFont,"Waiting for server",WINDOW_WIDTH/2,WINDOW_HEIGHT/2+100);
+    pGame->pOverText = createText(pGame->pRenderer,0,105,255,pGame->pFont,"Game over",WINDOW_WIDTH/2,WINDOW_HEIGHT/2+100);
 
     pGame->pPacket->address.host = pGame->serverAddress.host;
     pGame->pPacket->address.port = pGame->serverAddress.port;
@@ -210,6 +211,9 @@ void run(Game *pGame){
                 break;
             
             case GAME_OVER:
+                SDL_RenderClear(pGame->pRenderer);
+                drawText(pGame->pOverText);
+                SDL_RenderPresent(pGame->pRenderer);
                 break;
             case START:
                 int mouseX, mouseY;

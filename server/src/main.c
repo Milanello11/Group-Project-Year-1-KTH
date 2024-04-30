@@ -159,6 +159,10 @@ void run(Game *pGame){
                 if(SDL_PollEvent(&event)){
                     if(event.type==SDL_QUIT) 
                         active = false;
+                    else if(event.key.keysym.scancode == SDL_SCANCODE_G){ //ändra till characters alive = 0
+                        pGame->state = GAME_OVER;
+                        sendGameData(pGame);
+                    }
                 }
                 for (int i = 0; i < CHARACTERS; i++){
                     updateCharacter(pGame->pCharacter[i]);
