@@ -206,9 +206,15 @@ void run(Game *pGame){
                 break;
             
             case GAME_OVER:
+                /*updateWithServerData(pGame);
                 SDL_RenderClear(pGame->pRenderer);
                 drawText(pGame->pOverText);
                 SDL_RenderPresent(pGame->pRenderer);
+                if(SDL_PollEvent(&event)){
+                    if(event.type==SDL_QUIT){ 
+                        active = false;
+                    }
+                }*/
                 break;
             case START:
                 int mouseX, mouseY;
@@ -261,7 +267,6 @@ void run(Game *pGame){
                 }
                 break;
             }       
-        SDL_Delay(1000/60-15);
         }
 }
 
@@ -275,9 +280,7 @@ void updateWithServerData(Game *pGame){
         updateCharacterWithRecievedData(pGame->pCharacter[i], &(sData.characters[i]));
     }
     for(int i = 0; i < MAXSNOWBALLS;i++){
-        if(!getActiveSnowball(pGame->pCharacter[pGame->characterNumber])){
-            updateSnowballWithRecievedData(pGame->pSnowball[i], &(sData.SnowballData[i]));
-        }
+        updateSnowballWithRecievedData(pGame->pSnowball[i], &(sData.snowballData[i]));
     }
 }
 

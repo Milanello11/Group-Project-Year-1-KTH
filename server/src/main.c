@@ -157,8 +157,9 @@ void run(Game *pGame){
                     executeCommand(pGame,cData,&directionIndex);
                 }
                 if(SDL_PollEvent(&event)){
-                    if(event.type==SDL_QUIT) 
+                    if(event.type==SDL_QUIT){ 
                         active = false;
+                    }
                     else if(event.key.keysym.scancode == SDL_SCANCODE_G){ //ändra till characters alive = 0
                         pGame->state = GAME_OVER;
                         sendGameData(pGame);
@@ -175,11 +176,19 @@ void run(Game *pGame){
             
             case GAME_OVER:
                 //drawText(pGame->pOverText);
-                sendGameData(pGame);
-                if(pGame->nrOfClients==CHARACTERS){
-                    pGame->nrOfClients = 0;
+                if(SDL_PollEvent(&event)){
+                    if(event.type == SDL_QUIT){
+                        active = false;
+                    }
+                    else if(event.key.keysym.scancode == SDL_SCANCODE_R){
+                        pGame->state = ONGOING;
+                        sendGameData(pGame);
+                    }
                 }
-
+                /*if(pGame->nrOfClients==CHARACTERS){
+                    pGame->nrOfClients = 0;
+                }*/
+                break;
             case START:
                 drawText(pGame->pStartText);
                 drawText(pGame->pIPText);
@@ -200,7 +209,7 @@ void run(Game *pGame){
 
 void setUpGame(Game *pGame){
     //for (int i=0;i<MAX_PLAYERS;i++) resetCharacter(pGame->pCharacter[i]);
-    pGame->nrOfCharacters = CHARACTERS;
+    //pGame->nrOfCharacters = CHARACTERS;
     pGame->state = ONGOING; 
 }
 
@@ -209,12 +218,8 @@ void sendGameData(Game *pGame){
     for(int i=0;i<CHARACTERS;i++){
         getCharacterSendData(pGame->pCharacter[i], &(pGame->sData.characters[i]));
     }
-    for(int i = 0; i < MAXSNOWBALLS; i++)
-    {
-        if(getOnScreenIndex(pGame->pSnowball[i])){
-            updateSnowball(pGame->pSnowball[i]);
-            getSnowballSendData(pGame->pSnowball[i], &(pGame->sData.SnowballData[i]));
-        }
+    for(int i = 0; i < MAXSNOWBALLS; i++){
+        getSnowballSendData(pGame->pSnowball[i], &(pGame->sData.snowballData[i]));
     }
     for(int i=0;i<CHARACTERS;i++){
         pGame->sData.playerNumber = i;
