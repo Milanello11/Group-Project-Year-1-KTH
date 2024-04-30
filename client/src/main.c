@@ -87,8 +87,7 @@ int initializations(Game *pGame){
         return 0;
     }
     initBackground();
-    if (!(pGame->pSocket = SDLNet_UDP_Open(0)))
-	{
+    if (!(pGame->pSocket = SDLNet_UDP_Open(0))){
 		printf("SDLNet_UDP_Open: %s\n", SDLNet_GetError());
         return 0;
 	}
@@ -98,8 +97,7 @@ int initializations(Game *pGame){
         return 0;
     }
     
-    if (!(pGame->pPacket = SDLNet_AllocPacket(512)))
-	{
+    if (!(pGame->pPacket = SDLNet_AllocPacket(512))){
 		printf("SDLNet_AllocPacket: %s\n", SDLNet_GetError());
 		close(pGame);
         return 0;
@@ -200,12 +198,9 @@ void run(Game *pGame){
                     drawCharacter(pGame->pCharacter[i]);
                 }
                 for(int i=0;i<MAXSNOWBALLS;i++){
-                    if(getOnScreenIndex(pGame->pSnowball[i])){
-                        updateSnowball(pGame->pSnowball[i]);
-                        drawSnowball(pGame->pSnowball[i]);
-                    }
+                    updateSnowball(pGame->pSnowball[i]);
+                    drawSnowball(pGame->pSnowball[i]);
                 }
-                printf("%d \n", pGame->characterNumber);
                 SDL_RenderPresent(pGame->pRenderer);
                 SDL_Delay(1000/60);
                 break;
