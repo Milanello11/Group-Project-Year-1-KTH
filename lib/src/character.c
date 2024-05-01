@@ -155,13 +155,6 @@ int getPlayerYPos(Character *pCharacter){
 bool getActiveSnowball(Character *pCharacter){
     return (pCharacter->activeSnowball);
 }
-void updateActiveSnowball(Character *pCharacter){
-    if(pCharacter->activeSnowball){
-        pCharacter->activeSnowball = false;
-        return;
-    }
-    pCharacter->activeSnowball = true;
-}
 void updateCharacterWithRecievedData(Character *pCharacter, CharacterData *pCharacterData){
     pCharacter->x_vel = pCharacterData->x_vel;
     pCharacter->y_vel = pCharacterData->y_vel;
@@ -176,4 +169,10 @@ void getCharacterSendData(Character *pCharacter, CharacterData *pCharacterData){
 }
 int getPlayerDirection(Character *pCharacter){
     return (pCharacter->characterDirection);
+}
+void setActiveSnowballFalse(Character *pCharacter){
+    pCharacter->activeSnowball = false;
+}
+void setActiveSnowballTrue(Character *pCharacter){
+    pCharacter->activeSnowball = true;
 }

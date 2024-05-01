@@ -21,7 +21,8 @@ bool isColliding(SDL_Rect a, SDL_Rect b);
 int getPlayerXPos(Character *pCharacter);
 int getPlayerYPos(Character *pCharacter);
 bool getActiveSnowball(Character *pCharacter);
-void updateActiveSnowball(Character *pCharacter);
 int getPlayerDirection(Character *pCharacter);
+void setActiveSnowballTrue(Character *pCharacter);
+void setActiveSnowballFalse(Character *pCharacter);
 
 #endif

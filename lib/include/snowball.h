@@ -15,6 +15,8 @@ void startSnowball(Snowball *pSnowball, int startX, int startY, int directionInd
 int getOnScreenIndex(Snowball *pSnowball);
 void getSnowballSendData(Snowball *pSnowball, SnowballData *pSnowballData);
 void updateSnowballWithRecievedData(Snowball *pSnowball, SnowballData *pSnowballData);
+void setSnowballOwner(Snowball *pSnowball, int number);
+int getSnowballOwner(Snowball *pSnowball);
 
 
 #endif

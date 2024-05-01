@@ -7,7 +7,7 @@
 
 struct snowball{
     float x_pos, y_pos, x_vel, y_vel;
-    int window_width, window_height, isOnScreen;
+    int window_width, window_height, isOnScreen, owner;
 
     SDL_Renderer *pRenderer;
     SDL_Texture *pTexture;
@@ -21,6 +21,7 @@ Snowball *createSnowball(SDL_Renderer *pRenderer, int window_width , int window_
     pSnowball->isOnScreen = 0;
     pSnowball->window_width = window_width;
     pSnowball->window_height = window_height;
+    pSnowball->owner = -1;
 
     SDL_Surface *pSurface = IMG_Load("../lib/resources/Snowball.png");
     if (!pSurface){
@@ -49,6 +50,7 @@ void updateSnowball(Snowball *pSnowball){
         pSnowball->x_vel = 0;
         pSnowball->y_vel = 0;
         pSnowball->isOnScreen = 0;
+        pSnowball->owner = -1;
     }
     pSnowball->x_pos += pSnowball->x_vel;
     pSnowball->y_pos += pSnowball->y_vel;
@@ -104,4 +106,10 @@ void updateSnowballWithRecievedData(Snowball *pSnowball, SnowballData *pSnowball
     pSnowball->y_vel = pSnowballData->y_vel;
     pSnowball->x_pos = pSnowballData->x_pos;
     pSnowball->y_pos = pSnowballData->y_pos;
+}
+void setSnowballOwner(Snowball *pSnowball, int number){
+    pSnowball->owner = number;
+}
+int getSnowballOwner(Snowball *pSnowball){
+    return (pSnowball->owner);
 }

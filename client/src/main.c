@@ -352,13 +352,21 @@ void handleInput(Game *pGame, SDL_Event *pEvent){
                     break;
                 case SDL_SCANCODE_SPACE:
                     int check = -1;
-                    for(int i = 0; i < MAXSNOWBALLS;i++){
-                        if(!getActiveSnowball(pGame->pCharacter[pGame->characterNumber])){
-                            check = 1;
-                            updateActiveSnowball(pGame->pCharacter[pGame->characterNumber]);
+                    int owner = -1;
+
+                    for (int i = 0; i < MAXSNOWBALLS; i++){
+                        owner = getSnowballOwner(pGame->pSnowball[i]);
+                        if (owner == pGame->characterNumber){
+                            setActiveSnowballTrue(pGame->pCharacter[pGame->characterNumber]);
                             break;
                         }
+                        setActiveSnowballFalse(pGame->pCharacter[pGame->characterNumber]);
                     }
+                    
+                    if(getActiveSnowball(pGame->pCharacter[pGame->characterNumber])){
+                        check = 1;
+                    }
+
                     if(check == -1){
                         int ssx = getPlayerXPos(pGame->pCharacter[pGame->characterNumber]);
                         int ssy = getPlayerYPos(pGame->pCharacter[pGame->characterNumber]);
@@ -373,6 +381,8 @@ void handleInput(Game *pGame, SDL_Event *pEvent){
                         if(found >= 0){
                             int direction = getPlayerDirection(pGame->pCharacter[pGame->characterNumber]);
                             startSnowball(pGame->pSnowball[found], ssx, ssy, direction);
+                            setActiveSnowballTrue(pGame->pCharacter[pGame->characterNumber]);
+                            setSnowballOwner(pGame->pSnowball[found], pGame->characterNumber);
                             cData.command = SHOOT;
                         }
                     }
