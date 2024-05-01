@@ -325,7 +325,7 @@ void close(Game *pGame){
     SDL_Quit();
 }
 
-void handleInput(Game *pGame, SDL_Event *pEvent, int *pDirectionIndex){
+void handleInput(Game *pGame, SDL_Event *pEvent){
     ClientData cData;
     cData.playerNumber = pGame->characterNumber;
     switch(pEvent->type){
@@ -372,7 +372,8 @@ void handleInput(Game *pGame, SDL_Event *pEvent, int *pDirectionIndex){
                             }
                         }
                         if(found >= 0){
-                            startSnowball(pGame->pSnowball[found], ssx, ssy, *pDirectionIndex);
+                            int direction = getPlayerDirection(pGame->pCharacter[pGame->characterNumber]);
+                            startSnowball(pGame->pSnowball[found], ssx, ssy, direction);
                             cData.command = SHOOT;
                         }
                     }
