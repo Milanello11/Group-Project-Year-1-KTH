@@ -33,7 +33,7 @@ typedef struct{
 int initializations(Game *pGame);
 void run(Game *pGame);
 void close(Game *pGame);
-void handleInput(Game *pGame, SDL_Event *pEvent , int *pDirectionIndexl);
+void handleInput(Game *pGame, SDL_Event *pEvent);
 void updateWithServerData(Game *pGame);
 
 
@@ -167,7 +167,6 @@ void run(Game *pGame){
 
     int spritePos = 0;
     bool active = true;
-    int directionIndex = 0;
     int joining = 0;
 
     SDL_Event event;
@@ -187,7 +186,7 @@ void run(Game *pGame){
                     else if(event.key.keysym.scancode == SDL_SCANCODE_ESCAPE){
                         active = false;
                     }
-                    else handleInput(pGame,&event,&directionIndex);
+                    else handleInput(pGame,&event);
                 }
                 SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
                 SDL_RenderClear(pGame->pRenderer);

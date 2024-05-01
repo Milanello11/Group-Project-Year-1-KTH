@@ -174,6 +174,6 @@ void getCharacterSendData(Character *pCharacter, CharacterData *pCharacterData){
     pCharacterData->x_pos = pCharacter->x_pos;
     pCharacterData->y_pos = pCharacter->y_pos;
 }
-int getPlayerDirection(Character pCharacter){
+int getPlayerDirection(Character *pCharacter){
     return (pCharacter->characterDirection);
 }
