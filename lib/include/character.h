@@ -25,5 +25,7 @@ int getPlayerDirection(Character *pCharacter);
 void setActiveSnowballTrue(Character *pCharacter);
 void setActiveSnowballFalse(Character *pCharacter);
 SDL_Rect getCharacterRect(Character *pCharacter);
+void setCharacterDead(Character *pCharacter);
+bool checkCharacterAlive(Character *pCharacter);
 
 #endif

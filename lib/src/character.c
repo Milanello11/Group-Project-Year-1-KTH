@@ -10,7 +10,7 @@
 struct character{
     float x_pos, y_pos, x_vel, y_vel , xStart , yStart;
     int window_width , window_height;
-    bool activeSnowball;
+    bool activeSnowball, alive;
     SDL_Renderer *pRenderer;
     SDL_Texture *pTexture;
     SDL_Rect characterRect;
@@ -25,6 +25,7 @@ Character *createCharacter(int number, SDL_Renderer *pRenderer, int window_w, in
     pCharacter->window_height = window_h;
     pCharacter->activeSnowball = false;
     pCharacter->characterDirection = 0;
+    pCharacter->alive = true;
     
     SDL_Surface *pSurface = IMG_Load("../lib/resources/Character.png");
     if (!pSurface){
@@ -178,4 +179,10 @@ void setActiveSnowballTrue(Character *pCharacter){
 }
 SDL_Rect getCharacterRect(Character *pCharacter){
     return (pCharacter->characterRect);
+}
+void setCharacterDead(Character *pCharacter){
+    pCharacter->alive = false;
+}
+bool checkCharacterAlive(Character *pCharacter){
+    return pCharacter->alive;
 }

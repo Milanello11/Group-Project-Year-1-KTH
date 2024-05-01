@@ -92,7 +92,7 @@ int initializations(Game *pGame){
         return 0;
 	}
     
-    if(SDLNet_ResolveHost(&(pGame->serverAddress), "130.229.175.75", 2069)){
+    if(SDLNet_ResolveHost(&(pGame->serverAddress), "127.0.0.1", 2069)){
         printf("SDLNet_ResolveHost(127.0.0.1 2000): %s\n", SDLNet_GetError());
         return 0;
     }
@@ -159,7 +159,7 @@ int initializations(Game *pGame){
         setDesRect(pGame->pButton[i], i);
     }
 
-    pGame->state = ONGOING;
+    pGame->state = START;
     return 1;
 }
 
@@ -193,6 +193,7 @@ void run(Game *pGame){
                 for (int i = 0; i < MAXSNOWBALLS; i++){
                     snowballRect = getSnowballRect(pGame->pSnowball[i]);
                     if (!isColliding(characterRect, snowballRect)){
+                        setCharacterDead(pGame->pCharacter[pGame->characterNumber]);
                         printf("COLLISION\n");
                     }
                 }
@@ -334,89 +335,94 @@ void close(Game *pGame){
 }
 
 void handleInput(Game *pGame, SDL_Event *pEvent){
-    ClientData cData;
-    cData.playerNumber = pGame->characterNumber;
-    switch(pEvent->type){
-        case SDL_KEYDOWN:
-            switch(pEvent->key.keysym.scancode){
-                case SDL_SCANCODE_W:
-                case SDL_SCANCODE_UP:
-                    characterTurnUp(pGame->pCharacter[pGame->characterNumber]);
-                    cData.command = UP;
-                    break;
-                case SDL_SCANCODE_A:
-                case SDL_SCANCODE_LEFT:
-                    characterTurnLeft(pGame->pCharacter[pGame->characterNumber]);
-                    cData.command = LEFT;
-                    break;
-                case SDL_SCANCODE_S:
-                case SDL_SCANCODE_DOWN:
-                    characterTurnDown(pGame->pCharacter[pGame->characterNumber]);
-                    cData.command = DOWN;
-                    break;
-                case SDL_SCANCODE_D:
-                case SDL_SCANCODE_RIGHT:
-                    characterTurnRight(pGame->pCharacter[pGame->characterNumber]);
-                    cData.command = RIGHT;
-                    break;
-                case SDL_SCANCODE_SPACE:
-                    int check = -1;
-                    int owner = -1;
+    if(checkCharacterAlive(pGame->pCharacter[pGame->characterNumber])){
+        ClientData cData;
+        cData.playerNumber = pGame->characterNumber;
+        switch(pEvent->type){
+            case SDL_KEYDOWN:
+                switch(pEvent->key.keysym.scancode){
+                    case SDL_SCANCODE_W:
+                    case SDL_SCANCODE_UP:
+                        characterTurnUp(pGame->pCharacter[pGame->characterNumber]);
+                        cData.command = UP;
+                        break;
+                    case SDL_SCANCODE_A:
+                    case SDL_SCANCODE_LEFT:
+                        characterTurnLeft(pGame->pCharacter[pGame->characterNumber]);
+                        cData.command = LEFT;
+                        break;
+                    case SDL_SCANCODE_S:
+                    case SDL_SCANCODE_DOWN:
+                        characterTurnDown(pGame->pCharacter[pGame->characterNumber]);
+                        cData.command = DOWN;
+                        break;
+                    case SDL_SCANCODE_D:
+                    case SDL_SCANCODE_RIGHT:
+                        characterTurnRight(pGame->pCharacter[pGame->characterNumber]);
+                        cData.command = RIGHT;
+                        break;
+                    case SDL_SCANCODE_SPACE:
+                        int check = -1;
+                        int owner = -1;
 
-                    for (int i = 0; i < MAXSNOWBALLS; i++){
-                        owner = getSnowballOwner(pGame->pSnowball[i]);
-                        if (owner == pGame->characterNumber){
-                            setActiveSnowballTrue(pGame->pCharacter[pGame->characterNumber]);
-                            break;
-                        }
-                        setActiveSnowballFalse(pGame->pCharacter[pGame->characterNumber]);
-                    }
-                    
-                    if(getActiveSnowball(pGame->pCharacter[pGame->characterNumber])){
-                        check = 1;
-                    }
-
-                    if(check == -1){
-                        int ssx = getPlayerXPos(pGame->pCharacter[pGame->characterNumber]);
-                        int ssy = getPlayerYPos(pGame->pCharacter[pGame->characterNumber]);
-                        int found = -1;
-
-                        for(int i = 0; i < MAXSNOWBALLS;i++){
-                            if(!getOnScreenIndex(pGame->pSnowball[i])){
-                                found = i;
+                        for (int i = 0; i < MAXSNOWBALLS; i++){
+                            owner = getSnowballOwner(pGame->pSnowball[i]);
+                            if (owner == pGame->characterNumber){
+                                setActiveSnowballTrue(pGame->pCharacter[pGame->characterNumber]);
                                 break;
                             }
+                            setActiveSnowballFalse(pGame->pCharacter[pGame->characterNumber]);
                         }
-                        if(found >= 0){
-                            int direction = getPlayerDirection(pGame->pCharacter[pGame->characterNumber]);
-                            startSnowball(pGame->pSnowball[found], ssx, ssy, direction);
-                            setActiveSnowballTrue(pGame->pCharacter[pGame->characterNumber]);
-                            setSnowballOwner(pGame->pSnowball[found], pGame->characterNumber);
-                            cData.command = SHOOT;
+                        
+                        if(getActiveSnowball(pGame->pCharacter[pGame->characterNumber])){
+                            check = 1;
                         }
-                    }
-                    break;
-            }
-            break;
-        case SDL_KEYUP:
-            switch(pEvent->key.keysym.scancode){
-                case SDL_SCANCODE_W:
-                case SDL_SCANCODE_UP:
-                case SDL_SCANCODE_S:
-                case SDL_SCANCODE_DOWN:
-                    characterYStop(pGame->pCharacter[pGame->characterNumber]);
-                    cData.command = STOPY;
-                    break;
-                case SDL_SCANCODE_A:
-                case SDL_SCANCODE_LEFT:
-                case SDL_SCANCODE_D:
-                case SDL_SCANCODE_RIGHT:
-                    characterXStop(pGame->pCharacter[pGame->characterNumber]);
-                    cData.command = STOPX;
-                    break;  
-            }                                
+
+                        if(check == -1){
+                            int ssx = getPlayerXPos(pGame->pCharacter[pGame->characterNumber]);
+                            int ssy = getPlayerYPos(pGame->pCharacter[pGame->characterNumber]);
+                            int found = -1;
+
+                            for(int i = 0; i < MAXSNOWBALLS;i++){
+                                if(!getOnScreenIndex(pGame->pSnowball[i])){
+                                    found = i;
+                                    break;
+                                }
+                            }
+                            if(found >= 0){
+                                int direction = getPlayerDirection(pGame->pCharacter[pGame->characterNumber]);
+                                startSnowball(pGame->pSnowball[found], ssx, ssy, direction);
+                                setActiveSnowballTrue(pGame->pCharacter[pGame->characterNumber]);
+                                setSnowballOwner(pGame->pSnowball[found], pGame->characterNumber);
+                                cData.command = SHOOT;
+                            }
+                        }
+                        break;
+                }
+                break;
+            case SDL_KEYUP:
+                switch(pEvent->key.keysym.scancode){
+                    case SDL_SCANCODE_W:
+                    case SDL_SCANCODE_UP:
+                    case SDL_SCANCODE_S:
+                    case SDL_SCANCODE_DOWN:
+                        characterYStop(pGame->pCharacter[pGame->characterNumber]);
+                        cData.command = STOPY;
+                        break;
+                    case SDL_SCANCODE_A:
+                    case SDL_SCANCODE_LEFT:
+                    case SDL_SCANCODE_D:
+                    case SDL_SCANCODE_RIGHT:
+                        characterXStop(pGame->pCharacter[pGame->characterNumber]);
+                        cData.command = STOPX;
+                        break;  
+                }                                
+        }
+        memcpy(pGame->pPacket->data, &cData, sizeof(ClientData));
+        pGame->pPacket->len = sizeof(ClientData);
+        SDLNet_UDP_Send(pGame->pSocket, -1,pGame->pPacket);
     }
-    memcpy(pGame->pPacket->data, &cData, sizeof(ClientData));
-	pGame->pPacket->len = sizeof(ClientData);
-    SDLNet_UDP_Send(pGame->pSocket, -1,pGame->pPacket);
+    else{
+        return;
+    }
 }
