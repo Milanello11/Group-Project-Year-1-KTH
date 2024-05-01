@@ -2,7 +2,7 @@
 #define character_data_h
 #define WINDOW_HEIGHT 800
 #define WINDOW_WIDTH 800
-#define CHARACTERS 1
+#define CHARACTERS 2
 #define MAXSNOWBALLS 5
 
 enum gameState{START, ONGOING, GAME_OVER};
