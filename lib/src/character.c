@@ -14,6 +14,7 @@ struct character{
     SDL_Renderer *pRenderer;
     SDL_Texture *pTexture;
     SDL_Rect characterRect;
+    int characterDirection;
 };
 
 Character *createCharacter(int number, SDL_Renderer *pRenderer, int window_w, int window_h){
@@ -23,6 +24,7 @@ Character *createCharacter(int number, SDL_Renderer *pRenderer, int window_w, in
     pCharacter->window_width = window_w;
     pCharacter->window_height = window_h;
     pCharacter->activeSnowball = false;
+    pCharacter->characterDirection = 0;
     
     SDL_Surface *pSurface = IMG_Load("../lib/resources/Character.png");
     if (!pSurface){
@@ -115,21 +117,25 @@ void destroyCharacter(Character *pCharacter){
 void characterTurnUp(Character *pCharacter){
     pCharacter->y_vel = -(CHARACTERVELOCITY);
     pCharacter->x_vel = 0;
+    pCharacter->characterDirection = 0;
 }
 
 void characterTurnDown(Character *pCharacter){
     pCharacter->y_vel = CHARACTERVELOCITY;
     pCharacter->x_vel = 0;
+    pCharacter->characterDirection = 2;
 }
 
 void characterTurnRight(Character *pCharacter){
     pCharacter->x_vel = CHARACTERVELOCITY;
     pCharacter->y_vel = 0;
+    pCharacter->characterDirection = 1;
 }
 
 void characterTurnLeft(Character *pCharacter){
     pCharacter->x_vel = -(CHARACTERVELOCITY);
     pCharacter->y_vel = 0;
+    pCharacter->characterDirection = 3;
 }
 void characterXStop(Character *pCharacter){
     pCharacter->x_vel = 0;

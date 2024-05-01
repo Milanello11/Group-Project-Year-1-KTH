@@ -333,25 +333,21 @@ void handleInput(Game *pGame, SDL_Event *pEvent, int *pDirectionIndex){
             switch(pEvent->key.keysym.scancode){
                 case SDL_SCANCODE_W:
                 case SDL_SCANCODE_UP:
-                    *pDirectionIndex = 0;
                     characterTurnUp(pGame->pCharacter[pGame->characterNumber]);
                     cData.command = UP;
                     break;
                 case SDL_SCANCODE_A:
                 case SDL_SCANCODE_LEFT:
-                    *pDirectionIndex = 3;
                     characterTurnLeft(pGame->pCharacter[pGame->characterNumber]);
                     cData.command = LEFT;
                     break;
                 case SDL_SCANCODE_S:
                 case SDL_SCANCODE_DOWN:
-                    *pDirectionIndex = 2;
                     characterTurnDown(pGame->pCharacter[pGame->characterNumber]);
                     cData.command = DOWN;
                     break;
                 case SDL_SCANCODE_D:
                 case SDL_SCANCODE_RIGHT:
-                    *pDirectionIndex = 1;
                     characterTurnRight(pGame->pCharacter[pGame->characterNumber]);
                     cData.command = RIGHT;
                     break;
