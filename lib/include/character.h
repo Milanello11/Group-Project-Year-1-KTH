@@ -9,7 +9,6 @@ Character *createCharacter(int number, SDL_Renderer *pRenderer, int window_w, in
 void updateCharacter(Character *pCharacter);
 void drawCharacter(Character *pCharacter);
 void destroyCharacter(Character *pCharacter);
-//Behöver fixas
 void characterTurnUp(Character *pCharacter);
 void characterTurnDown(Character *pCharacter);
 void characterTurnRight(Character *pCharacter);
@@ -23,5 +22,6 @@ int getPlayerXPos(Character *pCharacter);
 int getPlayerYPos(Character *pCharacter);
 bool getActiveSnowball(Character *pCharacter);
 void updateActiveSnowball(Character *pCharacter);
+int getPlayerDirection(Character *pCharacter);
 
 #endif
