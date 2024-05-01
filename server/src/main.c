@@ -258,13 +258,21 @@ void executeCommand(Game *pGame, ClientData cData){
             break;
         case SHOOT:
             int check = -1;
-            for(int i = 0; i < MAXSNOWBALLS;i++){
-                if(!getActiveSnowball(pGame->pCharacter[cData.playerNumber])){
-                    check = 1;
-                    updateActiveSnowball(pGame->pCharacter[cData.playerNumber]);
+            int owner = -1;
+
+            for (int i = 0; i < MAXSNOWBALLS; i++){
+                owner = getSnowballOwner(pGame->pSnowball[i]);
+                if (owner == cData.playerNumber){
+                    setActiveSnowballTrue(pGame->pCharacter[cData.playerNumber]);
                     break;
                 }
+                setActiveSnowballFalse(pGame->pCharacter[cData.playerNumber]);
             }
+            
+            if(getActiveSnowball(pGame->pCharacter[cData.playerNumber])){
+                check = 1;
+            }
+
             if(check == -1){
                 int ssx = getPlayerXPos(pGame->pCharacter[cData.playerNumber]);
                 int ssy = getPlayerYPos(pGame->pCharacter[cData.playerNumber]);
@@ -279,6 +287,9 @@ void executeCommand(Game *pGame, ClientData cData){
                 if(found >= 0){
                     int direction = getPlayerDirection(pGame->pCharacter[cData.playerNumber]);
                     startSnowball(pGame->pSnowball[found], ssx, ssy, direction);
+                    setActiveSnowballTrue(pGame->pCharacter[cData.playerNumber]);
+                    setSnowballOwner(pGame->pSnowball[found], cData.playerNumber);
+                    cData.command = SHOOT;
                 }
             }
             break;
