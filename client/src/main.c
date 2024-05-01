@@ -159,7 +159,7 @@ int initializations(Game *pGame){
         setDesRect(pGame->pButton[i], i);
     }
 
-    pGame->state = START;
+    pGame->state = ONGOING;
     return 1;
 }
 
