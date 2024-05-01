@@ -27,5 +27,6 @@ void setActiveSnowballFalse(Character *pCharacter);
 SDL_Rect getCharacterRect(Character *pCharacter);
 void setCharacterDead(Character *pCharacter);
 bool checkCharacterAlive(Character *pCharacter);
+void getAnimation(Character *pCharacter);
 
 #endif

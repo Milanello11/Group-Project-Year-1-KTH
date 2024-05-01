@@ -6,6 +6,7 @@
 #include "characterData.h"
 #include <stdbool.h>
 #define CHARACTERVELOCITY 3
+#define NUMOFFRAMES
 
 struct character{
     float x_pos, y_pos, x_vel, y_vel , xStart , yStart;
@@ -14,7 +15,10 @@ struct character{
     SDL_Renderer *pRenderer;
     SDL_Texture *pTexture;
     SDL_Rect characterRect;
+    SDL_Rect characterSrcRect;
     int characterDirection;
+
+    int player_down_clips[4];
 };
 
 Character *createCharacter(int number, SDL_Renderer *pRenderer, int window_w, int window_h){
@@ -40,8 +44,16 @@ Character *createCharacter(int number, SDL_Renderer *pRenderer, int window_w, in
         return NULL;
     }
     SDL_QueryTexture(pCharacter->pTexture, NULL, NULL, &(pCharacter->characterRect.w), &(pCharacter->characterRect.h));
-    pCharacter->characterRect.w /= 5;
-    pCharacter->characterRect.h /= 5;
+    pCharacter->characterRect.w /= 4;
+    pCharacter->characterRect.h /= 4;
+
+    pCharacter->characterSrcRect.x = 32;
+
+    pCharacter->player_down_clips[0] = 0;
+    pCharacter->player_down_clips[1] = 32;
+    pCharacter->player_down_clips[2] = 64;
+    pCharacter->player_down_clips[3] = 32;
+
     switch (number)
     {
     case 0:
@@ -107,7 +119,24 @@ void updateCharacter(Character *pCharacter){
 }
 
 void drawCharacter(Character *pCharacter){
-    SDL_RenderCopy(pCharacter->pRenderer, pCharacter->pTexture, NULL, &(pCharacter->characterRect));
+
+    if(pCharacter->characterDirection == 0){
+        pCharacter->characterSrcRect.y = 96;
+    }
+    else if(pCharacter->characterDirection == 1){
+        pCharacter->characterSrcRect.y = 64;
+    }
+    else if(pCharacter->characterDirection == 2){
+        pCharacter->characterSrcRect.y = 0;
+    }
+    else if(pCharacter->characterDirection == 3){
+        pCharacter->characterSrcRect.y = 32;
+    }
+
+    pCharacter->characterSrcRect.w = 32;
+    pCharacter->characterSrcRect.h = 32;
+
+    SDL_RenderCopy(pCharacter->pRenderer, pCharacter->pTexture, &(pCharacter->characterSrcRect), &(pCharacter->characterRect));
 }
 
 void destroyCharacter(Character *pCharacter){
@@ -119,24 +148,28 @@ void characterTurnUp(Character *pCharacter){
     pCharacter->y_vel = -(CHARACTERVELOCITY);
     pCharacter->x_vel = 0;
     pCharacter->characterDirection = 0;
+    getAnimation(pCharacter);
 }
 
 void characterTurnDown(Character *pCharacter){
     pCharacter->y_vel = CHARACTERVELOCITY;
     pCharacter->x_vel = 0;
     pCharacter->characterDirection = 2;
+    getAnimation(pCharacter);
 }
 
 void characterTurnRight(Character *pCharacter){
     pCharacter->x_vel = CHARACTERVELOCITY;
     pCharacter->y_vel = 0;
     pCharacter->characterDirection = 1;
+    getAnimation(pCharacter);
 }
 
 void characterTurnLeft(Character *pCharacter){
     pCharacter->x_vel = -(CHARACTERVELOCITY);
     pCharacter->y_vel = 0;
     pCharacter->characterDirection = 3;
+    getAnimation(pCharacter);
 }
 void characterXStop(Character *pCharacter){
     pCharacter->x_vel = 0;
@@ -161,12 +194,14 @@ void updateCharacterWithRecievedData(Character *pCharacter, CharacterData *pChar
     pCharacter->y_vel = pCharacterData->y_vel;
     pCharacter->x_pos = pCharacterData->x_pos;
     pCharacter->y_pos = pCharacterData->y_pos;
+    pCharacter->characterDirection = pCharacterData->characterDirection;
 }
 void getCharacterSendData(Character *pCharacter, CharacterData *pCharacterData){
     pCharacterData->x_vel = pCharacter->x_vel;
     pCharacterData->y_vel = pCharacter->y_vel;
     pCharacterData->x_pos = pCharacter->x_pos;
     pCharacterData->y_pos = pCharacter->y_pos;
+    pCharacterData->characterDirection = pCharacter->characterDirection;
 }
 int getPlayerDirection(Character *pCharacter){
     return (pCharacter->characterDirection);
@@ -185,4 +220,22 @@ void setCharacterDead(Character *pCharacter){
 }
 bool checkCharacterAlive(Character *pCharacter){
     return pCharacter->alive;
+}
+void getAnimation(Character *pCharacter){
+    static int frame = 0;
+    const int animationSpeed = 2; // Animation rate (adjust as needed)
+    static int currentFrame = 0;   // Track the current frame index
+
+    int framePositions[NUMOFFRAMES] = {0, 32, 64}; // Adjust these values based on frame widths
+
+    frame++;
+    if (frame == animationSpeed) {
+        pCharacter->characterSrcRect.x = framePositions[currentFrame];
+        currentFrame++;
+        if(currentFrame == 3){
+            currentFrame = 0;
+        }
+
+        frame = 0;
+    }
 }

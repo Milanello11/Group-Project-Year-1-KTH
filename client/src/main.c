@@ -423,6 +423,7 @@ void handleInput(Game *pGame, SDL_Event *pEvent){
         SDLNet_UDP_Send(pGame->pSocket, -1,pGame->pPacket);
     }
     else{
-        return;
+        characterYStop(pGame->pCharacter[pGame->characterNumber]);
+        characterXStop(pGame->pCharacter[pGame->characterNumber]);
     }
 }
