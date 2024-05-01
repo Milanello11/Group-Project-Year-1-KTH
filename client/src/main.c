@@ -35,7 +35,7 @@ void run(Game *pGame);
 void close(Game *pGame);
 void handleInput(Game *pGame, SDL_Event *pEvent);
 void updateWithServerData(Game *pGame);
-
+bool snowballHit(Character *pCharacter, Snowball *pSnowball);
 
 int main (int argument, char* arguments[]){
     Game game={0};
@@ -173,6 +173,7 @@ void run(Game *pGame){
     ClientData cData;
     SDL_Texture* startButtonTexture = NULL;
     SDL_Renderer* renderer = NULL;
+    SDL_Rect snowballRect, characterRect;
 
     while(active){
         switch (pGame->state){
@@ -188,6 +189,14 @@ void run(Game *pGame){
                     }
                     else handleInput(pGame,&event);
                 }
+                characterRect = getCharacterRect(pGame->pCharacter[pGame->characterNumber]);
+                for (int i = 0; i < MAXSNOWBALLS; i++){
+                    snowballRect = getSnowballRect(pGame->pSnowball[i]);
+                    if (isColliding(characterRect, snowballRect)){
+                        printf("COLLISION\n");
+                    }
+                }
+
                 SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
                 SDL_RenderClear(pGame->pRenderer);
                 renderBackground(pGame->pRenderer, pGame->pBackground);

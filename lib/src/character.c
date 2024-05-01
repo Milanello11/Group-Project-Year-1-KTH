@@ -176,3 +176,6 @@ void setActiveSnowballFalse(Character *pCharacter){
 void setActiveSnowballTrue(Character *pCharacter){
     pCharacter->activeSnowball = true;
 }
+SDL_Rect getCharacterRect(Character *pCharacter){
+    return (pCharacter->characterRect);
+}

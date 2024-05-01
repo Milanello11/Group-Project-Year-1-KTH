@@ -113,3 +113,6 @@ void setSnowballOwner(Snowball *pSnowball, int number){
 int getSnowballOwner(Snowball *pSnowball){
     return (pSnowball->owner);
 }
+SDL_Rect getSnowballRect(Snowball *pSnowball){
+    return (pSnowball->snowballRect);
+}
