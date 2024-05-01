@@ -192,7 +192,7 @@ void run(Game *pGame){
                 characterRect = getCharacterRect(pGame->pCharacter[pGame->characterNumber]);
                 for (int i = 0; i < MAXSNOWBALLS; i++){
                     snowballRect = getSnowballRect(pGame->pSnowball[i]);
-                    if (isColliding(characterRect, snowballRect)){
+                    if (!isColliding(characterRect, snowballRect)){
                         printf("COLLISION\n");
                     }
                 }

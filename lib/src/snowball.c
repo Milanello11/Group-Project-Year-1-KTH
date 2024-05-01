@@ -70,24 +70,30 @@ void destroySnowball(Snowball *pSnowball){
 }           
 void startSnowball(Snowball *pSnowball, int startX, int startY, int directionIndex){
     pSnowball->isOnScreen = 1;
-    pSnowball->x_pos = startX;
-    pSnowball->y_pos = startY;
     switch (directionIndex){
         case 0: 
             pSnowball->x_vel = 0;
             pSnowball->y_vel = -SNOWBALLSPEED;
+            pSnowball->x_pos = startX;
+            pSnowball->y_pos = startY - 1;
         break;
         case 1: 
             pSnowball->x_vel = SNOWBALLSPEED;
             pSnowball->y_vel = 0;
+            pSnowball->x_pos = startX + 11;
+            pSnowball->y_pos = startY;
         break;
         case 2: 
             pSnowball->x_vel = 0;
             pSnowball->y_vel = SNOWBALLSPEED;
+            pSnowball->x_pos = startX;
+            pSnowball->y_pos = startY + 15;
         break;
         case 3: 
             pSnowball->x_vel = -SNOWBALLSPEED;
             pSnowball->y_vel = 0;
+            pSnowball->x_pos = startX - 1;
+            pSnowball->y_pos = startY;
         break;
     }
 }
