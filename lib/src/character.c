@@ -6,7 +6,7 @@
 #include "characterData.h"
 #include <stdbool.h>
 #define CHARACTERVELOCITY 3
-#define NUMOFFRAMES
+#define NUMOFFRAMES 3
 
 struct character{
     float x_pos, y_pos, x_vel, y_vel , xStart , yStart;
