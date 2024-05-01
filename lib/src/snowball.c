@@ -45,7 +45,7 @@ Snowball *createSnowball(SDL_Renderer *pRenderer, int window_width , int window_
 void updateSnowball(Snowball *pSnowball){ 
 
     
-    if (pSnowball->x_pos > pSnowball->window_width || pSnowball->x_pos < 0 - pSnowball->snowballRect.w || pSnowball->y_pos > pSnowball->window_height || pSnowball->y_pos < 0 - pSnowball->snowballRect.y){
+    if (pSnowball->x_pos > pSnowball->window_width || pSnowball->x_pos < 0 - pSnowball->snowballRect.w || pSnowball->y_pos > pSnowball->window_height || pSnowball->y_pos < 0 - pSnowball->snowballRect.h){
         pSnowball->x_vel = 0;
         pSnowball->y_vel = 0;
         pSnowball->isOnScreen = 0;
