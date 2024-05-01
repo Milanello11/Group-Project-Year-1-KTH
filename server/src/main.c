@@ -219,6 +219,7 @@ void sendGameData(Game *pGame){
         getCharacterSendData(pGame->pCharacter[i], &(pGame->sData.characters[i]));
     }
     for(int i = 0; i < MAXSNOWBALLS; i++){
+        updateSnowball(pGame->pSnowball[i]);
         getSnowballSendData(pGame->pSnowball[i], &(pGame->sData.snowballData[i]));
     }
     for(int i=0;i<CHARACTERS;i++){

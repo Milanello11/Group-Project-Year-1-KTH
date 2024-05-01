@@ -373,9 +373,9 @@ void handleInput(Game *pGame, SDL_Event *pEvent, int *pDirectionIndex){
                         }
                         if(found >= 0){
                             startSnowball(pGame->pSnowball[found], ssx, ssy, *pDirectionIndex);
+                            cData.command = SHOOT;
                         }
                     }
-                    cData.command = SHOOT;
                     break;
             }
             break;
