@@ -164,9 +164,24 @@ void run(Game *pGame){
                         sendGameData(pGame);
                     }
                 }
+                
+                int numberOfCharactersAlive = CHARACTERS;
                 for (int i = 0; i < CHARACTERS; i++){
+                    printf("%d\n", checkCharacterAlive(pGame->pCharacter[i]));
                     updateCharacter(pGame->pCharacter[i]);
-                }
+                    if(!checkCharacterAlive(pGame->pCharacter[i]))
+                    {
+                        numberOfCharactersAlive=1;
+                        if(numberOfCharactersAlive == 1)
+                        {
+                            printf("GAme is over");
+                            pGame->state = GAME_OVER;
+                            sendGameData(pGame);
+                        }
+                        
+                    }    
+                    printf("%d\n", numberOfCharactersAlive);
+                } 
                 SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
                 SDL_RenderClear(pGame->pRenderer);
                 SDL_RenderPresent(pGame->pRenderer);
@@ -298,6 +313,9 @@ void executeCommand(Game *pGame, ClientData cData){
             break;
         case STOPY:
             characterYStop(pGame->pCharacter[cData.playerNumber]);
+            break;
+        case DEAD:
+            setCharacterDead(pGame->pCharacter[cData.playerNumber]);
             break;
     }
 }
