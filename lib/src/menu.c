@@ -31,6 +31,32 @@ Menu *createMenuBackground(SDL_Renderer *pRenderer, int window_w, int window_h){
 
 }
 
+Menu *createCreditBackground(SDL_Renderer *pRenderer, int window_w, int window_h){
+    Menu *pCreditBackground = malloc(sizeof(struct menu));
+    pCreditBackground->pRenderer = pRenderer;
+    SDL_Surface *pSurface = IMG_Load("../lib/resources/Credits.png");
+    if(!pSurface){
+        printf("Error: %s\n", SDL_GetError());
+        return NULL;
+    }
+    pCreditBackground->pTexture = SDL_CreateTextureFromSurface(pRenderer, pSurface);
+    if (!pCreditBackground->pTexture){
+        printf("Error: %s", SDL_GetError());
+        return NULL;
+    }
+    SDL_FreeSurface(pSurface);
+
+    pCreditBackground->window_w = window_w;
+    pCreditBackground->window_h = window_h;
+
+    return pCreditBackground;
+
+}
+
 void renderMenuBackground(Menu *pMenuBackground){
     SDL_RenderCopy(pMenuBackground->pRenderer, pMenuBackground->pTexture, NULL, NULL);
+}
+
+void renderCreditBackground(Menu *pCreditBackground){
+    SDL_RenderCopy(pCreditBackground->pRenderer, pCreditBackground->pTexture, NULL, NULL);
 }
