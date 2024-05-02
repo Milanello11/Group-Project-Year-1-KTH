@@ -25,6 +25,7 @@ typedef struct{
         Snowball *pSnowball[MAXSNOWBALLS];
         Background *pBackground;
         Menu *pMenuBackground;
+        Menu *pCreditBackground;
         Button *pButton[3];
         TTF_Font *pFont, *pScoreFont;
         Text *pOverText, *pStartText;
@@ -154,6 +155,14 @@ int initializations(Game *pGame){
         close(pGame);
         return 0;
     }
+
+    pGame->pCreditBackground = createCreditBackground(pGame->pRenderer, WINDOW_WIDTH, WINDOW_HEIGHT);
+    if(!pGame->pCreditBackground){
+        printf("Error: %s\n",SDL_GetError());
+        close(pGame);
+        return 0; 
+    }
+
     for (int i = 0; i < 3; i++){
         pGame->pButton[i] = createButton(pGame->pRenderer, 0, 0, 400, 100);
         setDesRect(pGame->pButton[i], i);
@@ -194,6 +203,10 @@ void run(Game *pGame){
                     snowballRect = getSnowballRect(pGame->pSnowball[i]);
                     if (!isColliding(characterRect, snowballRect)){
                         setCharacterDead(pGame->pCharacter[pGame->characterNumber]);
+                        cData.command = DEAD;
+                        memcpy(pGame->pPacket->data, &cData, sizeof(ClientData));
+                        pGame->pPacket->len = sizeof(ClientData);
+                        SDLNet_UDP_Send(pGame->pSocket, -1,pGame->pPacket);
                         printf("COLLISION\n");
                     }
                 }
@@ -249,13 +262,15 @@ void run(Game *pGame){
                     if(!joining && event.type == SDL_MOUSEBUTTONDOWN){
                         if(mouseX >= 200 && mouseX <= 600 && mouseY >= 200 && mouseY <= 355){
                             joining = 1;
-                            cData.command = READY;
                             cData.playerNumber =- 1;
                             memcpy(pGame->pPacket->data, &cData, sizeof(ClientData));
                             pGame->pPacket->len = sizeof(ClientData);
                         }
                         if(mouseX >= 300 && mouseX <= 500 && mouseY >= 400 && mouseY <= 505){
                             active = false;
+                        }
+                        if(mouseX >= 580 && mouseX <= 780 && mouseY >= 650 && mouseY <= 755){
+                            pGame->state = CREDITS;
                         }
                     }
                     if(joining){
@@ -275,8 +290,32 @@ void run(Game *pGame){
                     }
                 }
                 break;
-            }       
+            case CREDITS:
+                int mouseCX, mouseCY;
+                SDL_GetMouseState(&mouseCX, &mouseCY);
+                if(SDL_PollEvent(&event)){
+                    if(event.type == SDL_QUIT){
+                        active = false;
+                    }
+                    if(event.key.keysym.scancode == SDL_SCANCODE_B){
+                        pGame->state = START;
+                    }
+                }
+                SDL_SetRenderDrawColor(pGame->pRenderer,255,255,255,255);
+                SDL_RenderClear(pGame->pRenderer);
+                renderCreditBackground(pGame->pCreditBackground);
+                SDL_RenderPresent(pGame->pRenderer);
+                break;
+            case JOIN:
+                if(SDL_PollEvent(&event)){
+                    if(event.type == SDL_QUIT){
+                        active = false;
+                    }
+                       
+            }
+            break;
         }
+    }
 }
 
 
@@ -335,8 +374,8 @@ void close(Game *pGame){
 }
 
 void handleInput(Game *pGame, SDL_Event *pEvent){
+    ClientData cData;
     if(checkCharacterAlive(pGame->pCharacter[pGame->characterNumber])){
-        ClientData cData;
         cData.playerNumber = pGame->characterNumber;
         switch(pEvent->type){
             case SDL_KEYDOWN:
@@ -418,12 +457,13 @@ void handleInput(Game *pGame, SDL_Event *pEvent){
                         break;  
                 }                                
         }
-        memcpy(pGame->pPacket->data, &cData, sizeof(ClientData));
-        pGame->pPacket->len = sizeof(ClientData);
-        SDLNet_UDP_Send(pGame->pSocket, -1,pGame->pPacket);
     }
     else{
         characterYStop(pGame->pCharacter[pGame->characterNumber]);
         characterXStop(pGame->pCharacter[pGame->characterNumber]);
+        cData.command = DEAD;
     }
+    memcpy(pGame->pPacket->data, &cData, sizeof(ClientData));
+    pGame->pPacket->len = sizeof(ClientData);
+    SDLNet_UDP_Send(pGame->pSocket, -1,pGame->pPacket);
 }

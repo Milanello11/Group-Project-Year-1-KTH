@@ -5,10 +5,10 @@
 #define CHARACTERS 2
 #define MAXSNOWBALLS 5
 
-enum gameState{START, ONGOING, GAME_OVER};
+enum gameState{MENU, START, JOIN, ONGOING, GAME_OVER, CREDITS};
 typedef enum gameState GameState;
 
-enum clientCommand{READY, UP, DOWN, LEFT, RIGHT, SHOOT, STOPX, STOPY};
+enum clientCommand{READY, UP, DOWN, LEFT, RIGHT, SHOOT, STOPX, STOPY, DEAD};
 typedef enum clientCommand ClientCommand;
 
 struct clientData{
@@ -26,6 +26,7 @@ typedef struct snowballData SnowballData;
 struct characterData{
     float x_pos, y_pos, x_vel, y_vel;
     int window_width , window_height, characterDirection;
+    bool alive;
 };
 typedef struct characterData CharacterData;
 
