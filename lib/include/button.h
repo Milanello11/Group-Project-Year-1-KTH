@@ -1,5 +1,6 @@
 #ifndef button_h
 #define button_h
+#define NROFBUTTONS 4
 
 typedef struct button Button;
 

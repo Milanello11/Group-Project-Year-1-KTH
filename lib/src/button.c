@@ -88,9 +88,15 @@ void setDesRect(Button *pButton, int index){
         pButton->buttonDesRect.w = 200;
         pButton->buttonDesRect.h = 105;
     }
-    else{
+    else if(index == 2){
         pButton->buttonDesRect.x = 580;
         pButton->buttonDesRect.y = 650;
+        pButton->buttonDesRect.w = 200;
+        pButton->buttonDesRect.h = 105;
+    }
+    else if(index == 3){
+        pButton->buttonDesRect.x = 300;
+        pButton->buttonDesRect.y = 660;
         pButton->buttonDesRect.w = 200;
         pButton->buttonDesRect.h = 105;
     }

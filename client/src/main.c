@@ -26,7 +26,7 @@ typedef struct{
         Background *pBackground;
         Menu *pMenuBackground;
         Menu *pCreditBackground;
-        Button *pButton[3];
+        Button *pButton[NROFBUTTONS];
         TTF_Font *pFont, *pScoreFont;
         Text *pOverText, *pStartText;
     }Game;
@@ -163,12 +163,12 @@ int initializations(Game *pGame){
         return 0; 
     }
 
-    for (int i = 0; i < 3; i++){
+    for (int i = 0; i < NROFBUTTONS; i++){
         pGame->pButton[i] = createButton(pGame->pRenderer, 0, 0, 400, 100);
         setDesRect(pGame->pButton[i], i);
     }
 
-    pGame->state = START;
+    pGame->state = MENU;
     return 1;
 }
 
@@ -186,66 +186,8 @@ void run(Game *pGame){
 
     while(active){
         switch (pGame->state){
-            case ONGOING:
-                while(SDLNet_UDP_Recv(pGame->pSocket, pGame->pPacket)){
-                    updateWithServerData(pGame);
-                }
-                while(SDL_PollEvent(&event)){
-                    if(event.type==SDL_QUIT) 
-                        active = false;
-                    else if(event.key.keysym.scancode == SDL_SCANCODE_ESCAPE){
-                        active = false;
-                    }
-                    else handleInput(pGame,&event);
-                }
-                characterRect = getCharacterRect(pGame->pCharacter[pGame->characterNumber]);
-                for (int i = 0; i < MAXSNOWBALLS; i++){
-                    snowballRect = getSnowballRect(pGame->pSnowball[i]);
-                    if (!isColliding(characterRect, snowballRect)){
-                        setCharacterDead(pGame->pCharacter[pGame->characterNumber]);
-                        cData.command = DEAD;
-                        memcpy(pGame->pPacket->data, &cData, sizeof(ClientData));
-                        pGame->pPacket->len = sizeof(ClientData);
-                        SDLNet_UDP_Send(pGame->pSocket, -1,pGame->pPacket);
-                        printf("COLLISION\n");
-                    }
-                }
-                printf("%d\n", checkCharacterAlive(pGame->pCharacter[pGame->characterNumber]));
-
-                SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
-                SDL_RenderClear(pGame->pRenderer);
-                renderBackground(pGame->pRenderer, pGame->pBackground);
-                SDL_SetRenderDrawColor(pGame->pRenderer,230,230,230,255);
-                for(int i=0;i<CHARACTERS;i++){
-                    updateCharacter(pGame->pCharacter[i]);
-                    drawCharacter(pGame->pCharacter[i]);
-                }
-                for(int i=0;i<MAXSNOWBALLS;i++){
-                    updateSnowball(pGame->pSnowball[i]);
-                    drawSnowball(pGame->pSnowball[i]);
-                }
-                SDL_RenderPresent(pGame->pRenderer);
-                SDL_Delay(1000/60);
-                break;
-            
-            case GAME_OVER:
-
-
-                updateWithServerData(pGame);
-                /*
-                SDL_SetRenderDrawColor(pGame->pRenderer, 255, 255, 255, 255);
-                SDL_RenderClear(pGame->pRenderer);
-                drawText(pGame->pOverText);
-                SDL_RenderPresent(pGame->pRenderer);
-                */
-                if(SDL_PollEvent(&event)){
-                    if(event.type==SDL_QUIT){ 
-                        active = false;
-                    }
-                }
-                break;
-            case START:
-                int mouseX, mouseY;
+            int mouseX, mouseY;
+            case MENU:
                 SDL_GetMouseState(&mouseX, &mouseY);
                 if(!joining){
                     SDL_SetRenderDrawColor(pGame->pRenderer,255,255,255,255);
@@ -297,19 +239,24 @@ void run(Game *pGame){
                 }
                 break;
             case CREDITS:
-                int mouseCX, mouseCY;
-                SDL_GetMouseState(&mouseCX, &mouseCY);
+                SDL_GetMouseState(&mouseX, &mouseY);
                 if(SDL_PollEvent(&event)){
                     if(event.type == SDL_QUIT){
                         active = false;
                     }
                     if(event.key.keysym.scancode == SDL_SCANCODE_B){
-                        pGame->state = START;
+                        pGame->state = MENU;
                     }
+                    if(event.type == SDL_MOUSEBUTTONDOWN){
+                        if(mouseX >= 300 && mouseX <= 500 && mouseY >= 660 && mouseY <= 765){
+                            pGame->state = MENU;
+                        }
+                    }   
                 }
                 SDL_SetRenderDrawColor(pGame->pRenderer,255,255,255,255);
                 SDL_RenderClear(pGame->pRenderer);
                 renderCreditBackground(pGame->pCreditBackground);
+                drawButton(pGame->pButton[3], 1);
                 SDL_RenderPresent(pGame->pRenderer);
                 break;
             case JOIN:
@@ -317,9 +264,63 @@ void run(Game *pGame){
                     if(event.type == SDL_QUIT){
                         active = false;
                     }
-                       
             }
             break;
+            case ONGOING:
+                while(SDLNet_UDP_Recv(pGame->pSocket, pGame->pPacket)){
+                    updateWithServerData(pGame);
+                }
+                while(SDL_PollEvent(&event)){
+                    if(event.type==SDL_QUIT) 
+                        active = false;
+                    else if(event.key.keysym.scancode == SDL_SCANCODE_ESCAPE){
+                        active = false;
+                    }
+                    else handleInput(pGame,&event);
+                }
+                characterRect = getCharacterRect(pGame->pCharacter[pGame->characterNumber]);
+                for (int i = 0; i < MAXSNOWBALLS; i++){
+                    snowballRect = getSnowballRect(pGame->pSnowball[i]);
+                    if (!isColliding(characterRect, snowballRect)){
+                        setCharacterDead(pGame->pCharacter[pGame->characterNumber]);
+                        cData.command = DEAD;
+                        memcpy(pGame->pPacket->data, &cData, sizeof(ClientData));
+                        pGame->pPacket->len = sizeof(ClientData);
+                        SDLNet_UDP_Send(pGame->pSocket, -1,pGame->pPacket);
+                        printf("COLLISION\n");
+                    }
+                }
+                printf("%d\n", checkCharacterAlive(pGame->pCharacter[pGame->characterNumber]));
+
+                SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
+                SDL_RenderClear(pGame->pRenderer);
+                renderBackground(pGame->pRenderer, pGame->pBackground);
+                SDL_SetRenderDrawColor(pGame->pRenderer,230,230,230,255);
+                for(int i=0;i<CHARACTERS;i++){
+                    updateCharacter(pGame->pCharacter[i]);
+                    drawCharacter(pGame->pCharacter[i]);
+                }
+                for(int i=0;i<MAXSNOWBALLS;i++){
+                    updateSnowball(pGame->pSnowball[i]);
+                    drawSnowball(pGame->pSnowball[i]);
+                }
+                SDL_RenderPresent(pGame->pRenderer);
+                SDL_Delay(1000/60);
+                break;
+            case GAME_OVER:
+                //updateWithServerData(pGame);
+                /*
+                SDL_SetRenderDrawColor(pGame->pRenderer, 255, 255, 255, 255);
+                SDL_RenderClear(pGame->pRenderer);
+                drawText(pGame->pOverText);
+                SDL_RenderPresent(pGame->pRenderer);
+                */
+                if(SDL_PollEvent(&event)){
+                    if(event.type==SDL_QUIT){ 
+                        active = false;
+                    }
+                }
+                break;
         }
     }
 }
