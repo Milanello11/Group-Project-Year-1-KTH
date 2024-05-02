@@ -195,6 +195,7 @@ void updateCharacterWithRecievedData(Character *pCharacter, CharacterData *pChar
     pCharacter->x_pos = pCharacterData->x_pos;
     pCharacter->y_pos = pCharacterData->y_pos;
     pCharacter->characterDirection = pCharacterData->characterDirection;
+    pCharacter->alive = pCharacterData->alive;
 }
 void getCharacterSendData(Character *pCharacter, CharacterData *pCharacterData){
     pCharacterData->x_vel = pCharacter->x_vel;
@@ -202,6 +203,7 @@ void getCharacterSendData(Character *pCharacter, CharacterData *pCharacterData){
     pCharacterData->x_pos = pCharacter->x_pos;
     pCharacterData->y_pos = pCharacter->y_pos;
     pCharacterData->characterDirection = pCharacter->characterDirection;
+    pCharacterData->alive = pCharacter->alive;
 }
 int getPlayerDirection(Character *pCharacter){
     return (pCharacter->characterDirection);

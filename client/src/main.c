@@ -217,7 +217,8 @@ void run(Game *pGame){
             case GAME_OVER:
 
 
-                /*updateWithServerData(pGame);
+                updateWithServerData(pGame);
+                /*
                 SDL_SetRenderDrawColor(pGame->pRenderer, 255, 255, 255, 255);
                 SDL_RenderClear(pGame->pRenderer);
                 drawText(pGame->pOverText);
