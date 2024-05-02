@@ -92,7 +92,7 @@ int initializations(Game *pGame){
         return 0;
 	}
     
-    if(SDLNet_ResolveHost(&(pGame->serverAddress), "127.0.0.1", 2069)){
+    if(SDLNet_ResolveHost(&(pGame->serverAddress), "130.229.190.151", 2069)){
         printf("SDLNet_ResolveHost(127.0.0.1 2000): %s\n", SDLNet_GetError());
         return 0;
     }
@@ -215,15 +215,19 @@ void run(Game *pGame){
                 break;
             
             case GAME_OVER:
+
+
                 /*updateWithServerData(pGame);
+                SDL_SetRenderDrawColor(pGame->pRenderer, 255, 255, 255, 255);
                 SDL_RenderClear(pGame->pRenderer);
                 drawText(pGame->pOverText);
                 SDL_RenderPresent(pGame->pRenderer);
+                */
                 if(SDL_PollEvent(&event)){
                     if(event.type==SDL_QUIT){ 
                         active = false;
                     }
-                }*/
+                }
                 break;
             case START:
                 int mouseX, mouseY;
