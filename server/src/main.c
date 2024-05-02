@@ -171,7 +171,7 @@ void run(Game *pGame){
                     updateCharacter(pGame->pCharacter[i]);
                     if(!checkCharacterAlive(pGame->pCharacter[i]))
                     {
-                        numberOfCharactersAlive=1;
+                        numberOfCharactersAlive--;
                         if(numberOfCharactersAlive == 1)
                         {
                             printf("GAme is over");
@@ -257,8 +257,7 @@ void add(IPaddress address, IPaddress clients[],int *pNrOfClients){
 }
 
 void executeCommand(Game *pGame, ClientData cData){
-        switch (cData.command)
-    {
+    switch (cData.command){
         case UP:
             characterTurnUp(pGame->pCharacter[cData.playerNumber]);
             break;
