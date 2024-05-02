@@ -4,6 +4,7 @@
 #define WINDOW_WIDTH 800
 #define CHARACTERS 2
 #define MAXSNOWBALLS 5
+#include <stdbool.h>
 
 enum gameState{MENU, START, JOIN, ONGOING, GAME_OVER, CREDITS};
 typedef enum gameState GameState;
