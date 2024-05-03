@@ -183,10 +183,6 @@ void renderMenuBackground(Background *pMenuBackground){
     SDL_RenderCopy(pMenuBackground->pRenderer, pMenuBackground->pTexture, NULL, NULL);
 }
 
-void renderCreditBackground(Background *pCreditBackground){
-    SDL_RenderCopy(pCreditBackground->pRenderer, pCreditBackground->pTexture, NULL, NULL);
-}
-
 void destroyBackground(Background *pBackground){
     SDL_DestroyTexture(pBackground->pTexture);
     free(pBackground);

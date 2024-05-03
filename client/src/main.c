@@ -208,10 +208,11 @@ void run(Game *pGame){
                     }
                     if(!joining && event.type == SDL_MOUSEBUTTONDOWN){
                         if(mouseX >= 200 && mouseX <= 600 && mouseY >= 200 && mouseY <= 355){
-                            joining = 1;
+                            /*joining = 1;
                             cData.playerNumber =- 1;
                             memcpy(pGame->pPacket->data, &cData, sizeof(ClientData));
-                            pGame->pPacket->len = sizeof(ClientData);
+                            pGame->pPacket->len = sizeof(ClientData);*/
+                            pGame->state = JOIN;
                         }
                         if(mouseX >= 300 && mouseX <= 500 && mouseY >= 400 && mouseY <= 505){
                             active = false;
@@ -254,7 +255,7 @@ void run(Game *pGame){
                 }
                 SDL_SetRenderDrawColor(pGame->pRenderer,255,255,255,255);
                 SDL_RenderClear(pGame->pRenderer);
-                renderCreditBackground(pGame->pCreditBackground);
+                renderMenuBackground(pGame->pCreditBackground);
                 drawButton(pGame->pButton[3], 1);
                 SDL_RenderPresent(pGame->pRenderer);
                 break;
@@ -263,7 +264,15 @@ void run(Game *pGame){
                     if(event.type == SDL_QUIT){
                         active = false;
                     }
-            }
+                    if(event.key.keysym.scancode == SDL_SCANCODE_B){
+                        pGame->state = MENU;
+                    }
+                }
+                SDL_SetRenderDrawColor(pGame->pRenderer,255,255,255,255);
+                SDL_RenderClear(pGame->pRenderer);
+                renderMenuBackground(pGame->pMenuBackground);
+                SDL_RenderPresent(pGame->pRenderer);
+
             break;
             case ONGOING:
                 while(SDLNet_UDP_Recv(pGame->pSocket, pGame->pPacket)){
