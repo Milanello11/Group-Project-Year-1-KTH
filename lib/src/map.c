@@ -50,6 +50,48 @@ void initBackground(){
     }
 }
 
+Background *createMenuBackground(SDL_Renderer *pRenderer, int window_w, int window_h){
+    Background *pMenuBackground = malloc(sizeof(struct background));
+    pMenuBackground->pRenderer = pRenderer;
+    SDL_Surface *pSurface = IMG_Load("../lib/resources/Bakgrund.png");
+    if(!pSurface){
+        printf("Error: %s\n", SDL_GetError());
+        return NULL;
+    }
+    pMenuBackground->pTexture = SDL_CreateTextureFromSurface(pRenderer, pSurface);
+    if (!pMenuBackground->pTexture){
+        printf("Error: %s", SDL_GetError());
+        return NULL;
+    }
+    SDL_FreeSurface(pSurface);
+
+    pMenuBackground->window_w = window_w;
+    pMenuBackground->window_h = window_h;
+
+    return pMenuBackground;
+}
+
+Background *createCreditBackground(SDL_Renderer *pRenderer, int window_w, int window_h){
+    Background *pCreditBackground = malloc(sizeof(struct background));
+    pCreditBackground->pRenderer = pRenderer;
+    SDL_Surface *pSurface = IMG_Load("../lib/resources/Credits.png");
+    if(!pSurface){
+        printf("Error: %s\n", SDL_GetError());
+        return NULL;
+    }
+    pCreditBackground->pTexture = SDL_CreateTextureFromSurface(pRenderer, pSurface);
+    if (!pCreditBackground->pTexture){
+        printf("Error: %s", SDL_GetError());
+        return NULL;
+    }
+    SDL_FreeSurface(pSurface);
+
+    pCreditBackground->window_w = window_w;
+    pCreditBackground->window_h = window_h;
+
+    return pCreditBackground;
+}
+
 int tileMap[50][50] = {
     {0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01},//1-
     {0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01},//2-
@@ -135,4 +177,17 @@ void renderBackground(SDL_Renderer *pGameRender, Background *pBackground){ //*ti
             }
         }
     }
+}
+
+void renderMenuBackground(Background *pMenuBackground){
+    SDL_RenderCopy(pMenuBackground->pRenderer, pMenuBackground->pTexture, NULL, NULL);
+}
+
+void renderCreditBackground(Background *pCreditBackground){
+    SDL_RenderCopy(pCreditBackground->pRenderer, pCreditBackground->pTexture, NULL, NULL);
+}
+
+void destroyBackground(Background *pBackground){
+    SDL_DestroyTexture(pBackground->pTexture);
+    free(pBackground);
 }

@@ -18,7 +18,7 @@ struct button{
 Button *createButton(SDL_Renderer *pRenderer, int x, int y, int w, int h){
 
     Button *pButton = malloc(sizeof(struct button));
-    SDL_Surface *pSurface = IMG_Load("../lib/resources/startButton.png");
+    SDL_Surface *pSurface = IMG_Load("../lib/resources/Buttons.png");
     if(!pSurface){
         printf("Error: %s\n", SDL_GetError());
         return NULL;

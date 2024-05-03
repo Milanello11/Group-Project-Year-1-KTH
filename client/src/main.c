@@ -8,7 +8,6 @@
 #include "snowball.h"
 #include "characterData.h"
 #include "map.h"
-#include "menu.h"
 #include "button.h"
 #include "text.h"
 
@@ -24,8 +23,8 @@ typedef struct{
         ServerData sData;
         Snowball *pSnowball[MAXSNOWBALLS];
         Background *pBackground;
-        Menu *pMenuBackground;
-        Menu *pCreditBackground;
+        Background *pMenuBackground;
+        Background *pCreditBackground;
         Button *pButton[NROFBUTTONS];
         TTF_Font *pFont, *pScoreFont;
         Text *pOverText, *pStartText;
@@ -350,12 +349,20 @@ void close(Game *pGame){
             destroySnowball(pGame->pSnowball[i]);
         }
     }
-    for(int i = 0; i < 3; i++){
+    for(int i = 0; i < NROFBUTTONS;i++){
         if(pGame->pButton[i]){
             destroyButton(pGame->pButton[i]);
         }
     }
-
+    if(pGame->pBackground){
+        destroyBackground(pGame->pBackground);
+    }
+    if(pGame->pMenuBackground){
+        destroyBackground(pGame->pMenuBackground);
+    }
+    if(pGame->pCreditBackground){
+        destroyBackground(pGame->pCreditBackground);
+    }
     if(pGame->pRenderer){ 
         SDL_DestroyRenderer(pGame->pRenderer);
     }
