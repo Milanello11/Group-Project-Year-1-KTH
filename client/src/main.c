@@ -27,7 +27,7 @@ typedef struct{
         Background *pCreditBackground;
         Button *pButton[NROFBUTTONS];
         TTF_Font *pFont, *pScoreFont;
-        Text *pOverText, *pStartText;
+        Text *pWinnerText, *pLoserText ,*pStartText;
     }Game;
 
 int initializations(Game *pGame);
@@ -117,7 +117,8 @@ int initializations(Game *pGame){
     }
 
     pGame->pStartText = createText(pGame->pRenderer,0,0,0,pGame->pFont,"Waiting for server",WINDOW_WIDTH/2,WINDOW_HEIGHT/2+100);
-    pGame->pOverText = createText(pGame->pRenderer,0,105,255,pGame->pFont,"Game over",WINDOW_WIDTH/2,WINDOW_HEIGHT/2+100);
+    pGame->pLoserText = createText(pGame->pRenderer,0,105,255,pGame->pFont,"You Lost",WINDOW_WIDTH/2,WINDOW_HEIGHT/2+100);
+    pGame->pWinnerText = createText(pGame->pRenderer,0,105,255,pGame->pFont,"You Won",WINDOW_WIDTH/2,WINDOW_HEIGHT/2+100);
 
     pGame->pPacket->address.host = pGame->serverAddress.host;
     pGame->pPacket->address.port = pGame->serverAddress.port;
@@ -333,13 +334,21 @@ void run(Game *pGame){
             case GAME_OVER:
                 //updateWithServerData(pGame);
                 SDL_SetRenderDrawColor(pGame->pRenderer, 255, 255, 255, 255);
-                SDL_RenderClear(pGame->pRenderer);
-                drawText(pGame->pOverText);
                 SDL_RenderPresent(pGame->pRenderer);
                 if(SDL_PollEvent(&event)){
                     if(event.type==SDL_QUIT){ 
                         active = false;
                     }
+                }
+                if(checkCharacterAlive(pGame->pCharacter[pGame->characterNumber])){
+                    SDL_RenderClear(pGame->pRenderer);
+                    drawText(pGame->pWinnerText);
+                    SDL_RenderPresent(pGame->pRenderer);
+                }
+                else{
+                    SDL_RenderClear(pGame->pRenderer);
+                    drawText(pGame->pLoserText);
+                    SDL_RenderPresent(pGame->pRenderer);
                 }
                 break;
         }

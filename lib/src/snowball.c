@@ -75,24 +75,24 @@ void startSnowball(Snowball *pSnowball, int startX, int startY, int directionInd
             pSnowball->x_vel = 0;
             pSnowball->y_vel = -SNOWBALLSPEED;
             pSnowball->x_pos = startX;
-            pSnowball->y_pos = startY - 7;
+            pSnowball->y_pos = startY - 9;
         break;
         case 1: 
             pSnowball->x_vel = SNOWBALLSPEED;
             pSnowball->y_vel = 0;
-            pSnowball->x_pos = startX + 27;
+            pSnowball->x_pos = startX + 29;
             pSnowball->y_pos = startY;
         break;
         case 2: 
             pSnowball->x_vel = 0;
             pSnowball->y_vel = SNOWBALLSPEED;
             pSnowball->x_pos = startX;
-            pSnowball->y_pos = startY + 29;
+            pSnowball->y_pos = startY + 31;
         break;
         case 3: 
             pSnowball->x_vel = -SNOWBALLSPEED;
             pSnowball->y_vel = 0;
-            pSnowball->x_pos = startX - 7;
+            pSnowball->x_pos = startX - 9;
             pSnowball->y_pos = startY;
         break;
     }
