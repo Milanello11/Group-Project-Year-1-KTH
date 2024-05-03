@@ -116,7 +116,7 @@ int initializations(Game *pGame){
         return 0;
     }
 
-    pGame->pStartText = createText(pGame->pRenderer,0,105,255,pGame->pFont,"Waiting for server",WINDOW_WIDTH/2,WINDOW_HEIGHT/2+100);
+    pGame->pStartText = createText(pGame->pRenderer,0,0,0,pGame->pFont,"Waiting for server",WINDOW_WIDTH/2,WINDOW_HEIGHT/2+100);
     pGame->pOverText = createText(pGame->pRenderer,0,105,255,pGame->pFont,"Game over",WINDOW_WIDTH/2,WINDOW_HEIGHT/2+100);
 
     pGame->pPacket->address.host = pGame->serverAddress.host;
@@ -274,8 +274,7 @@ void run(Game *pGame){
                         }
                     }
                     if(joining){
-                        SDL_SetRenderDrawColor(pGame->pRenderer,255,255,255,255);
-                        SDL_RenderClear(pGame->pRenderer);
+                        renderMenuBackground(pGame->pMenuBackground);
                         drawText(pGame->pStartText);
                         SDL_RenderPresent(pGame->pRenderer);
                     }
@@ -308,7 +307,6 @@ void run(Game *pGame){
                     if (!isColliding(characterRect, snowballRect)){
                         setCharacterDead(pGame->pCharacter[pGame->characterNumber]);
                         cData.command = DEAD;
-                        cData.command = FREEZE;
                         memcpy(pGame->pPacket->data, &cData, sizeof(ClientData));
                         pGame->pPacket->len = sizeof(ClientData);
                         SDLNet_UDP_Send(pGame->pSocket, -1,pGame->pPacket);
@@ -334,12 +332,10 @@ void run(Game *pGame){
                 break;
             case GAME_OVER:
                 //updateWithServerData(pGame);
-                /*
                 SDL_SetRenderDrawColor(pGame->pRenderer, 255, 255, 255, 255);
                 SDL_RenderClear(pGame->pRenderer);
                 drawText(pGame->pOverText);
                 SDL_RenderPresent(pGame->pRenderer);
-                */
                 if(SDL_PollEvent(&event)){
                     if(event.type==SDL_QUIT){ 
                         active = false;
