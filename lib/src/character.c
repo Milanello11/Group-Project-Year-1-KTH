@@ -65,8 +65,8 @@ Character *createCharacter(int number, SDL_Renderer *pRenderer, int window_w, in
         pCharacter->yStart = pCharacter->y_pos = pCharacter->characterRect.y = 100;
         break;
     case 2:
-        pCharacter->xStart = pCharacter->x_pos = pCharacter->characterRect.x = 100;
-        pCharacter->yStart = pCharacter->y_pos = pCharacter->characterRect.y = 600;
+        pCharacter->xStart = pCharacter->x_pos = pCharacter->characterRect.x = 95;
+        pCharacter->yStart = pCharacter->y_pos = pCharacter->characterRect.y = 610;
         break;
     case 3:
         pCharacter->xStart = pCharacter->x_pos = pCharacter->characterRect.x = 700;

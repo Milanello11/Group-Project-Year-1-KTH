@@ -43,29 +43,35 @@ int hover(int x, int y, Button *pButton){
     return 0;
 }
 
-void drawButton(Button *pButton , int index){
+void drawButton(Button *pButton , int index , int hover){
 
-    if (index == 1){
-        pButton->buttonSrcRect.x = 400;
+    if(index == 0){
+        pButton->buttonSrcRect.y = 0;
     }
-    else if (index == 2){
-        pButton->buttonSrcRect.x = 800;
+    if(index == 1){
+        pButton->buttonSrcRect.y = 99 * index;
     }
-    else if (index == 3){
-        pButton->buttonSrcRect.x = 200;
+    if(index == 2){
+        pButton->buttonSrcRect.y = 99 * index;
     }
-    else if (index == 4){
-        pButton->buttonSrcRect.x = 600;
+    if(index == 3){
+        pButton->buttonSrcRect.y = 99 * index;
     }
-    else if (index == 5){
-        pButton->buttonSrcRect.x = 1000;
+    if(index == 4){
+        pButton->buttonSrcRect.y = 99 * index;
     }
-    else {
-        pButton->buttonSrcRect.x = 0;
+    if(index == 5){
+        pButton->buttonSrcRect.y = 99 * index;
     }
-    pButton->buttonSrcRect.y = 0;
+    if(index == 6){
+        pButton->buttonSrcRect.y = 99 * index;
+    }
+    if(index == 7){
+        pButton->buttonSrcRect.y = 99 * index;
+    }
+    pButton->buttonSrcRect.x = 200 * hover;
     pButton->buttonSrcRect.w = 200;
-    pButton->buttonSrcRect.h = 105;
+    pButton->buttonSrcRect.h = 99;
 
     SDL_RenderCopy(pButton->pRenderer, pButton->pTexture, &(pButton->buttonSrcRect), &(pButton->buttonDesRect));
 }
@@ -76,28 +82,52 @@ void destroyButton(Button *pButton){
 }
 void setDesRect(Button *pButton, int index){
 
-    if (index == 0){
+    if (index == 0){ //stora startknappen
         pButton->buttonDesRect.x = 200;
-        pButton->buttonDesRect.y = 200;
+        pButton->buttonDesRect.y = 150;
         pButton->buttonDesRect.w = 400;
-        pButton->buttonDesRect.h = 155;
+        pButton->buttonDesRect.h = 198;
     }
-    else if (index == 1){
+    else if(index == 1){ //exit
         pButton->buttonDesRect.x = 300;
-        pButton->buttonDesRect.y = 400;
+        pButton->buttonDesRect.y = 570;
         pButton->buttonDesRect.w = 200;
-        pButton->buttonDesRect.h = 105;
+        pButton->buttonDesRect.h = 99;
     }
-    else if(index == 2){
+    else if(index == 2){ //credits
         pButton->buttonDesRect.x = 580;
-        pButton->buttonDesRect.y = 650;
+        pButton->buttonDesRect.y = 660;
         pButton->buttonDesRect.w = 200;
-        pButton->buttonDesRect.h = 105;
+        pButton->buttonDesRect.h = 99;  
     }
-    else if(index == 3){
+    else if(index == 3){ //back
         pButton->buttonDesRect.x = 300;
         pButton->buttonDesRect.y = 660;
         pButton->buttonDesRect.w = 200;
-        pButton->buttonDesRect.h = 105;
+        pButton->buttonDesRect.h = 99;  
+    }
+    else if(index == 4){ //host
+        pButton->buttonDesRect.x = 300;
+        pButton->buttonDesRect.y = 310;
+        pButton->buttonDesRect.w = 200;
+        pButton->buttonDesRect.h = 99;  
+    }
+    else if(index == 5){ //join
+        pButton->buttonDesRect.x = 300;
+        pButton->buttonDesRect.y = 200;
+        pButton->buttonDesRect.w = 200;
+        pButton->buttonDesRect.h = 99;  
+    }
+    else if (index == 6){ //leaderboard
+        pButton->buttonDesRect.x = 300;
+        pButton->buttonDesRect.y = 350;
+        pButton->buttonDesRect.w = 200;
+        pButton->buttonDesRect.h = 99;
+    }
+    else if(index == 7){ //settings
+        pButton->buttonDesRect.x = 300;
+        pButton->buttonDesRect.y = 460;
+        pButton->buttonDesRect.w = 200;
+        pButton->buttonDesRect.h = 99;
     }
 }
