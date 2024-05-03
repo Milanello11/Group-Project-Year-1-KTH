@@ -8,9 +8,9 @@ CFLAGS = -g -I$(INCLUDE) -c
 LDFLAGS =  -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net -lSDL2_ttf 
 CC = gcc-13
 
-snomosClient: main.o character.o snowball.o map.o menu.o button.o text.o
+snomosClient: main.o character.o snowball.o map.o button.o text.o
 	@echo "Building Snomos"
-	$(CC) -o snomosClient main.o character.o snowball.o map.o menu.o button.o text.o $(LDFLAGS) -L $(LIBS)
+	$(CC) -o snomosClient main.o character.o snowball.o map.o button.o text.o $(LDFLAGS) -L $(LIBS)
 
 main.o: $(SRCDIR)/main.c $(INCDIR)/character.h $(INCDIR)/characterData.h $(INCDIR)/snowball.h $(INCDIR)/map.h
 	$(CC) $(CFLAGS) $(SRCDIR)/main.c 
@@ -23,9 +23,6 @@ snowball.o: $(COMMONSRCDIR)/snowball.c $(INCDIR)/snowball.h $(INCDIR)/characterD
 
 map.o: $(COMMONSRCDIR)/map.c $(INCDIR)/map.h
 	$(CC) $(CFLAGS) $(COMMONSRCDIR)/map.c
-
-menu.o: $(COMMONSRCDIR)/menu.c $(INCDIR)/menu.h
-	$(CC) $(CFLAGS) $(COMMONSRCDIR)/menu.c
 
 button.o: $(COMMONSRCDIR)/button.c $(INCDIR)/button.h
 	$(CC) $(CFLAGS) $(COMMONSRCDIR)/button.c
