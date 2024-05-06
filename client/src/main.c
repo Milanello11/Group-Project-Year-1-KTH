@@ -303,10 +303,12 @@ void run(Game *pGame){
                     else handleInput(pGame,&event);
                 }
                 characterRect = getCharacterRect(pGame->pCharacter[pGame->characterNumber]);
+                int check = 0;
                 for (int i = 0; i < MAXSNOWBALLS; i++){
                     snowballRect = getSnowballRect(pGame->pSnowball[i]);
-                    if (!isColliding(characterRect, snowballRect) && checkCharacterAlive(pGame->pCharacter[pGame->characterNumber])){
+                    if (!isColliding(characterRect, snowballRect) && check == 0){
                         setCharacterDead(pGame->pCharacter[pGame->characterNumber]);
+                        check = 1;
                         cData.command = DEAD;
                         cData.playerNumber = pGame->characterNumber;
                         memcpy(pGame->pPacket->data, &cData, sizeof(ClientData));
@@ -335,7 +337,6 @@ void run(Game *pGame){
             case GAME_OVER:
                 //updateWithServerData(pGame);
                 SDL_SetRenderDrawColor(pGame->pRenderer, 255, 255, 255, 255);
-                SDL_RenderPresent(pGame->pRenderer);
                 if(SDL_PollEvent(&event)){
                     if(event.type==SDL_QUIT){ 
                         active = false;

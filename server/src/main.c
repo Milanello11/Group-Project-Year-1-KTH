@@ -13,7 +13,6 @@ typedef struct{
         SDL_Window *pWindow;
         SDL_Renderer *pRenderer;
         Character *pCharacter[CHARACTERS];
-        int nrOfCharacters;
         GameState state;
         UDPpacket *pPacket;
         UDPsocket pSocket;
@@ -30,7 +29,7 @@ void run(Game *pGame);
 void close(Game *pGame);
 void add(IPaddress address, IPaddress clients[], int *pNrOfClients);
 void sendGameData(Game *pGame);
-void executeCommand(Game *pGame, ClientData cData, int *pNrOfClients);
+void executeCommand(Game *pGame, ClientData cData, int *pNrOfCharacters);
 void setUpGame(Game *pGame);
 
 int main (int argument, char* arguments[]){
@@ -94,12 +93,11 @@ int initializations(Game *pGame){
 		close(pGame);
         return 0;
 	}
-    
+
     for (int i = 0 ; i < CHARACTERS ; i++){
         pGame->pCharacter[i] = createCharacter(i,pGame->pRenderer,WINDOW_WIDTH,WINDOW_HEIGHT);
     }
 
-    pGame->nrOfCharacters = CHARACTERS;
     for(int i = 0 ; i < CHARACTERS ; i++){
         if(!pGame->pCharacter[i]){
             printf("Error: %s\n" , SDL_GetError());
@@ -143,6 +141,7 @@ int initializations(Game *pGame){
 }
 
 void run(Game *pGame){
+    int nrOfCharacters = 3; 
     bool active = true;
     //int numberOfCharactersAlive = CHARACTERS;
     SDL_Event event;
@@ -150,10 +149,25 @@ void run(Game *pGame){
 
     while(active){
         switch (pGame->state){
+            case START:
+                drawText(pGame->pStartText);
+                drawText(pGame->pIPText);
+                SDL_RenderPresent(pGame->pRenderer);
+                if(SDL_PollEvent(&event) && event.type==SDL_QUIT){ 
+                    active = false;
+                }
+                if(SDLNet_UDP_Recv(pGame->pSocket,pGame->pPacket)==1){
+                    add(pGame->pPacket->address,pGame->clients,&(pGame->nrOfClients));
+                    if(pGame->nrOfClients == CHARACTERS){ 
+                        setUpGame(pGame);
+                    }
+                }
+                break;
             case ONGOING:
+                sendGameData(pGame); 
                 while(SDLNet_UDP_Recv(pGame->pSocket,pGame->pPacket)==1){
                     memcpy(&cData, pGame->pPacket->data, sizeof(ClientData));
-                    executeCommand(pGame,cData, &(pGame->nrOfClients));
+                    executeCommand(pGame,cData, &nrOfCharacters);
                 }
                 if(SDL_PollEvent(&event)){
                     if(event.type==SDL_QUIT){ 
@@ -164,21 +178,19 @@ void run(Game *pGame){
                         sendGameData(pGame);
                     }
                 }
-                if(pGame->nrOfClients == 1){
-                    printf("GAme is over");
+                if(nrOfCharacters <= 1){
+                    printf("Game is over");
                     pGame->state = GAME_OVER;
                     sendGameData(pGame);
                 }
                 for (int i = 0; i < CHARACTERS; i++){
                     updateCharacter(pGame->pCharacter[i]);    
                 }
-                sendGameData(pGame); 
                 SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
                 SDL_RenderClear(pGame->pRenderer);
                 SDL_RenderPresent(pGame->pRenderer);
                 SDL_Delay(1000/60);
                 break;
-            
             case GAME_OVER:
                 //drawText(pGame->pOverText);
                 if(SDL_PollEvent(&event)){
@@ -193,20 +205,6 @@ void run(Game *pGame){
                 /*if(pGame->nrOfClients==CHARACTERS){
                     pGame->nrOfClients = 0;
                 }*/
-                break;
-            case START:
-                drawText(pGame->pStartText);
-                drawText(pGame->pIPText);
-                SDL_RenderPresent(pGame->pRenderer);
-                if(SDL_PollEvent(&event) && event.type==SDL_QUIT){ 
-                    active = false;
-                }
-                if(SDLNet_UDP_Recv(pGame->pSocket,pGame->pPacket)==1){
-                    add(pGame->pPacket->address,pGame->clients,&(pGame->nrOfClients));
-                    if(pGame->nrOfClients == CHARACTERS){ 
-                        setUpGame(pGame);
-                    }
-                }
                 break;
         }       
     }
@@ -244,10 +242,9 @@ void add(IPaddress address, IPaddress clients[],int *pNrOfClients){
     }
     clients[*pNrOfClients] = address;
     (*pNrOfClients)++;
-    
 }
 
-void executeCommand(Game *pGame, ClientData cData, int *pNrOfClients){
+void executeCommand(Game *pGame, ClientData cData, int *pNrOfCharacters){
     switch (cData.command){
         case UP:
             characterTurnUp(pGame->pCharacter[cData.playerNumber]);
@@ -306,7 +303,9 @@ void executeCommand(Game *pGame, ClientData cData, int *pNrOfClients){
             break;
         case DEAD:
             setCharacterDead(pGame->pCharacter[cData.playerNumber]);
-            *(pNrOfClients)--;
+            printf("Before. %d \n", *pNrOfCharacters);
+            (*pNrOfCharacters)--;
+            printf("After. %d \n", *pNrOfCharacters);
             break;
     }
 }
