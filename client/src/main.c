@@ -92,7 +92,7 @@ int initializations(Game *pGame){
         return 0;
 	}
     
-    if(SDLNet_ResolveHost(&(pGame->serverAddress), "130.229.158.197", 2069)){
+    if(SDLNet_ResolveHost(&(pGame->serverAddress), "130.229.186.116", 2069)){
         printf("SDLNet_ResolveHost(127.0.0.1 2000): %s\n", SDLNet_GetError());
         return 0;
     }
@@ -308,6 +308,7 @@ void run(Game *pGame){
                     if (!isColliding(characterRect, snowballRect)){
                         setCharacterDead(pGame->pCharacter[pGame->characterNumber]);
                         cData.command = DEAD;
+                        cData.playerNumber = pGame->characterNumber;
                         memcpy(pGame->pPacket->data, &cData, sizeof(ClientData));
                         pGame->pPacket->len = sizeof(ClientData);
                         SDLNet_UDP_Send(pGame->pSocket, -1,pGame->pPacket);

@@ -117,24 +117,25 @@ void updateCharacter(Character *pCharacter){
     pCharacter->characterRect.x = pCharacter->x_pos;
     pCharacter->characterRect.y = pCharacter->y_pos;
     
-    if(!(pCharacter->alive)){
-        getFrozenAnimation(pCharacter);
-    }
 }
 
 void drawCharacter(Character *pCharacter){
-
-    if(pCharacter->characterDirection == 0){
-        pCharacter->characterSrcRect.y = 96;
+    if(checkCharacterAlive){
+        if(pCharacter->characterDirection == 0){
+            pCharacter->characterSrcRect.y = 96;
+        }
+        else if(pCharacter->characterDirection == 1){
+            pCharacter->characterSrcRect.y = 64;
+        }
+        else if(pCharacter->characterDirection == 2){
+            pCharacter->characterSrcRect.y = 0;
+        }
+        else if(pCharacter->characterDirection == 3){
+            pCharacter->characterSrcRect.y = 32;
+        }
     }
-    else if(pCharacter->characterDirection == 1){
-        pCharacter->characterSrcRect.y = 64;
-    }
-    else if(pCharacter->characterDirection == 2){
-        pCharacter->characterSrcRect.y = 0;
-    }
-    else if(pCharacter->characterDirection == 3){
-        pCharacter->characterSrcRect.y = 32;
+    else{
+        getFrozenAnimation(pCharacter);
     }
 
     pCharacter->characterSrcRect.w = 32;
@@ -225,7 +226,6 @@ void setCharacterDead(Character *pCharacter){
     pCharacter->alive = false;
     pCharacter->x_vel = 0;
     pCharacter->y_vel = 0;
-    getFrozenAnimation(pCharacter);
 }
 bool checkCharacterAlive(Character *pCharacter){
     return pCharacter->alive;
