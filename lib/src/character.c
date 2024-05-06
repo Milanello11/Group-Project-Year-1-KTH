@@ -120,7 +120,7 @@ void updateCharacter(Character *pCharacter){
 }
 
 void drawCharacter(Character *pCharacter){
-    if(checkCharacterAlive){
+    if(pCharacter->alive){
         if(pCharacter->characterDirection == 0){
             pCharacter->characterSrcRect.y = 96;
         }
