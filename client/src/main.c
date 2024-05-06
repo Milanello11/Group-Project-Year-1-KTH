@@ -303,11 +303,10 @@ void run(Game *pGame){
                     else handleInput(pGame,&event);
                 }
                 characterRect = getCharacterRect(pGame->pCharacter[pGame->characterNumber]);
-                int check = 1;
                 for (int i = 0; i < MAXSNOWBALLS; i++){
                     snowballRect = getSnowballRect(pGame->pSnowball[i]);
-                    if (!isColliding(characterRect, snowballRect) && check == 1){
-                        check = 0;
+                    if(checkCharacterAlive(pGame->pCharacter[pGame->characterNumber])){
+                        if(!isColliding(characterRect, snowballRect)){
                         setCharacterDead(pGame->pCharacter[pGame->characterNumber]);
                         cData.command = DEAD;
                         cData.playerNumber = pGame->characterNumber;
@@ -315,6 +314,7 @@ void run(Game *pGame){
                         pGame->pPacket->len = sizeof(ClientData);
                         SDLNet_UDP_Send(pGame->pSocket, -1,pGame->pPacket);
                         printf("COLLISION\n");
+                        }
                     }
                 }
                 printf("%d\n", checkCharacterAlive(pGame->pCharacter[pGame->characterNumber]));
