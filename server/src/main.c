@@ -150,7 +150,6 @@ void run(Game *pGame){
     while(active){
         switch (pGame->state){
             case ONGOING:
-                sendGameData(pGame);
                 while(SDLNet_UDP_Recv(pGame->pSocket,pGame->pPacket)==1){
                     memcpy(&cData, pGame->pPacket->data, sizeof(ClientData));
                     executeCommand(pGame,cData);
@@ -164,7 +163,7 @@ void run(Game *pGame){
                         sendGameData(pGame);
                     }
                 }
-                
+                sendGameData(pGame);
                 int numberOfCharactersAlive = CHARACTERS;
                 for (int i = 0; i < CHARACTERS; i++){
                     printf("%d\n", checkCharacterAlive(pGame->pCharacter[i]));

@@ -199,7 +199,7 @@ void updateCharacterWithRecievedData(Character *pCharacter, CharacterData *pChar
     pCharacter->x_pos = pCharacterData->x_pos;
     pCharacter->y_pos = pCharacterData->y_pos;
     pCharacter->characterDirection = pCharacterData->characterDirection;
-    //pCharacter->alive = pCharacterData->alive;
+    pCharacter->alive = pCharacterData->alive;
 }
 void getCharacterSendData(Character *pCharacter, CharacterData *pCharacterData){
     pCharacterData->x_vel = pCharacter->x_vel;
@@ -223,6 +223,9 @@ SDL_Rect getCharacterRect(Character *pCharacter){
 }
 void setCharacterDead(Character *pCharacter){
     pCharacter->alive = false;
+    pCharacter->x_vel = 0;
+    pCharacter->y_vel = 0;
+    getFrozenAnimation(pCharacter);
 }
 bool checkCharacterAlive(Character *pCharacter){
     return pCharacter->alive;
