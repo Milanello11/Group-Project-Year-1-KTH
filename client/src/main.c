@@ -293,6 +293,7 @@ void run(Game *pGame){
             case ONGOING:
                 while(SDLNet_UDP_Recv(pGame->pSocket, pGame->pPacket)){
                     updateWithServerData(pGame);
+                    printf("R\n");
                 }
                 while(SDL_PollEvent(&event)){
                     if(event.type==SDL_QUIT) 
@@ -301,10 +302,12 @@ void run(Game *pGame){
                         active = false;
                     }
                     else handleInput(pGame,&event);
+                    printf("E\n");
                 }
-                if(!checkCharacterAlive(pGame->pCharacter[pGame->characterNumber])){
+                if(checkCharacterAlive(pGame->pCharacter[pGame->characterNumber])){
                     characterRect = getCharacterRect(pGame->pCharacter[pGame->characterNumber]);
                     for (int i = 0; i < MAXSNOWBALLS; i++){
+                        printf("Snowball: %d\n",i );
                         snowballRect = getSnowballRect(pGame->pSnowball[i]);
                         if(!isColliding(characterRect, snowballRect)){
                             setCharacterDead(pGame->pCharacter[pGame->characterNumber]);
