@@ -30,7 +30,7 @@ void run(Game *pGame);
 void close(Game *pGame);
 void add(IPaddress address, IPaddress clients[], int *pNrOfClients);
 void sendGameData(Game *pGame);
-void executeCommand(Game *pGame, ClientData cData);
+void executeCommand(Game *pGame, ClientData cData, int *pNrOfClients);
 void setUpGame(Game *pGame);
 
 int main (int argument, char* arguments[]){
@@ -144,6 +144,7 @@ int initializations(Game *pGame){
 
 void run(Game *pGame){
     bool active = true;
+    //int numberOfCharactersAlive = CHARACTERS;
     SDL_Event event;
     ClientData cData;
 
@@ -152,7 +153,7 @@ void run(Game *pGame){
             case ONGOING:
                 while(SDLNet_UDP_Recv(pGame->pSocket,pGame->pPacket)==1){
                     memcpy(&cData, pGame->pPacket->data, sizeof(ClientData));
-                    executeCommand(pGame,cData);
+                    executeCommand(pGame,cData, &(pGame->nrOfClients));
                 }
                 if(SDL_PollEvent(&event)){
                     if(event.type==SDL_QUIT){ 
@@ -163,19 +164,13 @@ void run(Game *pGame){
                         sendGameData(pGame);
                     }
                 }
-                int numberOfCharactersAlive = CHARACTERS;
+                if(pGame->nrOfClients == 1){
+                    printf("GAme is over");
+                    pGame->state = GAME_OVER;
+                    sendGameData(pGame);
+                }
                 for (int i = 0; i < CHARACTERS; i++){
-                    printf("%d\n", checkCharacterAlive(pGame->pCharacter[i]));
-                    updateCharacter(pGame->pCharacter[i]);
-                    if(!checkCharacterAlive(pGame->pCharacter[i])){
-                        numberOfCharactersAlive--;
-                        if(numberOfCharactersAlive == 1){
-                            printf("GAme is over");
-                            pGame->state = GAME_OVER;
-                            sendGameData(pGame);
-                        }
-                    }    
-                    printf("%d\n", numberOfCharactersAlive);
+                    updateCharacter(pGame->pCharacter[i]);    
                 }
                 sendGameData(pGame); 
                 SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
@@ -244,7 +239,7 @@ void sendGameData(Game *pGame){
 void add(IPaddress address, IPaddress clients[],int *pNrOfClients){
 	for(int i=0;i<*pNrOfClients;i++){
         if(address.host==clients[i].host && address.port==clients[i].port){
-            return;
+            return; 
         }
     }
     clients[*pNrOfClients] = address;
@@ -252,7 +247,7 @@ void add(IPaddress address, IPaddress clients[],int *pNrOfClients){
     
 }
 
-void executeCommand(Game *pGame, ClientData cData){
+void executeCommand(Game *pGame, ClientData cData, int *pNrOfClients){
     switch (cData.command){
         case UP:
             characterTurnUp(pGame->pCharacter[cData.playerNumber]);
@@ -311,6 +306,7 @@ void executeCommand(Game *pGame, ClientData cData){
             break;
         case DEAD:
             setCharacterDead(pGame->pCharacter[cData.playerNumber]);
+            *(pNrOfClients)--;
             break;
     }
 }
