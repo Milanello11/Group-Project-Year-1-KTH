@@ -316,7 +316,6 @@ void run(Game *pGame){
                         SDLNet_UDP_Send(pGame->pSocket, -1,pGame->pPacket);
                         printf("COLLISION\n");
                     }
-                    break;
                 }
                 printf("%d\n", checkCharacterAlive(pGame->pCharacter[pGame->characterNumber]));
 
