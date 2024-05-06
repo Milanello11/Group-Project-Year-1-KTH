@@ -18,6 +18,6 @@ void updateSnowballWithRecievedData(Snowball *pSnowball, SnowballData *pSnowball
 void setSnowballOwner(Snowball *pSnowball, int number);
 int getSnowballOwner(Snowball *pSnowball);
 SDL_Rect getSnowballRect(Snowball *pSnowball);
-
+void resetSnowball(Snowball *pSnowball);
 
 #endif
