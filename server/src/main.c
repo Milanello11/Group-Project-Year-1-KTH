@@ -141,9 +141,9 @@ int initializations(Game *pGame){
 }
 
 void run(Game *pGame){
-    int nrOfCharacters = 3; 
+
+    int nrOfCharacters = CHARACTERS; 
     bool active = true;
-    //int numberOfCharactersAlive = CHARACTERS;
     SDL_Event event;
     ClientData cData;
 
@@ -160,11 +160,11 @@ void run(Game *pGame){
                     add(pGame->pPacket->address,pGame->clients,&(pGame->nrOfClients));
                     if(pGame->nrOfClients == CHARACTERS){ 
                         setUpGame(pGame);
+                        sendGameData(pGame);
                     }
                 }
                 break;
-            case ONGOING:
-                sendGameData(pGame); 
+            case ONGOING: 
                 while(SDLNet_UDP_Recv(pGame->pSocket,pGame->pPacket)==1){
                     memcpy(&cData, pGame->pPacket->data, sizeof(ClientData));
                     executeCommand(pGame,cData, &nrOfCharacters);
@@ -186,6 +186,7 @@ void run(Game *pGame){
                 for (int i = 0; i < CHARACTERS; i++){
                     updateCharacter(pGame->pCharacter[i]);    
                 }
+                sendGameData(pGame);
                 SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
                 SDL_RenderClear(pGame->pRenderer);
                 SDL_RenderPresent(pGame->pRenderer);

@@ -2,7 +2,7 @@
 #define character_data_h
 #define WINDOW_HEIGHT 800
 #define WINDOW_WIDTH 800
-#define CHARACTERS 2
+#define CHARACTERS 3
 #define MAXSNOWBALLS 5
 #include <stdbool.h>
 

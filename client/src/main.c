@@ -513,7 +513,6 @@ void handleInput(Game *pGame, SDL_Event *pEvent){
     else{
         characterYStop(pGame->pCharacter[pGame->characterNumber]);
         characterXStop(pGame->pCharacter[pGame->characterNumber]);
-        cData.command = DEAD;
     }
     memcpy(pGame->pPacket->data, &cData, sizeof(ClientData));
     pGame->pPacket->len = sizeof(ClientData);
