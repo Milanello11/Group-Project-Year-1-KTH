@@ -186,7 +186,7 @@ int initializations(Game *pGame){
     }
 
     pGame->pSounds = createSounds();
-    pGame->state = GAME_OVER;
+    pGame->state = MENU;
     playMenuMusic(pGame->pSounds);
     return 1;
 }
@@ -376,12 +376,14 @@ void run(Game *pGame){
                 }
                 if(checkCharacterAlive(pGame->pCharacter[pGame->characterNumber]) && control){
                     control = false;
+                    printf("Winner");
                     SDL_RenderClear(pGame->pRenderer);
                     drawText(pGame->pWinnerText);
                     SDL_RenderPresent(pGame->pRenderer);
                 }
                 else if(!(checkCharacterAlive(pGame->pCharacter[pGame->characterNumber])) && control){
                     control = false;
+                    printf("Loser");
                     playLoseMusic(pGame->pSounds);
                     SDL_RenderClear(pGame->pRenderer);
                     drawText(pGame->pLoserText);
