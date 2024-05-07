@@ -18,7 +18,7 @@ Sounds *createSounds(){
 
     pSounds->gameplayMusic = Mix_LoadMUS("../lib/resources/audio/gameplay_music.mp3");
     pSounds->menuMusic = Mix_LoadMUS("../lib/resources/audio/menu_music.mp3");
-    pSounds->loseMusic = Mix_LoadMUS("../lib/resource/audio/gotTheme.mp3");
+    pSounds->loseMusic = Mix_LoadMUS("../lib/resources/audio/gotTheme.mp3");
     pSounds->buttonEffect = Mix_LoadWAV("../lib/resources/audio/buttonEffect.wav");
     pSounds->hitEffect = Mix_LoadWAV("../lib/resources/audio/hitEffect.wav");
     pSounds->throwEffect = Mix_LoadWAV("../lib/resources/audio/throwEffect.wav");

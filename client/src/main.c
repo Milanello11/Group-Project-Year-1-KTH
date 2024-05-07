@@ -376,19 +376,16 @@ void run(Game *pGame){
                 }
                 if(checkCharacterAlive(pGame->pCharacter[pGame->characterNumber]) && control){
                     control = false;
-                    printf("Winner");
                     SDL_RenderClear(pGame->pRenderer);
                     drawText(pGame->pWinnerText);
-                    SDL_RenderPresent(pGame->pRenderer);
                 }
                 else if(!(checkCharacterAlive(pGame->pCharacter[pGame->characterNumber])) && control){
                     control = false;
-                    printf("Loser");
                     playLoseMusic(pGame->pSounds);
                     SDL_RenderClear(pGame->pRenderer);
                     drawText(pGame->pLoserText);
-                    SDL_RenderPresent(pGame->pRenderer);
                 }
+                SDL_RenderPresent(pGame->pRenderer);
                 break;
         }
     }
