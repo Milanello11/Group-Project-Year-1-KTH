@@ -227,6 +227,7 @@ void run(Game *pGame){
                         }
                         if(mouseX >= 300 && mouseX <= 500 && mouseY >= 570 && mouseY <= 669){
                             playButtonEffect(pGame->pSounds);
+                            SDL_Delay(100);
                             active = false;
                         }
                         if(mouseX >= 580 && mouseX <= 780 && mouseY >= 660 && mouseY <= 759){
