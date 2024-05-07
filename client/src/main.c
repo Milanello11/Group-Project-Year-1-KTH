@@ -320,7 +320,7 @@ void run(Game *pGame){
                 while(SDL_PollEvent(&event)){
                     if(event.type==SDL_QUIT) 
                         active = false;
-                    else if(event.key.keysym.scancode == SDL_SCANCODE_ESCAPE){
+                    if(event.key.keysym.scancode == SDL_SCANCODE_ESCAPE){
                         active = false;
                     }
                     else handleInput(pGame,&event);
@@ -366,6 +366,9 @@ void run(Game *pGame){
                 SDL_SetRenderDrawColor(pGame->pRenderer, 255, 255, 255, 255);
                 if(SDL_PollEvent(&event)){
                     if(event.type==SDL_QUIT){ 
+                        active = false;
+                    }
+                    if(event.key.keysym.scancode == SDL_SCANCODE_ESCAPE){
                         active = false;
                     }
                 }
