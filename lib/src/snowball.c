@@ -123,10 +123,7 @@ SDL_Rect getSnowballRect(Snowball *pSnowball){
     return (pSnowball->snowballRect);
 }
 void resetSnowball(Snowball *pSnowball){
-    pSnowball->snowballRect.x = -100;
-    pSnowball->snowballRect.y = -100;
-    pSnowball->x_pos = -100;
-    pSnowball->y_pos = -100;
-    pSnowball->x_vel = 0;
-    pSnowball->y_vel = 0;
+    pSnowball->x_pos = pSnowball->snowballRect.x = -100;
+    pSnowball->y_pos = pSnowball->snowballRect.y = -100;
+    pSnowball->x_vel = pSnowball->y_vel = 0;
 }
