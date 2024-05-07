@@ -258,7 +258,6 @@ void run(Game *pGame){
                         if(mouseX >= 300 && mouseX <= 500 && mouseY >= 660 && mouseY <= 765){
                             playButtonEffect(pGame->pSounds);
                             pGame->state = MENU;
-                            playMenuMusic(pGame->pSounds);
                         }
                     }   
                 }
