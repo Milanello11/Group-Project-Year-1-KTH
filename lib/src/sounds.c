@@ -8,7 +8,7 @@ struct sounds{
     Mix_Music *gameplayMusic;
     Mix_Music *menuMusic;
     Mix_Chunk *buttonEffect;
-    //Mix_Chunk *hitEffect;
+    Mix_Chunk *hitEffect;
     Mix_Chunk *throwEffect;
 };
 
@@ -18,7 +18,7 @@ Sounds *createSounds(){
     pSounds->gameplayMusic = Mix_LoadMUS("../lib/resources/audio/gameplay_music.mp3");
     pSounds->menuMusic = Mix_LoadMUS("../lib/resources/audio/menu_music.mp3");
     pSounds->buttonEffect = Mix_LoadWAV("../lib/resources/audio/buttonEffect.wav");
-    //pSounds->hitEffect = Mix_LoadWAV("../lib/resources/audio/hitEffect.wav");
+    pSounds->hitEffect = Mix_LoadWAV("../lib/resources/audio/hitEffect.wav");
     pSounds->throwEffect = Mix_LoadWAV("../lib/resources/audio/throwEffect.wav");
 
     Mix_VolumeMusic(30);
@@ -47,11 +47,15 @@ void playThrowEffect(Sounds *pSounds){
     Mix_PlayChannel(-1,pSounds->throwEffect, 0);
 }
 
+void playHitEffect(Sounds *pSounds){
+    Mix_PlayChannel(-1,pSounds->hitEffect, 0);
+}
+
 void musicCleanup(Sounds *pSounds){
     Mix_FreeMusic(pSounds->gameplayMusic);
     Mix_FreeMusic(pSounds->menuMusic);
     Mix_FreeChunk(pSounds->buttonEffect);
-    //Mix_FreeChunk(pSounds->hitEffect);
+    Mix_FreeChunk(pSounds->hitEffect);
     Mix_FreeChunk(pSounds->throwEffect);
     Mix_CloseAudio();
     free(pSounds);

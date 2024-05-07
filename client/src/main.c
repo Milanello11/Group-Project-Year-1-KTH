@@ -285,6 +285,7 @@ void run(Game *pGame){
                     }
                     if(!joining && event.type == SDL_MOUSEBUTTONDOWN){
                         if(mouseX >= 300 && mouseX <= 500 && mouseY >= 200 && mouseY <= 299){
+                            playButtonEffect(pGame->pSounds);
                             joining = 1;
                             cData.playerNumber =- 1;
                             memcpy(pGame->pPacket->data, &cData, sizeof(ClientData));
@@ -316,7 +317,7 @@ void run(Game *pGame){
                 while(SDLNet_UDP_Recv(pGame->pSocket, pGame->pPacket)){
                     updateWithServerData(pGame);
                 }
-                if(SDL_PollEvent(&event)){
+                while(SDL_PollEvent(&event)){
                     if(event.type==SDL_QUIT) 
                         active = false;
                     else if(event.key.keysym.scancode == SDL_SCANCODE_ESCAPE){
@@ -330,7 +331,9 @@ void run(Game *pGame){
                         //printf("Snowball: %d\n",i );
                         snowballRect = getSnowballRect(pGame->pSnowball[i]);
                         if(!isColliding(characterRect, snowballRect)){
+                            resetSnowball(pGame->pSnowball[i]);
                             setCharacterDead(pGame->pCharacter[pGame->characterNumber]);
+                            playHitEffect(pGame->pSounds);
                             cData.command = DEAD;
                             cData.playerNumber = pGame->characterNumber;
                             memcpy(pGame->pPacket->data, &cData, sizeof(ClientData));
@@ -507,6 +510,7 @@ void handleInput(Game *pGame, SDL_Event *pEvent){
                                 startSnowball(pGame->pSnowball[found], ssx, ssy, direction);
                                 setActiveSnowballTrue(pGame->pCharacter[pGame->characterNumber]);
                                 setSnowballOwner(pGame->pSnowball[found], pGame->characterNumber);
+                                playThrowEffect(pGame->pSounds);
                                 cData.command = SHOOT;
                             }
                         }

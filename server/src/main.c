@@ -159,16 +159,12 @@ void run(Game *pGame){
                     if(event.type==SDL_QUIT){ 
                         active = false;
                     }
-                    else if(event.key.keysym.scancode == SDL_SCANCODE_G){ //ändra till characters alive = 0
-                        pGame->state = GAME_OVER;
-                        sendGameData(pGame);
-                    }
                 }
-                /*if(nrOfCharacters <= 1){
+                if(nrOfCharacters <= 1){
                     printf("Game is over");
                     pGame->state = GAME_OVER;
                     sendGameData(pGame);
-                }*/
+                }
                 for (int i = 0; i < CHARACTERS; i++){
                     updateCharacter(pGame->pCharacter[i]);    
                 }
@@ -289,8 +285,10 @@ void executeCommand(Game *pGame, ClientData cData, int *pNrOfCharacters){
             characterYStop(pGame->pCharacter[cData.playerNumber]);
             break;
         case DEAD:
+            printf("Before: %d \n", *pNrOfCharacters);
             setCharacterDead(pGame->pCharacter[cData.playerNumber]);
             (*pNrOfCharacters)--;
+            printf("After: %d \n", *pNrOfCharacters);
             break;
     }
 }
