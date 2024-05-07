@@ -6,6 +6,7 @@ typedef struct sounds Sounds;
 Sounds *createSounds();
 void playGameplayMusic(Sounds *pSounds);
 void playMenuMusic(Sounds *pSounds);
+void playLoseMusic(Sounds *pSounds);
 void musicCleanup(Sounds *pSounds);
 void playButtonEffect(Sounds *pSounds);
 void playThrowEffect(Sounds *pSounds);

@@ -42,8 +42,9 @@ bool snowballHit(Character *pCharacter, Snowball *pSnowball);
 
 int main (int argument, char* arguments[]){
     Game game={0};
-    if(!initializations(&game)) 
+    if(!initializations(&game)){
         return 1;
+    }
     run(&game);
     close(&game);
     
@@ -185,7 +186,7 @@ int initializations(Game *pGame){
     }
 
     pGame->pSounds = createSounds();
-    pGame->state = MENU;
+    pGame->state = GAME_OVER;
     playMenuMusic(pGame->pSounds);
     return 1;
 }
@@ -195,6 +196,7 @@ void run(Game *pGame){
     int spritePos = 0;
     bool active = true;
     int joining = 0;
+    bool control = true;
 
     SDL_Event event;
     ClientData cData;
@@ -372,12 +374,15 @@ void run(Game *pGame){
                         active = false;
                     }
                 }
-                if(checkCharacterAlive(pGame->pCharacter[pGame->characterNumber])){
+                if(checkCharacterAlive(pGame->pCharacter[pGame->characterNumber]) && control){
+                    control = false;
                     SDL_RenderClear(pGame->pRenderer);
                     drawText(pGame->pWinnerText);
                     SDL_RenderPresent(pGame->pRenderer);
                 }
-                else{
+                else if(!(checkCharacterAlive(pGame->pCharacter[pGame->characterNumber])) && control){
+                    control = false;
+                    playLoseMusic(pGame->pSounds);
                     SDL_RenderClear(pGame->pRenderer);
                     drawText(pGame->pLoserText);
                     SDL_RenderPresent(pGame->pRenderer);

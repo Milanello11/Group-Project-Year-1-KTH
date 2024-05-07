@@ -285,6 +285,8 @@ void executeCommand(Game *pGame, ClientData cData, int *pNrOfCharacters){
             characterYStop(pGame->pCharacter[cData.playerNumber]);
             break;
         case DEAD:
+            characterXStop(pGame->pCharacter[cData.playerNumber]);
+            characterYStop(pGame->pCharacter[cData.playerNumber]);
             printf("Before: %d \n", *pNrOfCharacters);
             setCharacterDead(pGame->pCharacter[cData.playerNumber]);
             (*pNrOfCharacters)--;

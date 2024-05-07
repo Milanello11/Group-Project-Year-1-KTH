@@ -7,6 +7,7 @@
 struct sounds{
     Mix_Music *gameplayMusic;
     Mix_Music *menuMusic;
+    Mix_Music *loseMusic;
     Mix_Chunk *buttonEffect;
     Mix_Chunk *hitEffect;
     Mix_Chunk *throwEffect;
@@ -17,6 +18,7 @@ Sounds *createSounds(){
 
     pSounds->gameplayMusic = Mix_LoadMUS("../lib/resources/audio/gameplay_music.mp3");
     pSounds->menuMusic = Mix_LoadMUS("../lib/resources/audio/menu_music.mp3");
+    pSounds->loseMusic = Mix_LoadMUS("../lib/resource/audio/gotTheme.mp3");
     pSounds->buttonEffect = Mix_LoadWAV("../lib/resources/audio/buttonEffect.wav");
     pSounds->hitEffect = Mix_LoadWAV("../lib/resources/audio/hitEffect.wav");
     pSounds->throwEffect = Mix_LoadWAV("../lib/resources/audio/throwEffect.wav");
@@ -39,6 +41,12 @@ void playMenuMusic(Sounds *pSounds){
     }
 }
 
+void playLoseMusic(Sounds *pSounds){
+    if (Mix_PlayMusic(pSounds->loseMusic, -1) == -1) {
+        printf("Failed to play lose music: %s\n", Mix_GetError());
+    }
+}
+
 void playButtonEffect(Sounds *pSounds){
     Mix_PlayChannel(-1,pSounds->buttonEffect, 0);
 }
@@ -54,6 +62,7 @@ void playHitEffect(Sounds *pSounds){
 void musicCleanup(Sounds *pSounds){
     Mix_FreeMusic(pSounds->gameplayMusic);
     Mix_FreeMusic(pSounds->menuMusic);
+    Mix_FreeMusic(pSounds->loseMusic);
     Mix_FreeChunk(pSounds->buttonEffect);
     Mix_FreeChunk(pSounds->hitEffect);
     Mix_FreeChunk(pSounds->throwEffect);
