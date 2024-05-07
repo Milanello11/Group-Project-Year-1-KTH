@@ -5,12 +5,12 @@ INCDIR=../lib/include
 LIBS = /opt/homebrew/lib
 INCLUDE = /opt/homebrew/include -I$(INCDIR)
 CFLAGS = -g -I$(INCLUDE) -c
-LDFLAGS =  -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net -lSDL2_ttf 
+LDFLAGS =  -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net -lSDL2_ttf -lSDL2_mixer
 CC = gcc-13
 
-snomosClient: main.o character.o snowball.o map.o button.o text.o
+snomosClient: main.o character.o snowball.o map.o button.o text.o sounds.o
 	@echo "Building Snomos"
-	$(CC) -o snomosClient main.o character.o snowball.o map.o button.o text.o $(LDFLAGS) -L $(LIBS)
+	$(CC) -o snomosClient main.o character.o snowball.o map.o button.o text.o sounds.o $(LDFLAGS) -L $(LIBS)
 
 main.o: $(SRCDIR)/main.c $(INCDIR)/character.h $(INCDIR)/characterData.h $(INCDIR)/snowball.h $(INCDIR)/map.h
 	$(CC) $(CFLAGS) $(SRCDIR)/main.c 
@@ -30,6 +30,9 @@ button.o: $(COMMONSRCDIR)/button.c $(INCDIR)/button.h
 text.o: $(COMMONSRCDIR)/text.c $(INCDIR)/text.h
 	$(CC) $(CFLAGS) $(COMMONSRCDIR)/text.c
 
+sounds.o: $(COMMONSRCDIR)/sounds.c $(INCDIR)/sounds.h
+	$(CC) $(CFLAGS) $(COMMONSRCDIR)/sounds.c
+	
 clean: 
 	rm -f *.o
 	rm -f snomosClient

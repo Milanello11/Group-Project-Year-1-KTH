@@ -21,7 +21,7 @@ typedef struct{
         ServerData sData;
         Snowball *pSnowball[MAXSNOWBALLS];
         TTF_Font *pFont, *pScoreFont;
-        Text *pStartText;
+        Text *pStartText, *pNrOfClientsConnectedText;
     }Game;
 
 int initializations(Game *pGame);
@@ -82,13 +82,13 @@ int initializations(Game *pGame){
         return 0;
     }
 
-    if (!(pGame->pSocket = SDLNet_UDP_Open(2069))){
+    if(!(pGame->pSocket = SDLNet_UDP_Open(2069))){
 		printf("SDLNet_UDP_Open: %s\n", SDLNet_GetError());
 		close(pGame);
         return 0;
 	}
     
-	if (!(pGame->pPacket = SDLNet_AllocPacket(512))){
+	if(!(pGame->pPacket = SDLNet_AllocPacket(512))){
 		printf("SDLNet_AllocPacket: %s\n", SDLNet_GetError());
 		close(pGame);
         return 0;
@@ -106,7 +106,7 @@ int initializations(Game *pGame){
         }
     }
 
-    for (int i = 0; i < MAXSNOWBALLS; i++){
+    for(int i = 0; i < MAXSNOWBALLS; i++){
         pGame->pSnowball[i] = createSnowball(pGame->pRenderer , WINDOW_WIDTH , WINDOW_HEIGHT);
     }
     for(int i = 0 ; i < MAXSNOWBALLS ; i++){
@@ -117,6 +117,7 @@ int initializations(Game *pGame){
     }
 
     pGame->pStartText = createText(pGame->pRenderer,238,168,65,pGame->pScoreFont,"Waiting for clients",WINDOW_WIDTH/2,WINDOW_HEIGHT/2+100);
+    //pGame->pNrOfClientsConnectedText = createText(pGame->pRenderer,238,168,65,pGame->pScoreFont,pGame->nrOfClients,WINDOW_WIDTH/2,WINDOW_HEIGHT/2+100);
     pGame->state = START;
     pGame->nrOfClients = 0;
 
@@ -140,6 +141,9 @@ void run(Game *pGame){
                 }
                 if(SDLNet_UDP_Recv(pGame->pSocket,pGame->pPacket)==1){
                     add(pGame->pPacket->address,pGame->clients,&(pGame->nrOfClients));
+                    printf("Number of Clients: %d / %d\n", pGame->nrOfClients, CHARACTERS);
+                    //drawText(pGame->pNrOfClientsConnectedText);
+                    //SDL_RenderPresent(pGame->pRenderer);
                     if(pGame->nrOfClients == CHARACTERS){ 
                         setUpGame(pGame);
                         sendGameData(pGame);
@@ -286,9 +290,7 @@ void executeCommand(Game *pGame, ClientData cData, int *pNrOfCharacters){
             break;
         case DEAD:
             setCharacterDead(pGame->pCharacter[cData.playerNumber]);
-            printf("Before. %d \n", *pNrOfCharacters);
             (*pNrOfCharacters)--;
-            printf("After. %d \n", *pNrOfCharacters);
             break;
     }
 }

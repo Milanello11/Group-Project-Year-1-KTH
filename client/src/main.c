@@ -2,6 +2,7 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_net.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include "character.h"
@@ -10,12 +11,13 @@
 #include "map.h"
 #include "button.h"
 #include "text.h"
+#include "sounds.h"
 
 typedef struct{
         SDL_Window *pWindow;
         SDL_Renderer *pRenderer;
         Character *pCharacter[CHARACTERS];
-        int nrOfCharacters, characterNumber;
+        int characterNumber;
         GameState state;
         UDPpacket *pPacket;
         UDPsocket pSocket;
@@ -28,6 +30,7 @@ typedef struct{
         Button *pButton[NROFBUTTONS];
         TTF_Font *pFont, *pScoreFont;
         Text *pWinnerText, *pLoserText ,*pStartText;
+        Sounds *pSounds;
     }Game;
 
 int initializations(Game *pGame);
@@ -116,6 +119,20 @@ int initializations(Game *pGame){
         return 0;
     }
 
+    if(SDL_Init(SDL_INIT_AUDIO) < 0){
+        printf("Error: %s\n", SDL_GetError());
+        close(pGame);
+        return 0;
+        // initialize audio
+    }
+
+    if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0){
+        printf("Error: %s\n", Mix_GetError());
+        close(pGame);
+        return 0;
+        //initialize Sdl mixer
+    }
+
     pGame->pStartText = createText(pGame->pRenderer,0,0,0,pGame->pFont,"Waiting for server",WINDOW_WIDTH/2,WINDOW_HEIGHT/2+100);
     pGame->pLoserText = createText(pGame->pRenderer,0,105,255,pGame->pFont,"You Lost",WINDOW_WIDTH/2,WINDOW_HEIGHT/2+100);
     pGame->pWinnerText = createText(pGame->pRenderer,0,105,255,pGame->pFont,"You Won",WINDOW_WIDTH/2,WINDOW_HEIGHT/2+100);
@@ -126,7 +143,6 @@ int initializations(Game *pGame){
     for(int i=0;i<CHARACTERS;i++){
         pGame->pCharacter[i] = createCharacter(i,pGame->pRenderer,WINDOW_WIDTH,WINDOW_HEIGHT);
     }
-    pGame->nrOfCharacters = CHARACTERS;
 
     //pGame->pOverText = createText(pGame->pRenderer,238,168,65,pGame->pFont,"Game over",WINDOW_WIDTH/2,WINDOW_HEIGHT/2);
     //pGame->pStartText = createText(pGame->pRenderer,238,168,65,pGame->pScoreFont,"Waiting for clients",WINDOW_WIDTH/2,WINDOW_HEIGHT/2+100);
@@ -168,7 +184,9 @@ int initializations(Game *pGame){
         setDesRect(pGame->pButton[i], i);
     }
 
+    pGame->pSounds = createSounds();
     pGame->state = MENU;
+    playMenuMusic(pGame->pSounds);
     return 1;
 }
 
@@ -204,12 +222,15 @@ void run(Game *pGame){
                     }
                     if(!joining && event.type == SDL_MOUSEBUTTONDOWN){
                         if(mouseX >= 200 && mouseX <= 600 && mouseY >= 150 && mouseY <= 348){
+                            playButtonEffect(pGame->pSounds);
                             pGame->state = JOIN;
                         }
                         if(mouseX >= 300 && mouseX <= 500 && mouseY >= 570 && mouseY <= 669){
+                            playButtonEffect(pGame->pSounds);
                             active = false;
                         }
                         if(mouseX >= 580 && mouseX <= 780 && mouseY >= 660 && mouseY <= 759){
+                            playButtonEffect(pGame->pSounds);
                             pGame->state = CREDITS;
                         }
                     }
@@ -235,7 +256,9 @@ void run(Game *pGame){
                     }
                     if(event.type == SDL_MOUSEBUTTONDOWN){
                         if(mouseX >= 300 && mouseX <= 500 && mouseY >= 660 && mouseY <= 765){
+                            playButtonEffect(pGame->pSounds);
                             pGame->state = MENU;
+                            playMenuMusic(pGame->pSounds);
                         }
                     }   
                 }
@@ -260,9 +283,6 @@ void run(Game *pGame){
                     if(event.type == SDL_QUIT){
                         active = false;
                     }
-                    if(event.key.keysym.scancode == SDL_SCANCODE_B){
-                        pGame->state = MENU;
-                    }
                     if(!joining && event.type == SDL_MOUSEBUTTONDOWN){
                         if(mouseX >= 300 && mouseX <= 500 && mouseY >= 200 && mouseY <= 299){
                             joining = 1;
@@ -271,6 +291,7 @@ void run(Game *pGame){
                             pGame->pPacket->len = sizeof(ClientData);
                         }
                         if(mouseX >= 300 && mouseX <= 500 && mouseY >= 660 && mouseY <= 759){
+                            playButtonEffect(pGame->pSounds);
                             pGame->state = MENU;
                         }
                     }
@@ -286,6 +307,7 @@ void run(Game *pGame){
                 if(SDLNet_UDP_Recv(pGame->pSocket,pGame->pPacket)==1){
                     updateWithServerData(pGame);
                     if(pGame->state == ONGOING){
+                        playGameplayMusic(pGame->pSounds);
                         joining = 0;
                     }
                 }
@@ -293,25 +315,22 @@ void run(Game *pGame){
             case ONGOING:
                 while(SDLNet_UDP_Recv(pGame->pSocket, pGame->pPacket)){
                     updateWithServerData(pGame);
-                    printf("R\n");
                 }
-                while(SDL_PollEvent(&event)){
+                if(SDL_PollEvent(&event)){
                     if(event.type==SDL_QUIT) 
                         active = false;
                     else if(event.key.keysym.scancode == SDL_SCANCODE_ESCAPE){
                         active = false;
                     }
                     else handleInput(pGame,&event);
-                    printf("E\n");
                 }
                 if(checkCharacterAlive(pGame->pCharacter[pGame->characterNumber])){
                     characterRect = getCharacterRect(pGame->pCharacter[pGame->characterNumber]);
                     for (int i = 0; i < MAXSNOWBALLS; i++){
-                        printf("Snowball: %d\n",i );
+                        //printf("Snowball: %d\n",i );
                         snowballRect = getSnowballRect(pGame->pSnowball[i]);
                         if(!isColliding(characterRect, snowballRect)){
                             setCharacterDead(pGame->pCharacter[pGame->characterNumber]);
-                            resetSnowball(pGame->pSnowball[i]);
                             cData.command = DEAD;
                             cData.playerNumber = pGame->characterNumber;
                             memcpy(pGame->pPacket->data, &cData, sizeof(ClientData));
@@ -419,6 +438,9 @@ void close(Game *pGame){
     if(pGame->pFont){
         TTF_CloseFont(pGame->pFont);
     } 
+    if(pGame->pSounds){
+        musicCleanup(pGame->pSounds);
+    }
 
     TTF_Quit();
     SDLNet_Quit();
