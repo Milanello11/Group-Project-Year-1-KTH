@@ -201,8 +201,6 @@ void run(Game *pGame){
 
     SDL_Event event;
     ClientData cData;
-    SDL_Texture* startButtonTexture = NULL;
-    SDL_Renderer* renderer = NULL; //Ta bort illa kvickt
     SDL_Rect snowballRect, characterRect;
 
     while(active){
@@ -220,10 +218,11 @@ void run(Game *pGame){
                 drawButton(pGame->pButton[7], 7, hover(mouseX, mouseY, pGame->pButton[7]));
                 SDL_RenderPresent(pGame->pRenderer);  
                 if(SDL_PollEvent(&event)){
-                    if(event.type==SDL_QUIT || event.key.keysym.scancode == SDL_SCANCODE_ESCAPE){
+                    menuController(&event, mouseX, mouseY, pGame->pSounds, &active, &(pGame->state));
+                    /*if(event.type==SDL_QUIT || event.key.keysym.scancode == SDL_SCANCODE_ESCAPE){
                         active = false;
                     }
-                    if(!joining && event.type == SDL_MOUSEBUTTONDOWN){
+                    if(event.type == SDL_MOUSEBUTTONDOWN){
                         if(mouseX >= 200 && mouseX <= 600 && mouseY >= 150 && mouseY <= 348){
                             playButtonEffect(pGame->pSounds);
                             pGame->state = JOIN;
@@ -237,16 +236,7 @@ void run(Game *pGame){
                             playButtonEffect(pGame->pSounds);
                             pGame->state = CREDITS;
                         }
-                    }
-                }
-                if(joining){
-                    SDLNet_UDP_Send(pGame->pSocket, -1, pGame->pPacket);
-                }
-                if(SDLNet_UDP_Recv(pGame->pSocket,pGame->pPacket)==1){
-                    updateWithServerData(pGame);
-                    if(pGame->state == ONGOING){
-                        joining = 0;
-                    }
+                    }*/
                 }
                 break;
             case CREDITS:
