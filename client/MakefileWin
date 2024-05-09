@@ -11,7 +11,7 @@ snomosClient: main.o character.o snowball.o map.o button.o text.o sounds.o contr
 	@echo "Building Snomos"
 	$(CC) -o snomosClient main.o character.o snowball.o map.o button.o text.o sounds.o controller.o logic.o $(LDFLAGS)
 
-main.o: $(SRCDIR)/main.c $(INCDIR)/character.h $(INCDIR)/characterData.h $(INCDIR)/snowball.h $(INCDIR)/map.h $(INCDIR)/controller.h
+main.o: $(SRCDIR)/main.c $(INCDIR)/character.h $(INCDIR)/characterData.h $(INCDIR)/snowball.h $(INCDIR)/map.h $(INCDIR)/controller.h $(INCDIR)/logic.h
 	$(CC) $(CFLAGS) $(SRCDIR)/main.c 
 
 character.o: $(COMMONSRCDIR)/character.c $(INCDIR)/character.h $(INCDIR)/characterData.h
@@ -23,7 +23,7 @@ snowball.o: $(COMMONSRCDIR)/snowball.c $(INCDIR)/snowball.h $(INCDIR)/characterD
 controller.o: $(COMMONSRCDIR)/controller.c $(INCDIR)/controller.h $(INCDIR)/character.h $(INCDIR)/snowball.h $(INCDIR)/sounds.h $(INCDIR)/characterData.h
 	$(CC) $(CFLAGS) $(COMMONSRCDIR)/controller.c
 
-logic.o:  $(COMMONSRCDIR)/logic.c $(INCDIR)/character.h $(INCDIR)/snowball.h $(INCDIR)/sounds.h $(INCDIR)/characterData.h
+logic.o:  $(COMMONSRCDIR)/logic.c $(INCDIR)/logic.h $(INCDIR)/character.h $(INCDIR)/snowball.h $(INCDIR)/sounds.h $(INCDIR)/characterData.h
 	$(CC) $(CFLAGS) $(COMMONSRCDIR)/logic.c
 
 map.o: $(COMMONSRCDIR)/map.c $(INCDIR)/map.h
