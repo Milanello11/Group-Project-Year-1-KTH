@@ -220,7 +220,7 @@ void run(Game *pGame){
                 drawButton(pGame->pButton[7], 7, hover(mouseX, mouseY, pGame->pButton[7]));
                 SDL_RenderPresent(pGame->pRenderer);  
                 if(SDL_PollEvent(&event)){
-                    if(event.type == SDL_QUIT){
+                    if(event.type==SDL_QUIT || event.key.keysym.scancode == SDL_SCANCODE_ESCAPE){
                         active = false;
                     }
                     if(!joining && event.type == SDL_MOUSEBUTTONDOWN){
@@ -252,7 +252,7 @@ void run(Game *pGame){
             case CREDITS:
                 SDL_GetMouseState(&mouseX, &mouseY);
                 if(SDL_PollEvent(&event)){
-                    if(event.type == SDL_QUIT){
+                    if(event.type==SDL_QUIT || event.key.keysym.scancode == SDL_SCANCODE_ESCAPE){
                         active = false;
                     }
                     if(event.key.keysym.scancode == SDL_SCANCODE_B){
@@ -283,7 +283,7 @@ void run(Game *pGame){
                     SDL_RenderPresent(pGame->pRenderer);
                 }
                 if(SDL_PollEvent(&event)){
-                    if(event.type == SDL_QUIT){
+                    if(event.type==SDL_QUIT || event.key.keysym.scancode == SDL_SCANCODE_ESCAPE){
                         active = false;
                     }
                     if(!joining && event.type == SDL_MOUSEBUTTONDOWN){
@@ -349,10 +349,7 @@ void run(Game *pGame){
                 //updateWithServerData(pGame);
                 SDL_SetRenderDrawColor(pGame->pRenderer, 255, 255, 255, 255);
                 if(SDL_PollEvent(&event)){
-                    if(event.type==SDL_QUIT){
-                        active = false;
-                    }
-                    if(event.key.keysym.scancode == SDL_SCANCODE_ESCAPE){
+                    if(event.type==SDL_QUIT || event.key.keysym.scancode == SDL_SCANCODE_ESCAPE){
                         active = false;
                     }
                 }
