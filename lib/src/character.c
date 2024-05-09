@@ -56,24 +56,22 @@ Character *createCharacter(int number, SDL_Renderer *pRenderer, int window_w, in
 
     switch (number)
     {
-    case 0:
-        pCharacter->xStart = pCharacter->x_pos = pCharacter->characterRect.x = 100;
-        pCharacter->yStart = pCharacter->y_pos = pCharacter->characterRect.y = 100;
-        break;
-    case 1:
-        pCharacter->xStart = pCharacter->x_pos = pCharacter->characterRect.x = 700;
-        pCharacter->yStart = pCharacter->y_pos = pCharacter->characterRect.y = 100;
-        break;
-    case 2:
-        pCharacter->xStart = pCharacter->x_pos = pCharacter->characterRect.x = 95;
-        pCharacter->yStart = pCharacter->y_pos = pCharacter->characterRect.y = 610;
-        break;
-    case 3:
-        pCharacter->xStart = pCharacter->x_pos = pCharacter->characterRect.x = 700;
-        pCharacter->yStart = pCharacter->y_pos = pCharacter->characterRect.y = 600;
-        break;
-    default:
-        break;
+        case 0:
+            pCharacter->xStart = pCharacter->x_pos = pCharacter->characterRect.x = 100;
+            pCharacter->yStart = pCharacter->y_pos = pCharacter->characterRect.y = 100;
+            break;
+        case 1:
+            pCharacter->xStart = pCharacter->x_pos = pCharacter->characterRect.x = 700;
+            pCharacter->yStart = pCharacter->y_pos = pCharacter->characterRect.y = 100;
+            break;
+        case 2:
+            pCharacter->xStart = pCharacter->x_pos = pCharacter->characterRect.x = 95;
+            pCharacter->yStart = pCharacter->y_pos = pCharacter->characterRect.y = 610;
+            break;
+        case 3:
+            pCharacter->xStart = pCharacter->x_pos = pCharacter->characterRect.x = 700;
+            pCharacter->yStart = pCharacter->y_pos = pCharacter->characterRect.y = 600;
+            break;
     }
 
     return pCharacter;
@@ -250,4 +248,28 @@ void getAnimation(Character *pCharacter){
 }
 void getFrozenAnimation(Character *pCharacter){
     pCharacter->characterSrcRect.x = 96;
+}
+void resetCharacter(Character *pCharacter, int number){
+    pCharacter->alive = true;
+    pCharacter->activeSnowball = false;
+    pCharacter->x_vel = pCharacter->y_vel = 0;
+    switch (number)
+    {
+        case 0:
+            pCharacter->xStart = pCharacter->x_pos = pCharacter->characterRect.x = 100;
+            pCharacter->yStart = pCharacter->y_pos = pCharacter->characterRect.y = 100;
+            break;
+        case 1:
+            pCharacter->xStart = pCharacter->x_pos = pCharacter->characterRect.x = 700;
+            pCharacter->yStart = pCharacter->y_pos = pCharacter->characterRect.y = 100;
+            break;
+        case 2:
+            pCharacter->xStart = pCharacter->x_pos = pCharacter->characterRect.x = 95;
+            pCharacter->yStart = pCharacter->y_pos = pCharacter->characterRect.y = 610;
+            break;
+        case 3:
+            pCharacter->xStart = pCharacter->x_pos = pCharacter->characterRect.x = 700;
+            pCharacter->yStart = pCharacter->y_pos = pCharacter->characterRect.y = 600;
+            break;
+    }
 }

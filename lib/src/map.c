@@ -92,6 +92,48 @@ Background *createCreditBackground(SDL_Renderer *pRenderer, int window_w, int wi
     return pCreditBackground;
 }
 
+Background *createLoserBackground(SDL_Renderer *pRenderer, int window_w, int window_h){
+    Background *pLoserBackground = malloc(sizeof(struct background));
+    pLoserBackground->pRenderer = pRenderer;
+    SDL_Surface *pSurface = IMG_Load("../lib/resources/loseFinish.png");
+    if(!pSurface){
+        printf("Error: %s\n", SDL_GetError());
+        return NULL;
+    }
+    pLoserBackground->pTexture = SDL_CreateTextureFromSurface(pRenderer, pSurface);
+    if (!pLoserBackground->pTexture){
+        printf("Error: %s", SDL_GetError());
+        return NULL;
+    }
+    SDL_FreeSurface(pSurface);
+
+    pLoserBackground->window_w = window_w;
+    pLoserBackground->window_h = window_h;
+
+    return pLoserBackground;
+}
+
+Background *createWinnerBackground(SDL_Renderer *pRenderer, int window_w, int window_h){
+    Background *pWinnerBackground = malloc(sizeof(struct background));
+    pWinnerBackground->pRenderer = pRenderer;
+    SDL_Surface *pSurface = IMG_Load("../lib/resources/winFinish.png");
+    if(!pSurface){
+        printf("Error: %s\n", SDL_GetError());
+        return NULL;
+    }
+    pWinnerBackground->pTexture = SDL_CreateTextureFromSurface(pRenderer, pSurface);
+    if (!pWinnerBackground->pTexture){
+        printf("Error: %s", SDL_GetError());
+        return NULL;
+    }
+    SDL_FreeSurface(pSurface);
+
+    pWinnerBackground->window_w = window_w;
+    pWinnerBackground->window_h = window_h;
+
+    return pWinnerBackground;
+}
+
 int tileMap[50][50] = {
     {0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01},//1-
     {0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01},//2-

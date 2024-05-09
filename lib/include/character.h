@@ -29,5 +29,6 @@ void setCharacterDead(Character *pCharacter);
 bool checkCharacterAlive(Character *pCharacter);
 void getAnimation(Character *pCharacter);
 void getFrozenAnimation(Character *pCharacter);
+void resetCharacter(Character *pCharacter, int number);
 
 #endif

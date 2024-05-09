@@ -10,19 +10,19 @@
 #include "text.h"
 
 typedef struct{
-        SDL_Window *pWindow;
-        SDL_Renderer *pRenderer;
-        Character *pCharacter[CHARACTERS];
-        GameState state;
-        UDPpacket *pPacket;
-        UDPsocket pSocket;
-        IPaddress clients[CHARACTERS];
-        int nrOfClients;
-        ServerData sData;
-        Snowball *pSnowball[MAXSNOWBALLS];
-        TTF_Font *pFont, *pScoreFont;
-        Text *pStartText, *pNrOfClientsConnectedText;
-    }Game;
+    SDL_Window *pWindow;
+    SDL_Renderer *pRenderer;
+    Character *pCharacter[CHARACTERS];
+    GameState state;
+    UDPpacket *pPacket;
+    UDPsocket pSocket;
+    IPaddress clients[CHARACTERS];
+    int nrOfClients;
+    ServerData sData;
+    Snowball *pSnowball[MAXSNOWBALLS];
+    TTF_Font *pFont, *pScoreFont;
+    Text *pStartText;
+}Game;
 
 int initializations(Game *pGame);
 void run(Game *pGame);
@@ -117,7 +117,6 @@ int initializations(Game *pGame){
     }
 
     pGame->pStartText = createText(pGame->pRenderer,238,168,65,pGame->pScoreFont,"Waiting for clients",WINDOW_WIDTH/2,WINDOW_HEIGHT/2+100);
-    //pGame->pNrOfClientsConnectedText = createText(pGame->pRenderer,238,168,65,pGame->pScoreFont,pGame->nrOfClients,WINDOW_WIDTH/2,WINDOW_HEIGHT/2+100);
     pGame->state = START;
     pGame->nrOfClients = 0;
 
@@ -142,8 +141,6 @@ void run(Game *pGame){
                 if(SDLNet_UDP_Recv(pGame->pSocket,pGame->pPacket)==1){
                     add(pGame->pPacket->address,pGame->clients,&(pGame->nrOfClients));
                     printf("Number of Clients: %d / %d\n", pGame->nrOfClients, CHARACTERS);
-                    //drawText(pGame->pNrOfClientsConnectedText);
-                    //SDL_RenderPresent(pGame->pRenderer);
                     if(pGame->nrOfClients == CHARACTERS){ 
                         setUpGame(pGame);
                         sendGameData(pGame);
@@ -160,6 +157,7 @@ void run(Game *pGame){
                         active = false;
                     }
                 }
+                printf("nr of characters: %d \n", nrOfCharacters);
                 if(nrOfCharacters <= 1){
                     printf("Game is over");
                     pGame->state = GAME_OVER;
@@ -181,13 +179,15 @@ void run(Game *pGame){
                         active = false;
                     }
                     else if(event.key.keysym.scancode == SDL_SCANCODE_R){
+                        for(int i = 0; i < CHARACTERS; i++){
+                            resetCharacter(pGame->pCharacter[i], i);
+                            updateCharacter(pGame->pCharacter[i]);
+                        }
+                        nrOfCharacters = CHARACTERS;
                         pGame->state = ONGOING;
                         sendGameData(pGame);
                     }
                 }
-                /*if(pGame->nrOfClients==CHARACTERS){
-                    pGame->nrOfClients = 0;
-                }*/
                 break;
         }       
     }

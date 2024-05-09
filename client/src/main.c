@@ -16,29 +16,30 @@
 #include "logic.h"
 
 typedef struct{
-        SDL_Window *pWindow;
-        SDL_Renderer *pRenderer;
-        Character *pCharacter[CHARACTERS];
-        int characterNumber;
-        GameState state;
-        UDPpacket *pPacket;
-        UDPsocket pSocket;
-        IPaddress serverAddress;
-        ServerData sData;
-        Snowball *pSnowball[MAXSNOWBALLS];
-        Background *pBackground;
-        Background *pMenuBackground;
-        Background *pCreditBackground;
-        Button *pButton[NROFBUTTONS];
-        TTF_Font *pFont, *pScoreFont;
-        Text *pWinnerText, *pLoserText ,*pStartText;
-        Sounds *pSounds;
-    }Game;
+    SDL_Window *pWindow;
+    SDL_Renderer *pRenderer;
+    Character *pCharacter[CHARACTERS];
+    int characterNumber;
+    GameState state;
+    UDPpacket *pPacket;
+    UDPsocket pSocket;
+    IPaddress serverAddress;
+    ServerData sData;
+    Snowball *pSnowball[MAXSNOWBALLS];
+    Background *pBackground;
+    Background *pMenuBackground;
+    Background *pCreditBackground;
+    Background *pWinnerBackground;
+    Background *pLoserBackground;
+    Button *pButton[NROFBUTTONS];
+    TTF_Font *pFont, *pScoreFont;
+    Text *pWinnerText, *pLoserText ,*pStartText;
+    Sounds *pSounds;
+}Game;
 
 int initializations(Game *pGame);
 void run(Game *pGame);
 void close(Game *pGame);
-//void handleInput(Game *pGame, SDL_Event *pEvent);
 void updateWithServerData(Game *pGame);
 bool snowballHit(Character *pCharacter, Snowball *pSnowball);
 
@@ -98,7 +99,7 @@ int initializations(Game *pGame){
         return 0;
 	}
     
-    if(SDLNet_ResolveHost(&(pGame->serverAddress), "130.229.163.201", 2069)){
+    if(SDLNet_ResolveHost(&(pGame->serverAddress), "192.168.0.37", 2069)){
         printf("SDLNet_ResolveHost(127.0.0.1 2069): %s\n", SDLNet_GetError());
         return 0;
     }
@@ -177,6 +178,20 @@ int initializations(Game *pGame){
 
     pGame->pCreditBackground = createCreditBackground(pGame->pRenderer, WINDOW_WIDTH, WINDOW_HEIGHT);
     if(!pGame->pCreditBackground){
+        printf("Error: %s\n",SDL_GetError());
+        close(pGame);
+        return 0; 
+    }
+
+    pGame->pWinnerBackground = createWinnerBackground(pGame->pRenderer, WINDOW_WIDTH, WINDOW_HEIGHT);
+    if(!pGame->pWinnerBackground){
+        printf("Error: %s\n",SDL_GetError());
+        close(pGame);
+        return 0; 
+    }
+
+    pGame->pLoserBackground = createLoserBackground(pGame->pRenderer, WINDOW_WIDTH, WINDOW_HEIGHT);
+    if(!pGame->pLoserBackground){
         printf("Error: %s\n",SDL_GetError());
         close(pGame);
         return 0; 
@@ -288,8 +303,10 @@ void run(Game *pGame){
                 SDL_Delay(1000/60);
                 break;
             case GAME_OVER:
-                //updateWithServerData(pGame);
-                SDL_SetRenderDrawColor(pGame->pRenderer, 255, 255, 255, 255);
+                if(SDLNet_UDP_Recv(pGame->pSocket, pGame->pPacket) == 1){
+                    updateWithServerData(pGame);
+                }
+                printf("State: %d", pGame->state);
                 if(SDL_PollEvent(&event)){
                     closeController(&event, &active);
                 }
@@ -298,7 +315,7 @@ void run(Game *pGame){
                     Mix_HaltMusic();
                     playWinSound(pGame->pSounds);
                     SDL_RenderClear(pGame->pRenderer);
-                    drawText(pGame->pWinnerText);
+                    renderMenuBackground(pGame->pWinnerBackground);
                     SDL_RenderPresent(pGame->pRenderer);
                 }
                 else if(!(checkCharacterAlive(pGame->pCharacter[pGame->characterNumber])) && control){
@@ -306,6 +323,7 @@ void run(Game *pGame){
                     playLoseMusic(pGame->pSounds);
                     SDL_RenderClear(pGame->pRenderer);
                     drawText(pGame->pLoserText);
+                    renderMenuBackground(pGame->pLoserBackground);
                     SDL_RenderPresent(pGame->pRenderer);
                 }
                 break;
