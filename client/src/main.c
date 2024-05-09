@@ -207,7 +207,6 @@ void run(Game *pGame){
     while(active){
         switch (pGame->state){
             case MENU:
-                SDL_GetMouseState(&mouseX, &mouseY);
                 SDL_SetRenderDrawColor(pGame->pRenderer,255,255,255,255);
                 SDL_RenderClear(pGame->pRenderer);
                 renderMenuBackground(pGame->pMenuBackground);
@@ -218,21 +217,14 @@ void run(Game *pGame){
                 drawButton(pGame->pButton[7], 7, hover(mouseX, mouseY, pGame->pButton[7]));
                 SDL_RenderPresent(pGame->pRenderer);  
                 if(SDL_PollEvent(&event)){
+                    SDL_GetMouseState(&mouseX, &mouseY);
                     menuController(&event, mouseX, mouseY, pGame->pSounds, &active, &(pGame->state));
                 }
                 break;
             case CREDITS:
-                SDL_GetMouseState(&mouseX, &mouseY);
                 if(SDL_PollEvent(&event)){
-                    if(event.type==SDL_QUIT || event.key.keysym.scancode == SDL_SCANCODE_ESCAPE){
-                        active = false;
-                    }
-                    if(event.type == SDL_MOUSEBUTTONDOWN){
-                        if(mouseX >= 300 && mouseX <= 500 && mouseY >= 660 && mouseY <= 765){
-                            playButtonEffect(pGame->pSounds);
-                            pGame->state = MENU;
-                        }
-                    }   
+                    SDL_GetMouseState(&mouseX, &mouseY);
+                    menuController(&event, mouseX, mouseY, pGame->pSounds, &active, &(pGame->state));
                 }
                 SDL_SetRenderDrawColor(pGame->pRenderer,255,255,255,255);
                 SDL_RenderClear(pGame->pRenderer);
