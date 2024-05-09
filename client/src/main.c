@@ -12,6 +12,7 @@
 #include "button.h"
 #include "text.h"
 #include "sounds.h"
+#include "controller.h"
 
 typedef struct{
         SDL_Window *pWindow;
@@ -36,7 +37,7 @@ typedef struct{
 int initializations(Game *pGame);
 void run(Game *pGame);
 void close(Game *pGame);
-void handleInput(Game *pGame, SDL_Event *pEvent);
+//void handleInput(Game *pGame, SDL_Event *pEvent);
 void updateWithServerData(Game *pGame);
 bool snowballHit(Character *pCharacter, Snowball *pSnowball);
 
@@ -96,7 +97,7 @@ int initializations(Game *pGame){
         return 0;
 	}
     
-    if(SDLNet_ResolveHost(&(pGame->serverAddress), "130.229.181.202", 2069)){
+    if(SDLNet_ResolveHost(&(pGame->serverAddress), "130.229.163.201", 2069)){
         printf("SDLNet_ResolveHost(127.0.0.1 2069): %s\n", SDLNet_GetError());
         return 0;
     }
@@ -186,7 +187,7 @@ int initializations(Game *pGame){
     }
 
     pGame->pSounds = createSounds();
-    pGame->state = MENU;
+    pGame->state = ONGOING;
     playMenuMusic(pGame->pSounds);
     return 1;
 }
@@ -201,7 +202,7 @@ void run(Game *pGame){
     SDL_Event event;
     ClientData cData;
     SDL_Texture* startButtonTexture = NULL;
-    SDL_Renderer* renderer = NULL;
+    SDL_Renderer* renderer = NULL; //Ta bort illa kvickt
     SDL_Rect snowballRect, characterRect;
 
     while(active){
@@ -314,7 +315,7 @@ void run(Game *pGame){
                         joining = 0;
                     }
                 }
-            break;
+                break;
             case ONGOING:
                 while(SDLNet_UDP_Recv(pGame->pSocket, pGame->pPacket)){
                     updateWithServerData(pGame);
@@ -328,7 +329,12 @@ void run(Game *pGame){
                     if (event.key.keysym.scancode == SDL_SCANCODE_P){
                         pGame->state = GAME_OVER;
                     }
-                    else handleInput(pGame,&event);
+                    else{
+                        handleInput(pGame->pCharacter[pGame->characterNumber],pGame->pSnowball,pGame->characterNumber,&event,pGame->pSounds,pGame->pSocket,pGame->pPacket);
+                        memcpy(pGame->pPacket->data, &cData, sizeof(ClientData));
+                        pGame->pPacket->len = sizeof(ClientData);
+                        SDLNet_UDP_Send(pGame->pSocket, -1,pGame->pPacket);
+                    }
                 }
                 if(checkCharacterAlive(pGame->pCharacter[pGame->characterNumber])){
                     characterRect = getCharacterRect(pGame->pCharacter[pGame->characterNumber]);
@@ -383,14 +389,15 @@ void run(Game *pGame){
                     playWinSound(pGame->pSounds);
                     SDL_RenderClear(pGame->pRenderer);
                     drawText(pGame->pWinnerText);
+                    SDL_RenderPresent(pGame->pRenderer);
                 }
                 else if(!(checkCharacterAlive(pGame->pCharacter[pGame->characterNumber])) && control){
                     control = false;
                     playLoseMusic(pGame->pSounds);
                     SDL_RenderClear(pGame->pRenderer);
                     drawText(pGame->pLoserText);
+                    SDL_RenderPresent(pGame->pRenderer);
                 }
-                SDL_RenderPresent(pGame->pRenderer);
                 break;
         }
     }
@@ -462,7 +469,7 @@ void close(Game *pGame){
     SDL_Quit();
 }
 
-void handleInput(Game *pGame, SDL_Event *pEvent){
+/*void handleInput(Game *pGame, SDL_Event *pEvent){
     ClientData cData;
     if(checkCharacterAlive(pGame->pCharacter[pGame->characterNumber])){
         cData.playerNumber = pGame->characterNumber;
@@ -555,4 +562,4 @@ void handleInput(Game *pGame, SDL_Event *pEvent){
     memcpy(pGame->pPacket->data, &cData, sizeof(ClientData));
     pGame->pPacket->len = sizeof(ClientData);
     SDLNet_UDP_Send(pGame->pSocket, -1,pGame->pPacket);
-}
+}*/

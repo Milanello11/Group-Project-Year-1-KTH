@@ -7,11 +7,11 @@ CFLAGS = -g $(INCLUDE) -c
 LDFLAGS = -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_net -lSDL2_ttf -lSDL2_mixer -lm
 CC = gcc
 
-snomosClient: main.o character.o snowball.o map.o button.o text.o sounds.o
+snomosClient: main.o character.o snowball.o map.o button.o text.o sounds.o controller.o
 	@echo "Building Snomos"
-	$(CC) -o snomosClient main.o character.o snowball.o map.o button.o text.o sounds.o $(LDFLAGS)
+	$(CC) -o snomosClient main.o character.o snowball.o map.o button.o text.o sounds.o controller.o $(LDFLAGS)
 
-main.o: $(SRCDIR)/main.c $(INCDIR)/character.h $(INCDIR)/characterData.h $(INCDIR)/snowball.h $(INCDIR)/map.h
+main.o: $(SRCDIR)/main.c $(INCDIR)/character.h $(INCDIR)/characterData.h $(INCDIR)/snowball.h $(INCDIR)/map.h $(INCDIR)/controller.h
 	$(CC) $(CFLAGS) $(SRCDIR)/main.c 
 
 character.o: $(COMMONSRCDIR)/character.c $(INCDIR)/character.h $(INCDIR)/characterData.h
@@ -19,6 +19,9 @@ character.o: $(COMMONSRCDIR)/character.c $(INCDIR)/character.h $(INCDIR)/charact
 
 snowball.o: $(COMMONSRCDIR)/snowball.c $(INCDIR)/snowball.h
 	$(CC) $(CFLAGS) $(COMMONSRCDIR)/snowball.c 
+
+controller.o: $(COMMONSRCDIR)/controller.c $(INCDIR)/character.h $(INCDIR)/snowball.h $(INCDIR)/sounds.h $(INCDIR)/characterData.h
+	$(CC) $(CFLAGS) $(COMMONSRCDIR)/controller.c
 
 map.o: $(COMMONSRCDIR)/map.c $(INCDIR)/map.h
 	$(CC) $(CFLAGS) $(COMMONSRCDIR)/map.c
