@@ -4,7 +4,6 @@
 #define MAXSNOWBALLS 5
 #include "characterData.h"
 
-
 typedef struct snowball Snowball;
 
 Snowball *createSnowball(SDL_Renderer *pRenderer, int window_width , int window_height);
