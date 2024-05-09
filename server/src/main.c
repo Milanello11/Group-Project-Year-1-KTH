@@ -157,7 +157,6 @@ void run(Game *pGame){
                         active = false;
                     }
                 }
-                printf("nr of characters: %d \n", nrOfCharacters);
                 if(nrOfCharacters <= 1){
                     printf("Game is over");
                     pGame->state = GAME_OVER;
