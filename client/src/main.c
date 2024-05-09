@@ -306,7 +306,6 @@ void run(Game *pGame){
                 if(SDLNet_UDP_Recv(pGame->pSocket, pGame->pPacket) == 1){
                     updateWithServerData(pGame);
                 }
-                printf("State: %d", pGame->state);
                 if(SDL_PollEvent(&event)){
                     closeController(&event, &active);
                 }
