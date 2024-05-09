@@ -255,9 +255,6 @@ void run(Game *pGame){
                     if(event.type==SDL_QUIT || event.key.keysym.scancode == SDL_SCANCODE_ESCAPE){
                         active = false;
                     }
-                    if(event.key.keysym.scancode == SDL_SCANCODE_B){
-                        pGame->state = MENU;
-                    }
                     if(event.type == SDL_MOUSEBUTTONDOWN){
                         if(mouseX >= 300 && mouseX <= 500 && mouseY >= 660 && mouseY <= 765){
                             playButtonEffect(pGame->pSounds);
