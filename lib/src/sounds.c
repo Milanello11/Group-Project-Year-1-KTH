@@ -8,6 +8,7 @@ struct sounds{
     Mix_Music *gameplayMusic;
     Mix_Music *menuMusic;
     Mix_Music *loseMusic;
+    Mix_Chunk *winSound;
     Mix_Chunk *buttonEffect;
     Mix_Chunk *hitEffect;
     Mix_Chunk *throwEffect;
@@ -22,6 +23,8 @@ Sounds *createSounds(){
     pSounds->buttonEffect = Mix_LoadWAV("../lib/resources/audio/buttonEffect.wav");
     pSounds->hitEffect = Mix_LoadWAV("../lib/resources/audio/hitEffect.wav");
     pSounds->throwEffect = Mix_LoadWAV("../lib/resources/audio/throwEffect.wav");
+    pSounds->winSound = Mix_LoadWAV("../lib/resources/audio/winnerEffect.wav");
+
 
     Mix_VolumeMusic(30);
     //Mix_VolumeChunk(pSounds->buttonEffect, 64);
@@ -42,11 +45,13 @@ void playMenuMusic(Sounds *pSounds){
 }
 
 void playLoseMusic(Sounds *pSounds){
-    if (Mix_PlayMusic(pSounds->loseMusic, -1) == -1) {
+    if (Mix_PlayMusic(pSounds->loseMusic, -1) == -1){
         printf("Failed to play lose music: %s\n", Mix_GetError());
     }
 }
-
+void playWinSound(Sounds *pSounds){
+    Mix_PlayChannel(-1,pSounds->winSound, 0);
+}
 void playButtonEffect(Sounds *pSounds){
     Mix_PlayChannel(-1,pSounds->buttonEffect, 0);
 }

@@ -325,6 +325,9 @@ void run(Game *pGame){
                     if(event.key.keysym.scancode == SDL_SCANCODE_ESCAPE){
                         active = false;
                     }
+                    if (event.key.keysym.scancode == SDL_SCANCODE_P){
+                        pGame->state = GAME_OVER;
+                    }
                     else handleInput(pGame,&event);
                 }
                 if(checkCharacterAlive(pGame->pCharacter[pGame->characterNumber])){
@@ -367,7 +370,7 @@ void run(Game *pGame){
                 //updateWithServerData(pGame);
                 SDL_SetRenderDrawColor(pGame->pRenderer, 255, 255, 255, 255);
                 if(SDL_PollEvent(&event)){
-                    if(event.type==SDL_QUIT){ 
+                    if(event.type==SDL_QUIT){
                         active = false;
                     }
                     if(event.key.keysym.scancode == SDL_SCANCODE_ESCAPE){
@@ -376,6 +379,8 @@ void run(Game *pGame){
                 }
                 if(checkCharacterAlive(pGame->pCharacter[pGame->characterNumber]) && control){
                     control = false;
+                    Mix_HaltMusic();
+                    playWinSound(pGame->pSounds);
                     SDL_RenderClear(pGame->pRenderer);
                     drawText(pGame->pWinnerText);
                 }

@@ -11,5 +11,6 @@ void musicCleanup(Sounds *pSounds);
 void playButtonEffect(Sounds *pSounds);
 void playThrowEffect(Sounds *pSounds);
 void playHitEffect(Sounds *pSounds);
+void playWinSound(Sounds *pSounds);
 
 #endif
