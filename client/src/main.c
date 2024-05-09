@@ -201,7 +201,6 @@ void run(Game *pGame){
     int mouseX, mouseY;
 
     SDL_Event event;
-    ClientData cData;
     SDL_Rect snowballRect, characterRect;
 
     while(active){
@@ -233,7 +232,6 @@ void run(Game *pGame){
                 SDL_RenderPresent(pGame->pRenderer);
                 break;
             case JOIN:
-                SDL_GetMouseState(&mouseX, &mouseY);
                 if(!joining){
                     SDL_SetRenderDrawColor(pGame->pRenderer,255,255,255,255);
                     SDL_RenderClear(pGame->pRenderer);
@@ -247,26 +245,15 @@ void run(Game *pGame){
                     if(event.type==SDL_QUIT || event.key.keysym.scancode == SDL_SCANCODE_ESCAPE){
                         active = false;
                     }
-                    if(!joining && event.type == SDL_MOUSEBUTTONDOWN){
-                        if(mouseX >= 300 && mouseX <= 500 && mouseY >= 200 && mouseY <= 299){
-                            playButtonEffect(pGame->pSounds);
-                            joining = 1;
-                            cData.playerNumber =- 1;
-                            memcpy(pGame->pPacket->data, &cData, sizeof(ClientData));
-                            pGame->pPacket->len = sizeof(ClientData);
-                        }
-                        if(mouseX >= 300 && mouseX <= 500 && mouseY >= 660 && mouseY <= 759){
-                            playButtonEffect(pGame->pSounds);
-                            pGame->state = MENU;
-                        }
-                    }
-                    if(joining){
-                        renderMenuBackground(pGame->pMenuBackground);
-                        drawText(pGame->pStartText);
-                        SDL_RenderPresent(pGame->pRenderer);
+                    if(!joining){
+                        SDL_GetMouseState(&mouseX, &mouseY);
+                        joinController(&event, mouseX, mouseY, pGame->pSounds, pGame->pPacket, &(pGame->state), &joining);
                     }
                 }
                 if(joining){
+                    renderMenuBackground(pGame->pMenuBackground);
+                    drawText(pGame->pStartText);
+                    SDL_RenderPresent(pGame->pRenderer);
                     SDLNet_UDP_Send(pGame->pSocket, -1, pGame->pPacket);
                 }
                 if(SDLNet_UDP_Recv(pGame->pSocket,pGame->pPacket)==1){

@@ -104,23 +104,24 @@ void menuController(SDL_Event *pEvent, int mouseX, int mouseY, Sounds *pSounds, 
         case MENU:
             if(pEvent->type == SDL_QUIT || pEvent->key.keysym.scancode == SDL_SCANCODE_ESCAPE){
             *pActive = false;
-        }
-        if(pEvent->type == SDL_MOUSEBUTTONDOWN){
-            if(mouseX >= 200 && mouseX <= 600 && mouseY >= 150 && mouseY <= 348){
-                playButtonEffect(pSounds);
-                *pState = JOIN;
             }
-            if(mouseX >= 300 && mouseX <= 500 && mouseY >= 570 && mouseY <= 669){
-                playButtonEffect(pSounds);
-                SDL_Delay(100);
-                *pActive = false;
+            if(pEvent->type == SDL_MOUSEBUTTONDOWN){
+                if(mouseX >= 200 && mouseX <= 600 && mouseY >= 150 && mouseY <= 348){
+                    playButtonEffect(pSounds);
+                    *pState = JOIN;
+                }
+                if(mouseX >= 300 && mouseX <= 500 && mouseY >= 570 && mouseY <= 669){
+                    playButtonEffect(pSounds);
+                    SDL_Delay(100);
+                    *pActive = false;
+                }
+                if(mouseX >= 580 && mouseX <= 780 && mouseY >= 660 && mouseY <= 759){
+                    playButtonEffect(pSounds);
+                    *pState = CREDITS;
+                }
             }
-            if(mouseX >= 580 && mouseX <= 780 && mouseY >= 660 && mouseY <= 759){
-                playButtonEffect(pSounds);
-                *pState = CREDITS;
-            }
-        }
-        break;
+            break;
+
         case CREDITS:
             if(pEvent->type == SDL_QUIT || pEvent->key.keysym.scancode == SDL_SCANCODE_ESCAPE){
                 *pActive = false;
@@ -131,10 +132,23 @@ void menuController(SDL_Event *pEvent, int mouseX, int mouseY, Sounds *pSounds, 
                     *pState = MENU;
                 }
             }
+            break; 
     }
-
 }
 
-
-
-
+void joinController(SDL_Event *pEvent, int mouseX, int mouseY, Sounds *pSounds, UDPpacket *pPacket, GameState *pState, int *pJoining){
+    ClientData cData;
+    if(pEvent->type == SDL_MOUSEBUTTONDOWN){
+        if(mouseX >= 300 && mouseX <= 500 && mouseY >= 200 && mouseY <= 299){
+            playButtonEffect(pSounds);
+            *pJoining = 1;
+            cData.playerNumber =- 1;
+            memcpy(pPacket->data, &cData, sizeof(ClientData));
+            pPacket->len = sizeof(ClientData);
+        }
+        if(mouseX >= 300 && mouseX <= 500 && mouseY >= 660 && mouseY <= 759){
+            playButtonEffect(pSounds);
+            *pState = MENU;
+        }
+    }
+}
