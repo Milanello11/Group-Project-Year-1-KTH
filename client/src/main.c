@@ -198,6 +198,7 @@ void run(Game *pGame){
     bool active = true;
     int joining = 0;
     bool control = true;
+    int mouseX, mouseY;
 
     SDL_Event event;
     ClientData cData;
@@ -205,7 +206,6 @@ void run(Game *pGame){
 
     while(active){
         switch (pGame->state){
-            int mouseX, mouseY;
             case MENU:
                 SDL_GetMouseState(&mouseX, &mouseY);
                 SDL_SetRenderDrawColor(pGame->pRenderer,255,255,255,255);
@@ -219,24 +219,6 @@ void run(Game *pGame){
                 SDL_RenderPresent(pGame->pRenderer);  
                 if(SDL_PollEvent(&event)){
                     menuController(&event, mouseX, mouseY, pGame->pSounds, &active, &(pGame->state));
-                    /*if(event.type==SDL_QUIT || event.key.keysym.scancode == SDL_SCANCODE_ESCAPE){
-                        active = false;
-                    }
-                    if(event.type == SDL_MOUSEBUTTONDOWN){
-                        if(mouseX >= 200 && mouseX <= 600 && mouseY >= 150 && mouseY <= 348){
-                            playButtonEffect(pGame->pSounds);
-                            pGame->state = JOIN;
-                        }
-                        if(mouseX >= 300 && mouseX <= 500 && mouseY >= 570 && mouseY <= 669){
-                            playButtonEffect(pGame->pSounds);
-                            SDL_Delay(100);
-                            active = false;
-                        }
-                        if(mouseX >= 580 && mouseX <= 780 && mouseY >= 660 && mouseY <= 759){
-                            playButtonEffect(pGame->pSounds);
-                            pGame->state = CREDITS;
-                        }
-                    }*/
                 }
                 break;
             case CREDITS:
