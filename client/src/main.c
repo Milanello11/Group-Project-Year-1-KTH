@@ -321,41 +321,14 @@ void run(Game *pGame){
                     updateWithServerData(pGame);
                 }
                 while(SDL_PollEvent(&event)){
-                    if(event.type==SDL_QUIT) 
+                    if(event.type==SDL_QUIT || event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
                         active = false;
-                    if(event.key.keysym.scancode == SDL_SCANCODE_ESCAPE){
-                        active = false;
-                    }
-                    if (event.key.keysym.scancode == SDL_SCANCODE_P){
-                        pGame->state = GAME_OVER;
                     }
                     else{
                         handleInput(pGame->pCharacter[pGame->characterNumber],pGame->pSnowball,pGame->characterNumber,&event,pGame->pSounds,pGame->pSocket,pGame->pPacket);
-                        memcpy(pGame->pPacket->data, &cData, sizeof(ClientData));
-                        pGame->pPacket->len = sizeof(ClientData);
-                        SDLNet_UDP_Send(pGame->pSocket, -1,pGame->pPacket);
                     }
                 }
                 collisionManagement(pGame->pCharacter[pGame->characterNumber], pGame->pSnowball, pGame->characterNumber, pGame->pSounds, pGame->pSocket, pGame->pPacket);
-                /*if(checkCharacterAlive(pGame->pCharacter[pGame->characterNumber])){
-                    characterRect = getCharacterRect(pGame->pCharacter[pGame->characterNumber]);
-                    for (int i = 0; i < MAXSNOWBALLS; i++){
-                        //printf("Snowball: %d\n",i );
-                        snowballRect = getSnowballRect(pGame->pSnowball[i]);
-                        if(!isColliding(characterRect, snowballRect)){
-                            resetSnowball(pGame->pSnowball[i]);
-                            setCharacterDead(pGame->pCharacter[pGame->characterNumber]);
-                            playHitEffect(pGame->pSounds);
-                            cData.command = DEAD;
-                            cData.playerNumber = pGame->characterNumber;
-                            memcpy(pGame->pPacket->data, &cData, sizeof(ClientData));
-                            pGame->pPacket->len = sizeof(ClientData);
-                            SDLNet_UDP_Send(pGame->pSocket, -1,pGame->pPacket);
-                            printf("COLLISION\n");
-                            break;
-                        }
-                    }
-                }*/
 
                 SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
                 SDL_RenderClear(pGame->pRenderer);
