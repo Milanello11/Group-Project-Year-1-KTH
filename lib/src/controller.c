@@ -103,7 +103,7 @@ void menuController(SDL_Event *pEvent, int mouseX, int mouseY, Sounds *pSounds, 
     switch(*pState){
         case MENU:
             if(pEvent->type == SDL_QUIT || pEvent->key.keysym.scancode == SDL_SCANCODE_ESCAPE){
-            *pActive = false;
+                *pActive = false;
             }
             if(pEvent->type == SDL_MOUSEBUTTONDOWN){
                 if(mouseX >= 200 && mouseX <= 600 && mouseY >= 150 && mouseY <= 348){
@@ -136,8 +136,11 @@ void menuController(SDL_Event *pEvent, int mouseX, int mouseY, Sounds *pSounds, 
     }
 }
 
-void joinController(SDL_Event *pEvent, int mouseX, int mouseY, Sounds *pSounds, UDPpacket *pPacket, GameState *pState, int *pJoining){
+void joinController(SDL_Event *pEvent, int mouseX, int mouseY, Sounds *pSounds, UDPpacket *pPacket, GameState *pState, int *pJoining, bool *pActive){
     ClientData cData;
+    if(pEvent->type == SDL_QUIT || pEvent->key.keysym.scancode == SDL_SCANCODE_ESCAPE){
+        *pActive = false;
+    }
     if(pEvent->type == SDL_MOUSEBUTTONDOWN){
         if(mouseX >= 300 && mouseX <= 500 && mouseY >= 200 && mouseY <= 299){
             playButtonEffect(pSounds);
@@ -150,5 +153,11 @@ void joinController(SDL_Event *pEvent, int mouseX, int mouseY, Sounds *pSounds, 
             playButtonEffect(pSounds);
             *pState = MENU;
         }
+    }
+}
+
+void closeController(SDL_Event *pEvent, bool *pActive){
+    if(pEvent->type == SDL_QUIT || pEvent->key.keysym.scancode == SDL_SCANCODE_ESCAPE){
+        *pActive = false;
     }
 }

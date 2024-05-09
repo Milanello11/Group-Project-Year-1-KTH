@@ -242,12 +242,9 @@ void run(Game *pGame){
                     SDL_RenderPresent(pGame->pRenderer);
                 }
                 if(SDL_PollEvent(&event)){
-                    if(event.type==SDL_QUIT || event.key.keysym.scancode == SDL_SCANCODE_ESCAPE){
-                        active = false;
-                    }
                     if(!joining){
                         SDL_GetMouseState(&mouseX, &mouseY);
-                        joinController(&event, mouseX, mouseY, pGame->pSounds, pGame->pPacket, &(pGame->state), &joining);
+                        joinController(&event, mouseX, mouseY, pGame->pSounds, pGame->pPacket, &(pGame->state), &joining, &active);
                     }
                 }
                 if(joining){
@@ -255,6 +252,7 @@ void run(Game *pGame){
                     drawText(pGame->pStartText);
                     SDL_RenderPresent(pGame->pRenderer);
                     SDLNet_UDP_Send(pGame->pSocket, -1, pGame->pPacket);
+                    closeController(&event, &active);
                 }
                 if(SDLNet_UDP_Recv(pGame->pSocket,pGame->pPacket)==1){
                     updateWithServerData(pGame);
@@ -269,12 +267,8 @@ void run(Game *pGame){
                     updateWithServerData(pGame);
                 }
                 while(SDL_PollEvent(&event)){
-                    if(event.type==SDL_QUIT || event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
-                        active = false;
-                    }
-                    else{
-                        handleInput(pGame->pCharacter[pGame->characterNumber],pGame->pSnowball,pGame->characterNumber,&event,pGame->pSounds,pGame->pSocket,pGame->pPacket);
-                    }
+                    closeController(&event, &active);
+                    handleInput(pGame->pCharacter[pGame->characterNumber],pGame->pSnowball,pGame->characterNumber,&event,pGame->pSounds,pGame->pSocket,pGame->pPacket);
                 }
                 collisionManagement(pGame->pCharacter[pGame->characterNumber], pGame->pSnowball, pGame->characterNumber, pGame->pSounds, pGame->pSocket, pGame->pPacket);
 
@@ -297,9 +291,7 @@ void run(Game *pGame){
                 //updateWithServerData(pGame);
                 SDL_SetRenderDrawColor(pGame->pRenderer, 255, 255, 255, 255);
                 if(SDL_PollEvent(&event)){
-                    if(event.type==SDL_QUIT || event.key.keysym.scancode == SDL_SCANCODE_ESCAPE){
-                        active = false;
-                    }
+                    closeController(&event, &active);
                 }
                 if(checkCharacterAlive(pGame->pCharacter[pGame->characterNumber]) && control){
                     control = false;
