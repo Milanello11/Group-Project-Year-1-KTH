@@ -221,7 +221,7 @@ void run(Game *pGame){
     while(active){
         switch (pGame->state){
             case MENU:
-                SDL_SetRenderDrawColor(pGame->pRenderer,255,255,255,255);
+                /*SDL_SetRenderDrawColor(pGame->pRenderer,255,255,255,255);
                 SDL_RenderClear(pGame->pRenderer);
                 renderMenuBackground(pGame->pMenuBackground);
                 drawButton(pGame->pButton[0], 0, hover(mouseX, mouseY, pGame->pButton[0]));
@@ -229,6 +229,9 @@ void run(Game *pGame){
                 drawButton(pGame->pButton[2], 2, hover(mouseX, mouseY, pGame->pButton[2]));
                 drawButton(pGame->pButton[6], 6, hover(mouseX, mouseY, pGame->pButton[6]));
                 drawButton(pGame->pButton[7], 7, hover(mouseX, mouseY, pGame->pButton[7]));
+                */
+                drawColor(pGame->pRenderer, 255, 255, 255); //Varför ritar vi färg i menyn??
+                drawMenu(pGame->pMenuBackground, pGame->pButton, mouseX, mouseY);
                 SDL_RenderPresent(pGame->pRenderer);  
                 if(SDL_PollEvent(&event)){
                     SDL_GetMouseState(&mouseX, &mouseY);
