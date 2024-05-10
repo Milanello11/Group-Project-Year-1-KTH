@@ -265,12 +265,7 @@ void run(Game *pGame){
                     handleInput(pGame->pCharacter[pGame->characterNumber],pGame->pSnowball,pGame->characterNumber,&event,pGame->pSounds,pGame->pSocket,pGame->pPacket);
                 }
                 collisionManagement(pGame->pCharacter[pGame->characterNumber], pGame->pSnowball, pGame->characterNumber, pGame->pSounds, pGame->pSocket, pGame->pPacket);
-                printf("%d\n", checkCharacterAlive(pGame->pCharacter[pGame->characterNumber]));
-
-                SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
-                SDL_RenderClear(pGame->pRenderer);
                 renderBackground(pGame->pRenderer, pGame->pBackground);
-                SDL_SetRenderDrawColor(pGame->pRenderer,230,230,230,255);
                 for(int i=0;i<CHARACTERS;i++){
                     updateCharacter(pGame->pCharacter[i]);
                     drawCharacter(pGame->pCharacter[i]);
@@ -290,15 +285,12 @@ void run(Game *pGame){
                     control = false;
                     Mix_HaltMusic();
                     playWinSound(pGame->pSounds);
-                    SDL_RenderClear(pGame->pRenderer);
                     renderMenuBackground(pGame->pWinnerBackground);
                     SDL_RenderPresent(pGame->pRenderer);
                 }
                 else if(!(checkCharacterAlive(pGame->pCharacter[pGame->characterNumber])) && control){
                     control = false;
                     playLoseMusic(pGame->pSounds);
-                    SDL_RenderClear(pGame->pRenderer);
-                    drawText(pGame->pLoserText);
                     renderMenuBackground(pGame->pLoserBackground);
                     SDL_RenderPresent(pGame->pRenderer);
                 }
@@ -368,7 +360,7 @@ void close(Game *pGame){
         SDLNet_UDP_Close(pGame->pSocket);
     }
     if(pGame->pStartText){
-        destroyText(pGame->pStartText);  
+        destroyText(pGame->pStartText);
     }
     if(pGame->pFont){
         TTF_CloseFont(pGame->pFont);
