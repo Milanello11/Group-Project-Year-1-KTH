@@ -83,10 +83,10 @@ void destroyButton(Button *pButton){
 void setDesRect(Button *pButton, int index){
 
     if (index == 0){ //stora startknappen
-        pButton->buttonDesRect.x = 200;
-        pButton->buttonDesRect.y = 150;
-        pButton->buttonDesRect.w = 400;
-        pButton->buttonDesRect.h = 198;
+        pButton->buttonDesRect.x = 300;
+        pButton->buttonDesRect.y = 240;
+        pButton->buttonDesRect.w = 200;
+        pButton->buttonDesRect.h = 99;
     }
     else if(index == 1){ //exit
         pButton->buttonDesRect.x = 300;
