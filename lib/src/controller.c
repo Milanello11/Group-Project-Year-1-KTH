@@ -106,7 +106,7 @@ void menuController(SDL_Event *pEvent, int mouseX, int mouseY, Sounds *pSounds, 
                 *pActive = false;
             }
             if(pEvent->type == SDL_MOUSEBUTTONDOWN){
-                if(mouseX >= 200 && mouseX <= 600 && mouseY >= 150 && mouseY <= 348){
+                if(mouseX >= 300 && mouseX <= 500 && mouseY >= 240 && mouseY <= 339){
                     playButtonEffect(pSounds);
                     *pState = JOIN;
                 }
