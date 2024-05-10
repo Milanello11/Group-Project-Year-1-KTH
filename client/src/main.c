@@ -41,7 +41,6 @@ int initializations(Game *pGame);
 void run(Game *pGame);
 void close(Game *pGame);
 void updateWithServerData(Game *pGame);
-bool snowballHit(Character *pCharacter, Snowball *pSnowball);
 
 int main (int argument, char* arguments[]){
     Game game={0};
@@ -99,7 +98,7 @@ int initializations(Game *pGame){
         return 0;
 	}
     
-    if(SDLNet_ResolveHost(&(pGame->serverAddress), "192.168.0.37", 2069)){
+    if(SDLNet_ResolveHost(&(pGame->serverAddress), "127.0.0.1", 2069)){
         printf("SDLNet_ResolveHost(127.0.0.1 2069): %s\n", SDLNet_GetError());
         return 0;
     }
@@ -147,9 +146,6 @@ int initializations(Game *pGame){
     for(int i=0;i<CHARACTERS;i++){
         pGame->pCharacter[i] = createCharacter(i,pGame->pRenderer,WINDOW_WIDTH,WINDOW_HEIGHT);
     }
-
-    //pGame->pOverText = createText(pGame->pRenderer,238,168,65,pGame->pFont,"Game over",WINDOW_WIDTH/2,WINDOW_HEIGHT/2);
-    //pGame->pStartText = createText(pGame->pRenderer,238,168,65,pGame->pScoreFont,"Waiting for clients",WINDOW_WIDTH/2,WINDOW_HEIGHT/2+100);
 
     for(int i=0;i<CHARACTERS;i++){
         if(!pGame->pCharacter[i]){
@@ -286,6 +282,7 @@ void run(Game *pGame){
                     handleInput(pGame->pCharacter[pGame->characterNumber],pGame->pSnowball,pGame->characterNumber,&event,pGame->pSounds,pGame->pSocket,pGame->pPacket);
                 }
                 collisionManagement(pGame->pCharacter[pGame->characterNumber], pGame->pSnowball, pGame->characterNumber, pGame->pSounds, pGame->pSocket, pGame->pPacket);
+                printf("%d\n", checkCharacterAlive(pGame->pCharacter[pGame->characterNumber]));
 
                 SDL_SetRenderDrawColor(pGame->pRenderer,0,0,0,255);
                 SDL_RenderClear(pGame->pRenderer);
@@ -303,10 +300,6 @@ void run(Game *pGame){
                 SDL_Delay(1000/60);
                 break;
             case GAME_OVER:
-                if(SDLNet_UDP_Recv(pGame->pSocket, pGame->pPacket) == 1){
-                    updateWithServerData(pGame);
-                }
-                printf("State: %d", pGame->state);
                 if(SDL_PollEvent(&event)){
                     closeController(&event, &active);
                 }
@@ -325,6 +318,15 @@ void run(Game *pGame){
                     drawText(pGame->pLoserText);
                     renderMenuBackground(pGame->pLoserBackground);
                     SDL_RenderPresent(pGame->pRenderer);
+                }
+                if(SDLNet_UDP_Recv(pGame->pSocket, pGame->pPacket) == 1){
+                    control = true;
+                    Mix_HaltMusic();
+                    playGameplayMusic(pGame->pSounds);
+                    for(int i = 0; i < MAXSNOWBALLS; i++){
+                        resetSnowball(pGame->pSnowball[i]);
+                    }
+                    updateWithServerData(pGame);
                 }
                 break;
         }

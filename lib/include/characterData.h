@@ -28,6 +28,7 @@ struct characterData{
     float x_pos, y_pos, x_vel, y_vel;
     int window_width , window_height, characterDirection;
     bool alive;
+    SDL_Rect characterSrcRect;
 };
 typedef struct characterData CharacterData;
 

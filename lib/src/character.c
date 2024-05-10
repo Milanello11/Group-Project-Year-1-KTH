@@ -59,18 +59,22 @@ Character *createCharacter(int number, SDL_Renderer *pRenderer, int window_w, in
         case 0:
             pCharacter->xStart = pCharacter->x_pos = pCharacter->characterRect.x = 100;
             pCharacter->yStart = pCharacter->y_pos = pCharacter->characterRect.y = 100;
+            pCharacter->characterDirection = 1;
             break;
         case 1:
             pCharacter->xStart = pCharacter->x_pos = pCharacter->characterRect.x = 700;
             pCharacter->yStart = pCharacter->y_pos = pCharacter->characterRect.y = 100;
+            pCharacter->characterDirection = 3;
             break;
         case 2:
             pCharacter->xStart = pCharacter->x_pos = pCharacter->characterRect.x = 95;
             pCharacter->yStart = pCharacter->y_pos = pCharacter->characterRect.y = 610;
+            pCharacter->characterDirection = 1;
             break;
         case 3:
             pCharacter->xStart = pCharacter->x_pos = pCharacter->characterRect.x = 700;
             pCharacter->yStart = pCharacter->y_pos = pCharacter->characterRect.y = 600;
+            pCharacter->characterDirection = 3;
             break;
     }
 
@@ -121,15 +125,27 @@ void drawCharacter(Character *pCharacter){
     if(pCharacter->alive){
         if(pCharacter->characterDirection == 0){
             pCharacter->characterSrcRect.y = 96;
+            if(pCharacter->y_vel < 0){
+                getAnimation(pCharacter);
+            }
         }
         else if(pCharacter->characterDirection == 1){
             pCharacter->characterSrcRect.y = 64;
+            if(pCharacter->x_vel > 0){
+                getAnimation(pCharacter);
+            }
         }
         else if(pCharacter->characterDirection == 2){
             pCharacter->characterSrcRect.y = 0;
+            if(pCharacter->y_vel > 0){
+                getAnimation(pCharacter);
+            }
         }
         else if(pCharacter->characterDirection == 3){
             pCharacter->characterSrcRect.y = 32;
+            if(pCharacter->x_vel < 0){
+                getAnimation(pCharacter);
+            }
         }
     }
     else{
@@ -151,28 +167,24 @@ void characterTurnUp(Character *pCharacter){
     pCharacter->y_vel = -(CHARACTERVELOCITY);
     pCharacter->x_vel = 0;
     pCharacter->characterDirection = 0;
-    getAnimation(pCharacter);
 }
 
 void characterTurnDown(Character *pCharacter){
     pCharacter->y_vel = CHARACTERVELOCITY;
     pCharacter->x_vel = 0;
     pCharacter->characterDirection = 2;
-    getAnimation(pCharacter);
 }
 
 void characterTurnRight(Character *pCharacter){
     pCharacter->x_vel = CHARACTERVELOCITY;
     pCharacter->y_vel = 0;
     pCharacter->characterDirection = 1;
-    getAnimation(pCharacter);
 }
 
 void characterTurnLeft(Character *pCharacter){
     pCharacter->x_vel = -(CHARACTERVELOCITY);
     pCharacter->y_vel = 0;
     pCharacter->characterDirection = 3;
-    getAnimation(pCharacter);
 }
 void characterXStop(Character *pCharacter){
     pCharacter->x_vel = 0;
@@ -199,6 +211,7 @@ void updateCharacterWithRecievedData(Character *pCharacter, CharacterData *pChar
     pCharacter->y_pos = pCharacterData->y_pos;
     pCharacter->characterDirection = pCharacterData->characterDirection;
     pCharacter->alive = pCharacterData->alive;
+    pCharacter->characterSrcRect.x = pCharacterData->characterSrcRect.x;
 }
 void getCharacterSendData(Character *pCharacter, CharacterData *pCharacterData){
     pCharacterData->x_vel = pCharacter->x_vel;
@@ -207,6 +220,7 @@ void getCharacterSendData(Character *pCharacter, CharacterData *pCharacterData){
     pCharacterData->y_pos = pCharacter->y_pos;
     pCharacterData->characterDirection = pCharacter->characterDirection;
     pCharacterData->alive = pCharacter->alive;
+    pCharacterData->characterSrcRect.x = pCharacter->characterSrcRect.x;
 }
 int getPlayerDirection(Character *pCharacter){
     return (pCharacter->characterDirection);
@@ -230,7 +244,7 @@ bool checkCharacterAlive(Character *pCharacter){
 }
 void getAnimation(Character *pCharacter){
     static int frame = 0;
-    const int animationSpeed = 2; // Animation rate (adjust as needed)
+    const int animationSpeed = 3; // Animation rate (adjust as needed)
     static int currentFrame = 0;   // Track the current frame index
 
     int framePositions[NUMOFFRAMES] = {0, 32, 64}; // Adjust these values based on frame widths
@@ -251,25 +265,29 @@ void getFrozenAnimation(Character *pCharacter){
 }
 void resetCharacter(Character *pCharacter, int number){
     pCharacter->alive = true;
-    pCharacter->activeSnowball = false;
     pCharacter->x_vel = pCharacter->y_vel = 0;
+    pCharacter->characterSrcRect.x = 32;
     switch (number)
     {
         case 0:
             pCharacter->xStart = pCharacter->x_pos = pCharacter->characterRect.x = 100;
             pCharacter->yStart = pCharacter->y_pos = pCharacter->characterRect.y = 100;
+            pCharacter->characterDirection = 1;
             break;
         case 1:
             pCharacter->xStart = pCharacter->x_pos = pCharacter->characterRect.x = 700;
             pCharacter->yStart = pCharacter->y_pos = pCharacter->characterRect.y = 100;
+            pCharacter->characterDirection = 3;
             break;
         case 2:
             pCharacter->xStart = pCharacter->x_pos = pCharacter->characterRect.x = 95;
             pCharacter->yStart = pCharacter->y_pos = pCharacter->characterRect.y = 610;
+            pCharacter->characterDirection = 1;
             break;
         case 3:
             pCharacter->xStart = pCharacter->x_pos = pCharacter->characterRect.x = 700;
             pCharacter->yStart = pCharacter->y_pos = pCharacter->characterRect.y = 600;
+            pCharacter->characterDirection = 3;
             break;
     }
 }

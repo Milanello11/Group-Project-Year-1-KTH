@@ -27,7 +27,7 @@ Sounds *createSounds(){
 
 
     Mix_VolumeMusic(30);
-    //Mix_VolumeChunk(pSounds->buttonEffect, 64);
+    Mix_VolumeChunk(pSounds->winSound, 20);
 
     return pSounds;
 }
