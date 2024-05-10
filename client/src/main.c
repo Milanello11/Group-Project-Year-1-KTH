@@ -14,6 +14,7 @@
 #include "sounds.h"
 #include "controller.h"
 #include "logic.h"
+#include "view.h"
 
 typedef struct{
     SDL_Window *pWindow;
@@ -41,7 +42,6 @@ int initializations(Game *pGame);
 void run(Game *pGame);
 void close(Game *pGame);
 void updateWithServerData(Game *pGame);
-bool snowballHit(Character *pCharacter, Snowball *pSnowball);
 
 int main (int argument, char* arguments[]){
     Game game={0};
@@ -221,43 +221,22 @@ void run(Game *pGame){
     while(active){
         switch (pGame->state){
             case MENU:
-                /*SDL_SetRenderDrawColor(pGame->pRenderer,255,255,255,255);
-                SDL_RenderClear(pGame->pRenderer);
-                renderMenuBackground(pGame->pMenuBackground);
-                drawButton(pGame->pButton[0], 0, hover(mouseX, mouseY, pGame->pButton[0]));
-                drawButton(pGame->pButton[1], 1, hover(mouseX, mouseY, pGame->pButton[1]));
-                drawButton(pGame->pButton[2], 2, hover(mouseX, mouseY, pGame->pButton[2]));
-                drawButton(pGame->pButton[6], 6, hover(mouseX, mouseY, pGame->pButton[6]));
-                drawButton(pGame->pButton[7], 7, hover(mouseX, mouseY, pGame->pButton[7]));
-                */
-                drawColor(pGame->pRenderer, 255, 255, 255); //Varför ritar vi färg i menyn??
-                drawMenu(pGame->pMenuBackground, pGame->pButton, mouseX, mouseY);
-                SDL_RenderPresent(pGame->pRenderer);  
                 if(SDL_PollEvent(&event)){
                     SDL_GetMouseState(&mouseX, &mouseY);
                     menuController(&event, mouseX, mouseY, pGame->pSounds, &active, &(pGame->state));
                 }
+                drawMenu(pGame->pRenderer, pGame->pMenuBackground, pGame->pButton, mouseX, mouseY);
                 break;
             case CREDITS:
                 if(SDL_PollEvent(&event)){
                     SDL_GetMouseState(&mouseX, &mouseY);
                     menuController(&event, mouseX, mouseY, pGame->pSounds, &active, &(pGame->state));
                 }
-                SDL_SetRenderDrawColor(pGame->pRenderer,255,255,255,255);
-                SDL_RenderClear(pGame->pRenderer);
-                renderMenuBackground(pGame->pCreditBackground);
-                drawButton(pGame->pButton[3], 3, hover(mouseX, mouseY, pGame->pButton[3]));
-                SDL_RenderPresent(pGame->pRenderer);
+                drawCredits(pGame->pRenderer, pGame->pCreditBackground, pGame->pButton, mouseX, mouseY);
                 break;
             case JOIN:
                 if(!joining){
-                    SDL_SetRenderDrawColor(pGame->pRenderer,255,255,255,255);
-                    SDL_RenderClear(pGame->pRenderer);
-                    renderMenuBackground(pGame->pMenuBackground);
-                    drawButton(pGame->pButton[3], 3, hover(mouseX, mouseY, pGame->pButton[3]));
-                    drawButton(pGame->pButton[4], 4, hover(mouseX, mouseY, pGame->pButton[4]));
-                    drawButton(pGame->pButton[5], 5, hover(mouseX, mouseY, pGame->pButton[5]));
-                    SDL_RenderPresent(pGame->pRenderer);
+                    drawJoin(pGame->pRenderer, pGame->pMenuBackground, pGame->pButton, mouseX, mouseY);
                 }
                 if(SDL_PollEvent(&event)){
                     if(!joining){
