@@ -2,8 +2,6 @@
 #include <SDL2/SDL_image.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include "character.h"
-#include "snowball.h"
 #include "map.h"
 #include "button.h"
 
