@@ -34,7 +34,7 @@ typedef struct{
     Background *pLoserBackground;
     Button *pButton[NROFBUTTONS];
     TTF_Font *pFont, *pScoreFont;
-    Text *pWinnerText, *pLoserText ,*pStartText;
+    Text *pStartText;
     Sounds *pSounds;
 }Game;
 
@@ -138,8 +138,6 @@ int initializations(Game *pGame){
     }
 
     pGame->pStartText = createText(pGame->pRenderer,0,0,0,pGame->pFont,"Waiting for server",WINDOW_WIDTH/2,WINDOW_HEIGHT/2+100);
-    pGame->pLoserText = createText(pGame->pRenderer,0,105,255,pGame->pFont,"You Lost",WINDOW_WIDTH/2,WINDOW_HEIGHT/2+100);
-    pGame->pWinnerText = createText(pGame->pRenderer,0,105,255,pGame->pFont,"You Won",WINDOW_WIDTH/2,WINDOW_HEIGHT/2+100);
 
     pGame->pPacket->address.host = pGame->serverAddress.host;
     pGame->pPacket->address.port = pGame->serverAddress.port;

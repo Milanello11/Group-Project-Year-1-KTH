@@ -21,7 +21,7 @@ typedef struct{
     ServerData sData;
     Snowball *pSnowball[MAXSNOWBALLS];
     TTF_Font *pFont, *pScoreFont;
-    Text *pStartText;
+    Text *pStartText, *pEndText;
 }Game;
 
 int initializations(Game *pGame);
@@ -117,6 +117,7 @@ int initializations(Game *pGame){
     }
 
     pGame->pStartText = createText(pGame->pRenderer,238,168,65,pGame->pScoreFont,"Waiting for clients",WINDOW_WIDTH/2,WINDOW_HEIGHT/2+100);
+    pGame->pEndText = createText(pGame->pRenderer,238,168,65,pGame->pScoreFont,"Press 'R' to restart",WINDOW_WIDTH/2,WINDOW_HEIGHT/2+100);
     pGame->state = START;
     pGame->nrOfClients = 0;
 
@@ -168,6 +169,8 @@ void run(Game *pGame){
                 break;
             case GAME_OVER:
                 sendGameData(pGame);
+                drawText(pGame->pEndText);
+                SDL_RenderPresent(pGame->pRenderer);
                 if(SDL_PollEvent(&event)){
                     if(event.type == SDL_QUIT){
                         active = false;
@@ -287,10 +290,8 @@ void executeCommand(Game *pGame, ClientData cData, int *pNrOfCharacters){
         case DEAD:
             characterXStop(pGame->pCharacter[cData.playerNumber]);
             characterYStop(pGame->pCharacter[cData.playerNumber]);
-            printf("Before: %d \n", *pNrOfCharacters);
             setCharacterDead(pGame->pCharacter[cData.playerNumber]);
             (*pNrOfCharacters)--;
-            printf("After: %d \n", *pNrOfCharacters);
             break;
     }
 }
@@ -314,7 +315,10 @@ void close(Game *pGame){
     }
     if(pGame->pStartText){
         destroyText(pGame->pStartText);  
-    } 
+    }
+    if(pGame->pEndText){
+        destroyText(pGame->pEndText);
+    }
     if(pGame->pFont){
         TTF_CloseFont(pGame->pFont);
     }
