@@ -56,53 +56,54 @@ void destroyButton(Button *pButton){
     free(pButton);
 }
 void setDesRect(Button *pButton, int index){
-
-    if (index == 0){ //stora startknappen
-        pButton->buttonDesRect.x = 300;
-        pButton->buttonDesRect.y = 240;
-        pButton->buttonDesRect.w = 200;
-        pButton->buttonDesRect.h = 99;
-    }
-    else if(index == 1){ //exit
-        pButton->buttonDesRect.x = 300;
-        pButton->buttonDesRect.y = 570;
-        pButton->buttonDesRect.w = 200;
-        pButton->buttonDesRect.h = 99;
-    }
-    else if(index == 2){ //credits
-        pButton->buttonDesRect.x = 580;
-        pButton->buttonDesRect.y = 660;
-        pButton->buttonDesRect.w = 200;
-        pButton->buttonDesRect.h = 99;  
-    }
-    else if(index == 3){ //back
-        pButton->buttonDesRect.x = 300;
-        pButton->buttonDesRect.y = 660;
-        pButton->buttonDesRect.w = 200;
-        pButton->buttonDesRect.h = 99;  
-    }
-    else if(index == 4){ //host
-        pButton->buttonDesRect.x = 300;
-        pButton->buttonDesRect.y = 310;
-        pButton->buttonDesRect.w = 200;
-        pButton->buttonDesRect.h = 99;  
-    }
-    else if(index == 5){ //join
-        pButton->buttonDesRect.x = 300;
-        pButton->buttonDesRect.y = 200;
-        pButton->buttonDesRect.w = 200;
-        pButton->buttonDesRect.h = 99;  
-    }
-    else if (index == 6){ //leaderboard
-        pButton->buttonDesRect.x = 300;
-        pButton->buttonDesRect.y = 350;
-        pButton->buttonDesRect.w = 200;
-        pButton->buttonDesRect.h = 99;
-    }
-    else if(index == 7){ //settings
-        pButton->buttonDesRect.x = 300;
-        pButton->buttonDesRect.y = 460;
-        pButton->buttonDesRect.w = 200;
-        pButton->buttonDesRect.h = 99;
+    switch(index){
+        case 0:  //Startknappen
+            pButton->buttonDesRect.x = 300;
+            pButton->buttonDesRect.y = 240;
+            pButton->buttonDesRect.w = 200;
+            pButton->buttonDesRect.h = 99;
+            break;   
+        case 1:  //Exit
+            pButton->buttonDesRect.x = 300;
+            pButton->buttonDesRect.y = 570;
+            pButton->buttonDesRect.w = 200;
+            pButton->buttonDesRect.h = 99;   
+            break;
+        case 2:  //Credits
+            pButton->buttonDesRect.x = 580;
+            pButton->buttonDesRect.y = 660;
+            pButton->buttonDesRect.w = 200;
+            pButton->buttonDesRect.h = 99; 
+            break;
+        case 3:  //Back
+            pButton->buttonDesRect.x = 300;
+            pButton->buttonDesRect.y = 660;
+            pButton->buttonDesRect.w = 200;
+            pButton->buttonDesRect.h = 99;  
+            break;
+        case 4:  //Host
+            pButton->buttonDesRect.x = 300;
+            pButton->buttonDesRect.y = 310;
+            pButton->buttonDesRect.w = 200;
+            pButton->buttonDesRect.h = 99;  
+            break;
+        case 5:  //Join
+            pButton->buttonDesRect.x = 300;
+            pButton->buttonDesRect.y = 200;
+            pButton->buttonDesRect.w = 200;
+            pButton->buttonDesRect.h = 99; 
+            break;
+        case 6:  //Leaderboard
+            pButton->buttonDesRect.x = 300;
+            pButton->buttonDesRect.y = 350;
+            pButton->buttonDesRect.w = 200;
+            pButton->buttonDesRect.h = 99;
+            break;
+        case 7:  //Settings
+            pButton->buttonDesRect.x = 300;
+            pButton->buttonDesRect.y = 460;
+            pButton->buttonDesRect.w = 200;
+            pButton->buttonDesRect.h = 99;
+            break;
     }
 }
