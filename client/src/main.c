@@ -56,40 +56,35 @@ int main (int argument, char* arguments[]){
 
 int initializations(Game *pGame){
     if(SDL_Init(SDL_INIT_VIDEO)!=0){
-        printf("Error: %s\n",SDL_GetError());
+        printf("Error: %s\n", SDL_GetError());
         return 0;
     }
-
-    if(TTF_Init()!=0){
-        printf("Error: %s\n",TTF_GetError());
+    if(TTF_Init() != 0){
+        printf("Error: %s\n", TTF_GetError());
         SDL_Quit();
         return 0;
     }
-
-    if(SDLNet_Init()!=0){
+    if(SDLNet_Init() != 0){
 		printf("Error: %s\n", SDLNet_GetError());
-        TTF_Quit();
+        TTF_Quit(); 
         SDL_Quit();
 		return 0;
 	}
-
-    pGame->pWindow = SDL_CreateWindow("Snomos",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT,0);
+    pGame->pWindow = SDL_CreateWindow("Snomos", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
     if(!pGame->pWindow){
-        printf("Error: %s\n",SDL_GetError());
+        printf("Error: %s\n", SDL_GetError());
         close(pGame);
         return 0;
     }
-
     pGame->pRenderer = SDL_CreateRenderer(pGame->pWindow, -1, SDL_RENDERER_ACCELERATED|SDL_RENDERER_PRESENTVSYNC);
     if(!pGame->pRenderer){
-        printf("Error: %s\n",SDL_GetError());
+        printf("Error: %s\n", SDL_GetError());
         close(pGame);
         return 0;    
     }
-
-    pGame->pBackground = createBackground(pGame->pRenderer,WINDOW_WIDTH,WINDOW_HEIGHT);
+    pGame->pBackground = createBackground(pGame->pRenderer, WINDOW_WIDTH, WINDOW_HEIGHT);
     if(!pGame->pBackground){
-        printf("Error: %s\n",SDL_GetError());
+        printf("Error: %s\n", SDL_GetError());
         close(pGame);
         return 0;
     }
@@ -98,100 +93,85 @@ int initializations(Game *pGame){
 		printf("SDLNet_UDP_Open: %s\n", SDLNet_GetError());
         return 0;
 	}
-    
     if(SDLNet_ResolveHost(&(pGame->serverAddress), "127.0.0.1", 2069)){
         printf("SDLNet_ResolveHost(127.0.0.1 2069): %s\n", SDLNet_GetError());
         return 0;
     }
-    
     if (!(pGame->pPacket = SDLNet_AllocPacket(512))){
 		printf("SDLNet_AllocPacket: %s\n", SDLNet_GetError());
 		close(pGame);
         return 0;
 	}
-    
     if(!pGame->pPacket){
-        printf("Error: %s\n",SDL_GetError());
+        printf("Error: %s\n", SDL_GetError());
         close(pGame);
         return 0;
     }
-
     pGame->pFont = TTF_OpenFont("../lib/resources/arial.ttf", 40);
     if(!pGame->pFont){
-        printf("Error: %s\n",TTF_GetError());
+        printf("Error: %s\n", TTF_GetError());
         close(pGame);
         return 0;
     }
-
     if(SDL_Init(SDL_INIT_AUDIO) < 0){
         printf("Error: %s\n", SDL_GetError());
         close(pGame);
         return 0;
-        // initialize audio
     }
-
     if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0){
         printf("Error: %s\n", Mix_GetError());
         close(pGame);
         return 0;
-        //initialize Sdl mixer
     }
 
-    pGame->pStartText = createText(pGame->pRenderer,0,0,0,pGame->pFont,"Waiting for server",WINDOW_WIDTH/2,WINDOW_HEIGHT/2+100);
-
+    pGame->pStartText = createText(pGame->pRenderer, 0, 0, 0, pGame->pFont, "Waiting for server", WINDOW_WIDTH/2, WINDOW_HEIGHT/2+100);
     pGame->pPacket->address.host = pGame->serverAddress.host;
     pGame->pPacket->address.port = pGame->serverAddress.port;
 
-    for(int i=0;i<CHARACTERS;i++){
-        pGame->pCharacter[i] = createCharacter(i,pGame->pRenderer,WINDOW_WIDTH,WINDOW_HEIGHT);
+    for(int i = 0; i < CHARACTERS; i++){
+        pGame->pCharacter[i] = createCharacter(i, pGame->pRenderer, WINDOW_WIDTH, WINDOW_HEIGHT);
     }
-
-    for(int i=0;i<CHARACTERS;i++){
+    for(int i = 0; i < CHARACTERS; i++){
         if(!pGame->pCharacter[i]){
-            printf("Error: %s\n",SDL_GetError());
+            printf("Error: %s\n", SDL_GetError());
             close(pGame);
             return 0;
         }
     }
     for (int i = 0; i < MAXSNOWBALLS; i++){
-        pGame->pSnowball[i] = createSnowball(pGame->pRenderer , WINDOW_WIDTH , WINDOW_HEIGHT);
+        pGame->pSnowball[i] = createSnowball(pGame->pRenderer, WINDOW_WIDTH, WINDOW_HEIGHT);
     }
-    for(int i=0;i<MAXSNOWBALLS;i++){
+    for(int i = 0; i < MAXSNOWBALLS; i++){
         if(!pGame->pSnowball[i]){
-            printf("Error: %s\n",SDL_GetError());
+            printf("Error: %s\n", SDL_GetError());
             close(pGame);
             return 0;
         }
     }
-
     pGame->pMenuBackground = createMenuBackground(pGame->pRenderer, WINDOW_WIDTH, WINDOW_HEIGHT);
     if(!pGame->pMenuBackground){
-        printf("Error: %s\n",SDL_GetError());
+        printf("Error: %s\n", SDL_GetError());
         close(pGame);
         return 0;
     }
-
     pGame->pCreditBackground = createCreditBackground(pGame->pRenderer, WINDOW_WIDTH, WINDOW_HEIGHT);
     if(!pGame->pCreditBackground){
-        printf("Error: %s\n",SDL_GetError());
+        printf("Error: %s\n", SDL_GetError());
         close(pGame);
         return 0; 
     }
-
     pGame->pWinnerBackground = createWinnerBackground(pGame->pRenderer, WINDOW_WIDTH, WINDOW_HEIGHT);
     if(!pGame->pWinnerBackground){
-        printf("Error: %s\n",SDL_GetError());
+        printf("Error: %s\n", SDL_GetError());
         close(pGame);
         return 0; 
     }
-
     pGame->pLoserBackground = createLoserBackground(pGame->pRenderer, WINDOW_WIDTH, WINDOW_HEIGHT);
     if(!pGame->pLoserBackground){
-        printf("Error: %s\n",SDL_GetError());
+        printf("Error: %s\n", SDL_GetError());
         close(pGame);
         return 0; 
     }
-
     for (int i = 0; i < NROFBUTTONS; i++){
         pGame->pButton[i] = createButton(pGame->pRenderer, 0, 0, 400, 100);
         setDesRect(pGame->pButton[i], i);
@@ -209,7 +189,6 @@ void run(Game *pGame){
     int joining = 0;
     bool control = true;
     int mouseX, mouseY;
-
     SDL_Event event;
     SDL_Rect snowballRect, characterRect;
 
@@ -260,15 +239,15 @@ void run(Game *pGame){
                 }
                 while(SDL_PollEvent(&event)){
                     closeController(&event, &active);
-                    handleInput(pGame->pCharacter[pGame->characterNumber],pGame->pSnowball,pGame->characterNumber,&event,pGame->pSounds,pGame->pSocket,pGame->pPacket);
+                    handleInput(pGame->pCharacter[pGame->characterNumber], pGame->pSnowball, pGame->characterNumber, &event, pGame->pSounds, pGame->pSocket, pGame->pPacket);
                 }
                 collisionManagement(pGame->pCharacter[pGame->characterNumber], pGame->pSnowball, pGame->characterNumber, pGame->pSounds, pGame->pSocket, pGame->pPacket);
                 renderBackground(pGame->pRenderer, pGame->pBackground);
-                for(int i=0;i<CHARACTERS;i++){
+                for(int i = 0; i < CHARACTERS; i++){
                     updateCharacter(pGame->pCharacter[i]);
                     drawCharacter(pGame->pCharacter[i]);
                 }
-                for(int i=0;i<MAXSNOWBALLS;i++){
+                for(int i = 0; i < MAXSNOWBALLS; i++){
                     updateSnowball(pGame->pSnowball[i]);
                     drawSnowball(pGame->pSnowball[i]);
                 }
@@ -312,7 +291,7 @@ void updateWithServerData(Game *pGame){
     memcpy(&sData, pGame->pPacket->data, sizeof(ServerData));
     pGame->characterNumber = sData.playerNumber;
     pGame->state = sData.gState;
-    for(int i=0;i<CHARACTERS;i++){
+    for(int i = 0; i < CHARACTERS; i++){
         updateCharacterWithRecievedData(pGame->pCharacter[i], &(sData.characters[i]));
     }
     for(int i = 0; i < MAXSNOWBALLS;i++){
@@ -321,7 +300,7 @@ void updateWithServerData(Game *pGame){
 }
 
 void close(Game *pGame){
-    for(int i=0; i < CHARACTERS;i++){
+    for(int i = 0; i < CHARACTERS; i++){
         if(pGame->pCharacter){
             destroyCharacter(pGame->pCharacter[i]);
         }
