@@ -35,7 +35,6 @@ Button *createButton(SDL_Renderer *pRenderer, int x, int y, int w, int h){
 }
 
 int hover(int x, int y, Button *pButton){
-    
     if (x >= pButton->buttonDesRect.x && x <= pButton->buttonDesRect.x + pButton->buttonDesRect.w && y >= pButton->buttonDesRect.y && y <= pButton->buttonDesRect.y + pButton->buttonDesRect.h){
         return 1;
     }
@@ -44,31 +43,7 @@ int hover(int x, int y, Button *pButton){
 }
 
 void drawButton(Button *pButton , int index , int hover){
-
-    if(index == 0){
-        pButton->buttonSrcRect.y = 0;
-    }
-    if(index == 1){
-        pButton->buttonSrcRect.y = 99 * index;
-    }
-    if(index == 2){
-        pButton->buttonSrcRect.y = 99 * index;
-    }
-    if(index == 3){
-        pButton->buttonSrcRect.y = 99 * index;
-    }
-    if(index == 4){
-        pButton->buttonSrcRect.y = 99 * index;
-    }
-    if(index == 5){
-        pButton->buttonSrcRect.y = 99 * index;
-    }
-    if(index == 6){
-        pButton->buttonSrcRect.y = 99 * index;
-    }
-    if(index == 7){
-        pButton->buttonSrcRect.y = 99 * index;
-    }
+    pButton->buttonSrcRect.y = 99 * index;
     pButton->buttonSrcRect.x = 200 * hover;
     pButton->buttonSrcRect.w = 200;
     pButton->buttonSrcRect.h = 99;
