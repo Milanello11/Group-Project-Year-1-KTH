@@ -219,7 +219,6 @@ void run(Game *pGame){
                     }
                 }
                 if(joining){
-                    renderMenuBackground(pGame->pMenuBackground);
                     drawText(pGame->pStartText);
                     SDL_RenderPresent(pGame->pRenderer);
                     SDLNet_UDP_Send(pGame->pSocket, -1, pGame->pPacket);
