@@ -178,7 +178,7 @@ int initializations(Game *pGame){
     }
 
     pGame->pSounds = createSounds();
-    pGame->state = ONGOING;
+    pGame->state = MENU;
     playMenuMusic(pGame->pSounds);
     return 1;
 }
@@ -239,8 +239,6 @@ void run(Game *pGame){
                 }
                 while(SDL_PollEvent(&event)){
                     closeController(&event, &active);
-                    if (event.key.keysym.scancode == SDL_SCANCODE_P)
-                        pGame->state = GAME_OVER;
                     handleInput(pGame->pCharacter[pGame->characterNumber], pGame->pSnowball, pGame->characterNumber, &event, pGame->pSounds, pGame->pSocket, pGame->pPacket);
                 }
                 collisionManagement(pGame->pCharacter[pGame->characterNumber], pGame->pSnowball, pGame->characterNumber, pGame->pSounds, pGame->pSocket, pGame->pPacket);
@@ -254,6 +252,7 @@ void run(Game *pGame){
                     drawSnowball(pGame->pSnowball[i]);
                 }
                 SDL_RenderPresent(pGame->pRenderer);
+                control = true;
                 SDL_Delay(1000/60);
                 break;
             case GAME_OVER:
@@ -262,7 +261,7 @@ void run(Game *pGame){
                 }
                 if(checkCharacterAlive(pGame->pCharacter[pGame->characterNumber]) && control){
                     control = false;
-                    playWinSound(pGame->pSounds);
+                    playWinEffect(pGame->pSounds);
                     renderMenuBackground(pGame->pWinnerBackground);
                     SDL_RenderPresent(pGame->pRenderer);
                 }
@@ -273,7 +272,6 @@ void run(Game *pGame){
                     SDL_RenderPresent(pGame->pRenderer);
                 }
                 if(SDLNet_UDP_Recv(pGame->pSocket, pGame->pPacket) == 1){
-                    control = true;
                     Mix_HaltMusic();
                     playGameplayMusic(pGame->pSounds);
                     for(int i = 0; i < MAXSNOWBALLS; i++){
