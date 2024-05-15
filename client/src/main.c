@@ -93,7 +93,7 @@ int initializations(Game *pGame){
 		printf("SDLNet_UDP_Open: %s\n", SDLNet_GetError());
         return 0;
 	}
-    if(SDLNet_ResolveHost(&(pGame->serverAddress), "81.229.158.127", 2069)){
+    if(SDLNet_ResolveHost(&(pGame->serverAddress), "127.0.0.1", 2069)){
         printf("SDLNet_ResolveHost(127.0.0.1 2069): %s\n", SDLNet_GetError());
         return 0;
     }
@@ -261,6 +261,7 @@ void run(Game *pGame){
                 }
                 if(checkCharacterAlive(pGame->pCharacter[pGame->characterNumber]) && control){
                     control = false;
+                    Mix_HaltMusic();
                     playWinEffect(pGame->pSounds);
                     renderMenuBackground(pGame->pWinnerBackground);
                     SDL_RenderPresent(pGame->pRenderer);
@@ -272,12 +273,13 @@ void run(Game *pGame){
                     SDL_RenderPresent(pGame->pRenderer);
                 }
                 if(SDLNet_UDP_Recv(pGame->pSocket, pGame->pPacket) == 1){
-                    Mix_HaltMusic();
-                    playGameplayMusic(pGame->pSounds);
-                    for(int i = 0; i < MAXSNOWBALLS; i++){
-                        resetSnowball(pGame->pSnowball[i]);
-                    }
                     updateWithServerData(pGame);
+                    if(pGame->state == ONGOING){
+                        playGameplayMusic(pGame->pSounds);
+                        for(int i = 0; i < MAXSNOWBALLS; i++){
+                            resetSnowball(pGame->pSnowball[i]);
+                        }
+                    }
                 }
                 break;
         }

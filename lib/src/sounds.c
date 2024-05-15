@@ -8,7 +8,7 @@ struct sounds{
     Mix_Music *gameplayMusic;
     Mix_Music *menuMusic;
     Mix_Music *loseMusic;
-    Mix_Music *winSoundEffect;
+    Mix_Chunk *winSoundEffect;
     Mix_Chunk *buttonEffect;
     Mix_Chunk *hitEffect;
     Mix_Chunk *throwEffect;
