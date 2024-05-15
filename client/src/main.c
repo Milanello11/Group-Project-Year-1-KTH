@@ -252,7 +252,6 @@ void run(Game *pGame){
                     drawSnowball(pGame->pSnowball[i]);
                 }
                 SDL_RenderPresent(pGame->pRenderer);
-                control = true;
                 SDL_Delay(1000/60);
                 break;
             case GAME_OVER:
@@ -276,6 +275,7 @@ void run(Game *pGame){
                     updateWithServerData(pGame);
                     if(pGame->state == ONGOING){
                         playGameplayMusic(pGame->pSounds);
+                        control = true;
                         for(int i = 0; i < MAXSNOWBALLS; i++){
                             resetSnowball(pGame->pSnowball[i]);
                         }
