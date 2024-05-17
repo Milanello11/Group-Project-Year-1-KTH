@@ -93,7 +93,7 @@ int initializations(Game *pGame){
 		printf("SDLNet_UDP_Open: %s\n", SDLNet_GetError());
         return 0;
 	}
-    if(SDLNet_ResolveHost(&(pGame->serverAddress), "127.0.0.1", 2069)){
+    if(SDLNet_ResolveHost(&(pGame->serverAddress), "130.229.178.139", 2069)){
         printf("SDLNet_ResolveHost(127.0.0.1 2069): %s\n", SDLNet_GetError());
         return 0;
     }
@@ -219,6 +219,7 @@ void run(Game *pGame){
                     }
                 }
                 if(joining){
+                    renderMenuBackground(pGame->pMenuBackground);
                     drawText(pGame->pStartText);
                     SDL_RenderPresent(pGame->pRenderer);
                     SDLNet_UDP_Send(pGame->pSocket, -1, pGame->pPacket);
