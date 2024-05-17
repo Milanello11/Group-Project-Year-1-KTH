@@ -277,7 +277,6 @@ void executeCommand(Game *pGame, ClientData cData, int *pNrOfCharacters){
                     startSnowball(pGame->pSnowball[found], ssx, ssy, direction);
                     setActiveSnowballTrue(pGame->pCharacter[cData.playerNumber]);
                     setSnowballOwner(pGame->pSnowball[found], cData.playerNumber);
-                    cData.command = SHOOT;
                 }
             }
             break;

@@ -244,7 +244,7 @@ bool checkCharacterAlive(Character *pCharacter){
 }
 void getAnimation(Character *pCharacter){
     static int frame = 0;
-    const int animationSpeed = 3; // Animation rate (adjust as needed)
+    const int animationSpeed = 6; // Animation rate (adjust as needed)
     static int currentFrame = 0;   // Track the current frame index
 
     int framePositions[NUMOFFRAMES] = {0, 32, 64}; // Adjust these values based on frame widths
