@@ -33,7 +33,7 @@ typedef struct{
     Background *pWinnerBackground;
     Background *pLoserBackground;
     Button *pButton[NROFBUTTONS];
-    TTF_Font *pFont, *pScoreFont;
+    TTF_Font *pFont;
     Text *pStartText;
     Sounds *pSounds;
 }Game;

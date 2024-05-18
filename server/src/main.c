@@ -20,7 +20,7 @@ typedef struct{
     int nrOfClients;
     ServerData sData;
     Snowball *pSnowball[MAXSNOWBALLS];
-    TTF_Font *pFont, *pScoreFont;
+    TTF_Font *pScoreFont;
     Text *pStartText, *pEndText;
 }Game;
 
@@ -74,9 +74,8 @@ int initializations(Game *pGame){
         return 0;    
     }
 
-    pGame->pFont = TTF_OpenFont("../lib/resources/arial.ttf", 100);
     pGame->pScoreFont = TTF_OpenFont("../lib/resources/arial.ttf", 30);
-    if(!pGame->pFont || !pGame->pScoreFont){
+    if(!pGame->pScoreFont){
         printf("Error: %s\n",TTF_GetError());
         close(pGame);
         return 0;
@@ -317,9 +316,6 @@ void close(Game *pGame){
     }
     if(pGame->pEndText){
         destroyText(pGame->pEndText);
-    }
-    if(pGame->pFont){
-        TTF_CloseFont(pGame->pFont);
     }
     if(pGame->pScoreFont){
         TTF_CloseFont(pGame->pScoreFont);
