@@ -55,6 +55,7 @@ int main (int argument, char* arguments[]){
 }
 
 int initializations(Game *pGame){
+    char ipAddress[17];
     if(SDL_Init(SDL_INIT_VIDEO)!=0){
         printf("Error: %s\n", SDL_GetError());
         return 0;
@@ -93,7 +94,8 @@ int initializations(Game *pGame){
 		printf("SDLNet_UDP_Open: %s\n", SDLNet_GetError());
         return 0;
 	}
-    if(SDLNet_ResolveHost(&(pGame->serverAddress), "130.229.178.139", 2069)){
+    scanf("%s", ipAddress);
+    if(SDLNet_ResolveHost(&(pGame->serverAddress), ipAddress, 2069)){
         printf("SDLNet_ResolveHost(127.0.0.1 2069): %s\n", SDLNet_GetError());
         return 0;
     }
