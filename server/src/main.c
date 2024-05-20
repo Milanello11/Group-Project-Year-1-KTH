@@ -193,7 +193,7 @@ void changeState(Game *pGame){
     }
     else if(pGame->state == ONGOING && pGame->nrOfClients <= 1){
         pGame->state = GAME_OVER;
-        printf("Game is over");
+        printf("Game is over\n");
     }
     else if(pGame->state == GAME_OVER){
         pGame->state = ONGOING;

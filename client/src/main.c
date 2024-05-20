@@ -94,6 +94,7 @@ int initializations(Game *pGame){
 		printf("SDLNet_UDP_Open: %s\n", SDLNet_GetError());
         return 0;
 	}
+    printf("Skriv IP-adress: ");
     scanf("%s", ipAddress);
     if(SDLNet_ResolveHost(&(pGame->serverAddress), ipAddress, 2069)){
         printf("SDLNet_ResolveHost(127.0.0.1 2069): %s\n", SDLNet_GetError());
