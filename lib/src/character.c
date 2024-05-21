@@ -17,8 +17,6 @@ struct character{
     SDL_Rect characterRect;
     SDL_Rect characterSrcRect;
     int characterDirection;
-
-    int player_down_clips[4];
 };
 
 Character *createCharacter(int number, SDL_Renderer *pRenderer, int window_w, int window_h){
@@ -48,11 +46,6 @@ Character *createCharacter(int number, SDL_Renderer *pRenderer, int window_w, in
     pCharacter->characterRect.h /= 4;
 
     pCharacter->characterSrcRect.x = 32;
-
-    pCharacter->player_down_clips[0] = 0;
-    pCharacter->player_down_clips[1] = 32;
-    pCharacter->player_down_clips[2] = 64;
-    pCharacter->player_down_clips[3] = 32;
 
     switch (number)
     {
@@ -244,10 +237,10 @@ bool checkCharacterAlive(Character *pCharacter){
 }
 void getAnimation(Character *pCharacter){
     static int frame = 0;
-    const int animationSpeed = 6; // Animation rate (adjust as needed)
-    static int currentFrame = 0;   // Track the current frame index
+    const int animationSpeed = 6; 
+    static int currentFrame = 0; 
 
-    int framePositions[NUMOFFRAMES] = {0, 32, 64}; // Adjust these values based on frame widths
+    int framePositions[NUMOFFRAMES] = {0, 32, 64};
 
     frame++;
     if (frame == animationSpeed) {
